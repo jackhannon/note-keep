@@ -1,0 +1,224 @@
+.sidebar {
+  position: fixed;
+  padding: 4rem .3rem 0 .3rem;
+  background-color: rgb(51, 50, 50);
+  min-width: 3.2em;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  overflow: hidden;
+  overflow-x: hidden;
+  transition: all 0.4s ease;
+  z-index: 998;
+  border: 1px solid rgb(116, 116, 116);
+  
+}
+
+.open {
+  min-width: 12em;
+  /* padding: 4.5rem .5rem 0 .5rem; */
+}
+
+
+.open .child {
+  min-width: 100%;
+  justify-content: left;
+}
+
+.child {
+  border-radius: 2rem;
+  min-width: 2.5em;
+  max-width: 2.5rem;
+  min-height: 2.5em;
+  max-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  flex-direction: row;
+  transition: all .4s ease;
+  position: relative;
+  padding: 0.6em 1em;
+  font-size: 1em;
+  color: white;
+  background-color: rgb(105, 102, 102);
+}
+
+.child:hover {
+  background-color: gray;
+}
+
+
+.icon {
+  min-width: 16px;
+  position: absolute;
+  left: 0.8rem;
+  color: white;
+}
+
+.open .catagory {
+  color: white;
+}
+
+
+
+.catagory {
+  max-height: 2.5rem;
+  visibility: none;
+  margin-left: 20px;
+  color: transparent;
+  transition: all 0.2s ease-in-out;
+  max-width: 8rem;
+  color: inherit;
+  /* Truncate text with an ellipsis (...) */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.child.activeLabel {
+  background-color: rgb(169, 169, 169)
+}
+
+
+
+
+
+/* modal styles */
+
+
+
+.modalContainer {
+  background-color: rgba(0, 0, 0, 0.226);
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.modal {
+  background-color: rgb(66, 66, 66);
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: .7rem;
+  overflow: none;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  min-width: 15rem;
+  max-width: 15rem
+}
+.message {
+
+}
+
+.newLabel {
+  display: flex;
+}
+
+.modal button {
+  font-size: .7rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.5rem;
+  background-color: transparent;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  border: none;
+  color: inherit
+}
+
+.modal button:hover {
+  background-color: rgba(128, 128, 128, 0.37);
+}
+
+.modal input {
+  margin: 0 .3rem 0 .3rem;
+  width: 100%;
+  background-color: transparent;
+  color: inherit
+
+}
+
+.addNewLabelBtn {
+
+}
+
+.newLabelField {
+ 
+}
+
+
+.field {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirmLabelBtn {
+  font-size: .7rem;
+  display: none;
+  border-radius: 0;
+}
+
+.showCheck {
+  display: flex;
+}
+
+.input {
+  border-bottom: 1px solid rgb(99, 99, 99);
+
+}
+
+
+.edit {
+  display: flex;
+}
+
+
+
+/* minimodal */
+
+.confirmModal {
+  background-color: rgba(32, 32, 32, 0.71);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: .7rem;
+  overflow: none;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  justify-content: center;
+  text-align: center;
+  width: 90%
+}
+
+.deleteModalBtns {
+  display: flex;
+  justify-content: space-around;
+}
+
+
+.confirmModal button {
+  width: 20%
+}
+
+.confirmModal .confirm {
+  background-color: rgb(107, 212, 112);
+}
+
+.confirmModal .deny {
+  background-color: rgb(228, 92, 92);
+}
+
+
