@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node ./dist/server",
+    "build": "tsc",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
