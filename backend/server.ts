@@ -11,7 +11,6 @@ import envConfig from "./config/envConfig.js";
 
 async function startServer() {
   const port = Number(envConfig.PORT);
-  const host = String(envConfig.HOST);
 
   await connectToDatabase();
   const app: Express = express();
@@ -30,7 +29,7 @@ async function startServer() {
   app.use(notFound);
   
   
-  app.listen(port, host, () => {
+  app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`)
   })
 }

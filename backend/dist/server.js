@@ -24,7 +24,6 @@ const envConfig_js_1 = __importDefault(require("./config/envConfig.js"));
 function startServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const port = Number(envConfig_js_1.default.PORT);
-        const host = String(envConfig_js_1.default.HOST);
         yield (0, conn_js_1.connectToDatabase)();
         const app = (0, express_1.default)();
         app.use(credentials_js_1.credentials);
@@ -37,7 +36,7 @@ function startServer() {
         });
         app.use(errorHander_js_1.errorHandler);
         app.use(notFound_js_1.notFound);
-        app.listen(port, host, () => {
+        app.listen(port, () => {
             console.log(`Example app listening on port ${port}!`);
         });
     });
