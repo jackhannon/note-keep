@@ -35,7 +35,7 @@ const Note: React.FC<Props> = ({ note }) => {
       // Set the textarea height to the scroll height
       textareaRef.current.style.height = `${Math.min(scrollHeight, 200)}px`;
     }
-  }, [note.body]); // Recalculate height whenever the note body changes
+  }, [note.body]);
 
 
   const handleFocus = () => {

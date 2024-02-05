@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-type AsyncFunction<T> = (...args: unknown[]) => Promise<T>;
+type AsyncFunction<T> = (...args: never[]) => Promise<T>;
 
 
 export function useAsyncFn<T>(

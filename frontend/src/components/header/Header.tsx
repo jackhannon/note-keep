@@ -1,4 +1,4 @@
-import React, { useEffect, useState,  } from 'react';
+import React, { useEffect, useState } from 'react';
 import headerStyles from "./headerStyles.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ import { useAsyncFn } from '../../hooks/useAsync';
 
 
 const Header: React.FC = () => {
-  const {notes, setMultiSelectMode, multiSelectMode, selectedNotes, setSelectedNotes, deleteLocalNote, updateLocalNote, createLocalNote} = useNotes()
+  const {notes, setMultiSelectMode, multiSelectMode, selectedNotes, setSelectedNotes, deleteLocalNote, updateLocalNote} = useNotes()
   const {setIsOpen, isOpen, currentLabel} = useLabels()
   const [modalState, setModalState] = useState<boolean>(false)
 

@@ -20,6 +20,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
+  "baseUrl": ".",
+  "typeRoots": ["./node_modules/@types", "./custom-types"],
+  "paths": {
+    "*": ["*.css"]
+  },
   "include": ["frontend/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
