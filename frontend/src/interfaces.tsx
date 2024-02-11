@@ -1,10 +1,10 @@
 export interface LabelType {
-  _id: string;
+  _id?: number | string;
   title: string;
 }
 
 export interface NoteType {
-  _id: string;
+  _id: number;
   title?: string;
   body?: string;
   labels: LabelType[];
@@ -13,12 +13,12 @@ export interface NoteType {
   isArchived: boolean
 }
 
-export interface notesState {
+export interface NotesData {
   plainNotes: NoteType[]
   pinnedNotes: NoteType[]
 }
 
-export interface userInfo {
+export interface UserInfo {
   username: string
   password: string
 }

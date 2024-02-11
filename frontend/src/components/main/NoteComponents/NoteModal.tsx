@@ -1,17 +1,14 @@
 import React, {useRef, useEffect, useState,  useLayoutEffect} from 'react'
-import MainStyles from './MainStyles.module.css'
+import MainStyles from '../MainStyles.module.css'
 import NoteStyles from './NoteStyles.module.css'
-import { NoteType } from '../../interfaces';
-import { updateNote } from '../../utils/notes';
-import { useAsyncFn } from '../../hooks/useAsync';
-import { useNotes } from '../../context/NoteContext';
+import { NoteType } from '../../../interfaces';
 
 
 interface Props {
   noteState: boolean;
   setNoteState: React.Dispatch<React.SetStateAction<boolean>>;
   note: NoteType
-  handleDelete: () => Promise<void>
+  handleDelete: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 
@@ -19,8 +16,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, noteState, note
 
   const [title, setTitle] = useState<string>(`${note.title}`)
   const [body, setBody] = useState<string>(`${note.body}`)
-  const { updateLocalNote } = useNotes()
-  const updateNoteState = useAsyncFn(updateNote)
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.target.value)
@@ -68,10 +63,10 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, noteState, note
 
   
   const handleUpdateNote = async () => {
-    return updateNoteState.execute({title, body, id: note._id})
-    .then(note => {
-      updateLocalNote(note);
-    })
+    // return updateNoteState.execute({title, body, id: note._id})
+    // .then(note => {
+    //   updateLocalNote(note);
+    // })
   }
     
   const handleBlur = () => {

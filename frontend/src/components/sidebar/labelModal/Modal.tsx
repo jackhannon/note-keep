@@ -1,13 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import sidebarStyles from '../sidebarStyles.module.css'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faCheck, faX} from '@fortawesome/free-solid-svg-icons'
 import ModalLabels from './ModalLabels';
 import DeleteModal from './DeleteModal';
-import { useLabels } from '../../../context/LabelContext'
-import { useAsyncFn } from '../../../hooks/useAsync';
-import { createLabel } from '../../../utils/labels';
 import { LabelType } from '../../../interfaces';
 
 interface Props {
@@ -15,51 +12,51 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = ({ setModalState}) => {
-  const { labels, createLocalLabel } = useLabels()
-  const createLabelState = useAsyncFn(createLabel)
+  // const { labels, createLocalLabel } = useLabels()
+  // const createLabelState = useAsyncFn(createLabel)
 
-  const [newLabelState, setNewLabelState] = useState<boolean>(false)
-  const [newLabel, setNewLabel] = useState<string>("")
+  // const [newLabelState, setNewLabelState] = useState<boolean>(false)
+  // const [newLabel, setNewLabel] = useState<string>("")
   
-  const [deletionModalInfo, setDeletionModalInfo] = useState({
-    title: "",
-    id: ""
-  })
+  // const [deletionModalInfo, setDeletionModalInfo] = useState({
+  //   title: "",
+  //   id: ""
+  // })
 
-  const onLabelCreate = async () => {
-    return createLabelState.execute(newLabel)
-    .then((label: LabelType) => {
-     createLocalLabel(label)
-    })
-   }
+  // const onLabelCreate = async () => {
+  //   return createLabelState.execute(newLabel)
+  //   .then((label: LabelType) => {
+  //    createLocalLabel(label)
+  //   })
+  //  }
 
-  const [deletionModal, setDeletionModal] = useState<boolean>(false)
+  // const [deletionModal, setDeletionModal] = useState<boolean>(false)
 
-  const handleDeletionModal = (title: string, id: string) => {
-    setDeletionModalInfo({title: title, id: id})
-    setDeletionModal(true)
-  }
+  // const handleDeletionModal = (title: string, id: string) => {
+  //   setDeletionModalInfo({title: title, id: id})
+  //   setDeletionModal(true)
+  // }
 
-  const divRef = useRef<HTMLDivElement>(null);
+  // const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      setTimeout(()=> {
-        if (divRef.current && !divRef.current.contains(event.target as Node)) {
-          setModalState(false)
-        }
-      }, 100)
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setModalState]);
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     setTimeout(()=> {
+  //       if (divRef.current && !divRef.current.contains(event.target as Node)) {
+  //         setModalState(false)
+  //       }
+  //     }, 100)
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [setModalState]);
 
 
   return (
       <div className={sidebarStyles.modalContainer}>
-        <div className={sidebarStyles.modal} ref={divRef}>
+        {/* <div className={sidebarStyles.modal} ref={divRef}>
         {deletionModal ? (
           <DeleteModal title={deletionModalInfo.title} id={deletionModalInfo.id} setDeletionModal={setDeletionModal}/>
           ) : null
@@ -87,7 +84,7 @@ const Modal: React.FC<Props> = ({ setModalState}) => {
           return <ModalLabels key={index} label={label} newLabelState = {newLabelState} setNewLabelState={setNewLabelState} handleDeletionModal={handleDeletionModal} deletionModal={deletionModal}/>
         }
         )}
-        </div>
+        </div> */}
       </div>
   )
 }

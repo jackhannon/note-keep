@@ -104,7 +104,7 @@
   background-color: transparent;
   padding: .7rem;
   font-size: .7em;
-  border-radius: 20px;
+  border-radius: vmin;
   height: 1.4rem;
   width: 1.4rem
 }

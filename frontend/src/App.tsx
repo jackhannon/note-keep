@@ -4,7 +4,6 @@ import Notes from './components/main/Notes';
 import Sidebar from './components/sidebar/Sidebar'
 import './App.css'
 import { NoteProvider } from './context/NoteContext';
-import { LabelProvider } from './context/LabelContext';
 import { Routes, Route, useNavigate} from 'react-router-dom'
 
 
@@ -16,22 +15,20 @@ const App: React.FC = () => {
 
   useEffect(() => {
     navigate(`/Notes`);
-  }, [])
+  }, [navigate])
 
   return (
     <>
       <NoteProvider>
-        <LabelProvider>
-          <Header />
-          <Routes>
-            <Route path='/:labelId' element={
-                <div className="container">
-                  <Sidebar />
-                  <Notes/>
-                </div>
-            } />
-          </Routes>
-        </LabelProvider>
+        <Header />
+        <Routes>
+          <Route path='/:labelId' element={
+              <div className="container">
+                <Sidebar />
+                <Notes/>
+              </div>
+          } />
+        </Routes>
       </NoteProvider>
     </>
   )

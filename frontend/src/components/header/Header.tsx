@@ -1,135 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import headerStyles from "./headerStyles.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
 import OptionsModal from '../main/Multiselect-components/OptionsModal';
-import { useLabels } from '../../context/LabelContext';
 import { useNotes } from '../../context/NoteContext';
-import { updateNote, deleteNote } from '../../utils/notes';
 import SearchBar from './SearchBar';
-import { useAsyncFn } from '../../hooks/useAsync';
-
+import useMultiNoteMutation from '../../services/queryHooks/useMultiNoteMutation';
+import { TOGGLED_MODE_OFF } from '../../reducers/selectedNotesReducer';
 
 
 const Header: React.FC = () => {
-  const {notes, setMultiSelectMode, multiSelectMode, selectedNotes, setSelectedNotes, deleteLocalNote, updateLocalNote} = useNotes()
-  const {setIsOpen, isOpen, currentLabel} = useLabels()
+  const {selectedNotesState, dispatchSelectedNotes, setIsSidebarOpen, isSidebarOpen, currentLabel} = useNotes()
+  const {notes: selectedNotes, modeOn: multiSelectModeOn} = selectedNotesState
+
   const [modalState, setModalState] = useState<boolean>(false)
+  console.log(selectedNotesState)
 
-  const updateNoteState = useAsyncFn(updateNote)
-  const deleteNoteState = useAsyncFn(deleteNote)
-  
-  useEffect(() => {
-    if (multiSelectMode) {
-      if (selectedNotes.length <= 0) {
-        setMultiSelectMode(false)
-      }
-    }
-  }, [selectedNotes])
+  const {toggleSelectedNotesPin, archiveSelectedNotes, trashSelectedNotes, deleteSelectedNotes, restoreSelectedNotes} = useMultiNoteMutation(selectedNotes)
 
-  
-  useEffect(() => {
-    if (multiSelectMode) {
-      setMultiSelectMode(false)
-      setSelectedNotes([])
-    }
-  }, [currentLabel._id, notes, setSelectedNotes])
+  //if all notes are unpinned, pin all the notes.
+  //if any note is pinned, unpin all the notes
+  const handleToggleAllPins = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    toggleSelectedNotesPin.mutate()
+  }
 
+
+  const handleSelectedNotesArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    archiveSelectedNotes.mutate()
+  }
+
+  const handleSelectedNotesTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.stopPropagation();
+    trashSelectedNotes.mutate()
+  }
+
+  const handleSelectedNotesDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    deleteSelectedNotes.mutate()
+  }
   
+  const handleSelectedNotesRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    restoreSelectedNotes.mutate()
+  }
+
   const handleMultiSelectCancel = () => {
-    setMultiSelectMode(false)
-    setSelectedNotes([])
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
-
-  const handlePin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    selectedNotes.forEach((note) => {
-      updateNoteState.execute({id: note._id, 
-        options: {isPinned: true}
-      }).then(note => {
-        updateLocalNote(note)
-      })
-    })
-  }
-
-  const handleUnpin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    selectedNotes.forEach((note) => {
-      updateNoteState.execute({id: note._id, 
-        options: {isPinned: false}
-      }).then(note => {
-        updateLocalNote(note)
-      })
-    })
-  }
-
-  const handleArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    selectedNotes.forEach((note) => {
-      updateNoteState.execute({id: note._id, 
-        options: {isArchived: true,
-        isTrashed: false,}
-      }).then(note => {
-        deleteLocalNote(note)
-      })
-    })
-  }
-
-  const handleTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
-      e.stopPropagation();
-      selectedNotes.forEach((note) => {
-      updateNoteState.execute({id: note._id, 
-        options: {isArchived: false,
-          isTrashed: true}
-      }).then(note => {
-        deleteLocalNote(note)
-      })
-    })
-  }
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    selectedNotes.forEach((note) => {
-    deleteNoteState.execute(note._id)
-    .then(note => {
-      deleteLocalNote(note)
-    })
-  })
-}
-  
-  const handleRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    selectedNotes.forEach((note) => {
-    updateNoteState.execute({id: note._id, 
-      options: {isArchived: false,
-        isTrashed: false}
-    }).then(note => {
-      deleteLocalNote(note)
-    })
-  })
-}
-
-
 
   return (
     <header>
-      {!multiSelectMode ? (
-      <>
-        <div className={headerStyles.left}>
-          <button onClick={() => setIsOpen(!isOpen)} className={headerStyles.icon}>
-            <FontAwesomeIcon icon={faBars} />
-          </button>
-          <div className={headerStyles.title}>Keeper++</div>
-        </div>
+      {!multiSelectModeOn ? (
+        <>
+          <div className={headerStyles.left}>
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={headerStyles.icon}>
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+            <div className={headerStyles.title}>Keeper++</div>
+          </div>
 
-        <div className={headerStyles.center}>
-          <SearchBar />
-        </div>
+          <div className={headerStyles.center}>
+            <SearchBar key={currentLabel._id}/>
+          </div>
 
-        <div className={headerStyles.right}>
-      
-        </div>
-      </>
+          <div className={headerStyles.right}>
+        
+          </div>
+        </>
       ) : (
       <>
         <div className={headerStyles.left}>
@@ -139,21 +78,21 @@ const Header: React.FC = () => {
 
           <div className={headerStyles.title}>{selectedNotes.length} selected</div>
         </div>
-        {!["Trash", "Archive"].includes(currentLabel._id || "") ? (
+        {/* determine which buttons to show depending on if we are in a hardcoded label */}
+        {!["Trash", "Archive"].includes(String(currentLabel._id)) ? (
           <div className={headerStyles.right}>
-            {location.pathname !== '/search/query' ? 
-              selectedNotes.every(note => note.isPinned === true) ? (
-              <button onClick={(e) => handleUnpin(e)} className={`${headerStyles.option} ${headerStyles.removePin} ${headerStyles.noteSelectBtn}`} >
+            {location.pathname !== '/search/query' ? (
+              <button 
+                onClick={(e) => handleToggleAllPins(e)} 
+                className={`${headerStyles.option} 
+                            ${headerStyles.noteSelectBtn}
+                            ${selectedNotes.every(note => note.isPinned) ? headerStyles.removePin : ""}`}
+              >
                 <FontAwesomeIcon icon={faMapPin} />
               </button>
-              ) : (
-              <button onClick={(e) => handlePin(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`} >
-                <FontAwesomeIcon icon={faMapPin} />
-              </button>
-              )
-            : null}
+            ) : null}
 
-            <button onClick={(e) => handleArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faArchive} />
             </button>
             <button onClick={() => setModalState(!modalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
@@ -165,22 +104,22 @@ const Header: React.FC = () => {
           </div>
         ) : currentLabel._id === "Trash" ? (
           <div className={headerStyles.right}>
-            <button onClick={(e) => handleArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faArchive} />
             </button>
-            <button onClick={(e) => handleDelete(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesDelete(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
-            <button onClick={(e) => handleRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faTrashRestore} />
             </button>
           </div>
         ) : (
           <div className={headerStyles.right}>
-            <button onClick={(e) => handleTrash(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesTrash(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
-            <button onClick={(e) => handleRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={(e) => handleSelectedNotesRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faUndo} />
             </button>
           </div>

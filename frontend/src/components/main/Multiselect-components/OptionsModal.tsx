@@ -1,11 +1,9 @@
 import React, {useRef, useEffect, useState} from 'react'
 import optionModalStyles from '../../header/optionModalStyles.module.css'
 import LabelModal from './LabelModal';
-import { useLabels } from '../../../context/LabelContext';
 import { NoteType } from '../../../interfaces';
-import { useAsyncFn } from '../../../hooks/useAsync';
-import { createNote, updateNote } from '../../../utils/notes';
-import { useNotes } from '../../../context/NoteContext';
+import useLabelsQuery from '../../../services/queryHooks/useLabelsQuery';
+
 //there are cases where passing in the handle trash function from the header would not suffice
 //because the same component is being called by indivual notes
 
@@ -20,10 +18,7 @@ const OptionsModal: React.FC<Props> = ({notes, setOptionsModal, isFromHeader}) =
   
   const modalRef = useRef<HTMLDivElement>(null)
   const [labelModalState, setLabelModal] = useState<boolean>(false)
-  const {labels} = useLabels()
-  const {createLocalNote, deleteLocalNote} = useNotes()
-  const createNoteState = useAsyncFn(createNote)
-  const updateNoteState = useAsyncFn(updateNote)
+  const {data: labels} = useLabelsQuery()
 
 
   useEffect(() => {
@@ -41,31 +36,31 @@ const OptionsModal: React.FC<Props> = ({notes, setOptionsModal, isFromHeader}) =
   }, []);
 
   const handleCopy = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation();
-    if (!Array.isArray(notes)) {
-      notes = [notes]
-    }
-    notes.forEach((note) => {
-      createNoteState.execute(note.labels, note?.title, note?.body)
-      .then(note => {
-        createLocalNote(note)
-      })
-    })
+    // e.stopPropagation();
+    // if (!Array.isArray(notes)) {
+    //   notes = [notes]
+    // }
+    // notes.forEach((note) => {
+    //   createNoteState.execute(note.labels, note?.title, note?.body)
+    //   .then(note => {
+    //     createLocalNote(note)
+    //   })
+    // })
   }
 
   const handleTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation()
-    if (!Array.isArray(notes)) {
-      notes = [notes]
-    }
-    notes.forEach((note) => {
-      updateNoteState.execute({title: note.title, body: note.body, id: note._id,
-      options: {isArchived: false,
-        isTrashed: true}
-      }).then(note => {
-        deleteLocalNote(note)
-      })
-    })
+    // e.stopPropagation()
+    // if (!Array.isArray(notes)) {
+    //   notes = [notes]
+    // }
+    // notes.forEach((note) => {
+    //   updateNoteState.execute({title: note.title, body: note.body, id: note._id,
+    //   options: {isArchived: false,
+    //     isTrashed: true}
+    //   }).then(note => {
+    //     deleteLocalNote(note)
+    //   })
+    // })
   }
 
   const handleChangeLabels = async (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {

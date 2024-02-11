@@ -1,16 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react'
 import MainStyles from './MainStyles.module.css'
 import { useNotes } from '../../context/NoteContext'
-import { createNote } from '../../utils/notes'
+import { createNote } from '../../services/noteServices'
 import { useAsyncFn } from '../../hooks/useAsync'
-import { useLabels } from '../../context/LabelContext'
 
-const Create: React.FC = () => {
+const EditNote: React.FC = () => {
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
   const [newNoteState, setNewNoteState] = useState<boolean>(false)
-  const { createLocalNote } = useNotes()
-  const { currentLabel } = useLabels()
   const createNoteState = useAsyncFn(createNote)
 
 
@@ -77,4 +74,4 @@ const Create: React.FC = () => {
   )
 }
 
-export default Create
+export default EditNote

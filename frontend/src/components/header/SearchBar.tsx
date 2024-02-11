@@ -3,25 +3,25 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import headerStyles from './headerStyles.module.css'
 import { useNotes } from '../../context/NoteContext'
-import { useLabels } from '../../context/LabelContext'
 
 
 const SearchBar:React.FC = () => {
-  const { setQuery, query } = useNotes()
-  const { currentLabel } = useLabels()
+  const { query, setQuery, currentLabel } = useNotes();
 
-  
-
-  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
-  }
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const handleFocusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
+  }
+
+  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+  }
+
+  const handleClearQuery = () => {
+    setQuery("")
   }
 
   return (
@@ -32,9 +32,9 @@ const SearchBar:React.FC = () => {
           placeholder={`Search ${currentLabel.title}`}
           type="text" 
           value={query}
-          onChange={(e) =>  handleQuery(e)}
+          onChange={(e) => handleQuery(e)}
         />
-      <button className={headerStyles.X} onClick={() => setQuery("")}>X</button>
+      <button className={headerStyles.X} onClick={handleClearQuery}>X</button>
     </>
   )
 }
