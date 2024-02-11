@@ -3,7 +3,8 @@ import { createLabel, updateLabel } from "../labelServices";
 import { LabelType } from "../../interfaces";
 
 export const useLabelMutation = (labelId: number) => {
-  const {getQueryData, setQueryData} = useQueryClient();
+  const queryClient = useQueryClient();
+  const {setQueryData, getQueryData} = queryClient
 
   
   const updateLabelName = useMutation({

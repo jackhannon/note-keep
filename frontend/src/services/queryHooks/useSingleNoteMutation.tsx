@@ -6,7 +6,8 @@ import { LabelType, NoteType, NotesData } from "../../interfaces"
 import { removeNote } from "../optimisticUpdates"
 
 const useSingleNoteMutation = (boundNote: NoteType) => {
-  const {getQueryData, setQueryData, getQueriesData, invalidateQueries} = useQueryClient()
+  const queryClient = useQueryClient()
+  const {setQueryData, getQueryData} = queryClient
   const {query, currentLabel} = useNotes()
   const {labelId} = useParams()
 
@@ -15,14 +16,7 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
     
     mutationFn: () => togglePinOnNote(boundNote._id, !boundNote.isPinned),
     onMutate: () => {
-      console.log("I am getting logged")
-      try {
-        getQueriesData('notes')
-      } catch (err) {
-        console.log(err)
-      }
-      const previousNotes = getQueryData(['notes', labelId, query])
-    
+      const previousNotes = getQueryData(['notes', labelId, query]);
       setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         if (boundNote.isPinned) {
           const newPinnedNotes = prevNotes.pinnedNotes.filter(note => note._id !== boundNote._id);
@@ -38,10 +32,7 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
     },
     onError: (err, newNotes, context) => {
       setQueryData(['notes', labelId, query], context?.previousNotes)
-    },
-    onSettled: () => {
-      invalidateQueries({ queryKey: ['notes', labelId, query] })
-    },
+    }
   })
 
   

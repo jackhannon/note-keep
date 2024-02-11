@@ -6,7 +6,9 @@ import {  NotesData } from "../../interfaces"
 import { removeSelectedNotes } from "../optimisticUpdates"
 
 export const useMultiNoteMutation = (selectedNotes) => {
-  const {getQueryData, setQueryData} = useQueryClient()
+  const queryClient = useQueryClient()
+  const {setQueryData, getQueryData} = queryClient
+
   const {query} = useNotes()
   const {labelId} = useParams()
 

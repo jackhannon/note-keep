@@ -24,7 +24,6 @@ export function createNote(labels:LabelType[], title?: string, body?: string) {
 }
 
 export function togglePinOnNote(noteId: number, newPinStatus: boolean): Promise<unknown> {
-  console.log("adwadw")
   const requestData = {
     isPinned: newPinStatus
   };
