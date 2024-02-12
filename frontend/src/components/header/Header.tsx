@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import headerStyles from "./headerStyles.module.css";
+import optionModalStyles from '../optionModalStyles.module.css'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
 import { useNotes } from '../../context/NoteContext';
@@ -102,10 +104,10 @@ const Header: React.FC = () => {
               <FontAwesomeIcon icon={faEllipsisVertical} />
             </button>
             {optionsModalState ? (
-              <ClickToggleableOptionsModal setOptionsModal={setOptionsModal}>
-                <li onClick={(e) => handleSelectedNotesTrash(e)}>Delete</li>
-                <li onClick={(e) => handleSelectedNotesCopy(e)}>Make a copy</li>
-              </ClickToggleableOptionsModal>
+                <ClickToggleableOptionsModal setOptionsModal={setOptionsModal} positioningClass={"headerModal"}>
+                  <li onClick={(e) => handleSelectedNotesTrash(e)}>Delete</li>
+                  <li onClick={(e) => handleSelectedNotesCopy(e)}>Make a copy</li>
+                </ClickToggleableOptionsModal>
             ) : null}
           </div>
         ) : currentLabel._id === "Trash" ? (

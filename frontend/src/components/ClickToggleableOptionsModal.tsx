@@ -5,9 +5,10 @@ import optionModalStyles from './optionModalStyles.module.css'
 interface Props { 
   setOptionsModal: React.Dispatch<React.SetStateAction<boolean>>;
   children: ReactNode
+  positioningClass?: string
 }
 
-const ClickToggleableOptionsModal: React.FC<Props> = ({children, setOptionsModal}) => {
+const ClickToggleableOptionsModal: React.FC<Props> = ({children, setOptionsModal, positioningClass}) => {
   
   const modalRef = useRef<HTMLUListElement>(null)
 
@@ -27,7 +28,7 @@ const ClickToggleableOptionsModal: React.FC<Props> = ({children, setOptionsModal
 
 
   return (
-    <ul className={optionModalStyles.modal} ref={modalRef}>
+    <ul className={`${optionModalStyles.modal} ${positioningClass ? optionModalStyles[`${positioningClass}`] : ""}`} ref={modalRef}>
       {children}
     </ul>
   )
