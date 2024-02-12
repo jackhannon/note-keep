@@ -5,13 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from './SearchBar';
 import { useNotes } from '../../context/NoteContext';
 
-type Props = {
-  handleToggleSidebar: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-}
 
-const DefaultHead: React.FC<Props> = ({handleToggleSidebar}) => {
 
-  const {currentLabel} = useNotes()
+const DefaultHeader: React.FC = () => {
+
+  const {setIsSidebarOpen, isSidebarOpen, currentLabel} = useNotes()
+
+  const handleToggleSidebar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsSidebarOpen(!isSidebarOpen)
+  }
+
   return (
     <>
       <div className={headerStyles.left}>
@@ -32,4 +36,4 @@ const DefaultHead: React.FC<Props> = ({handleToggleSidebar}) => {
   )
 }
 
-export default DefaultHead
+export default DefaultHeader

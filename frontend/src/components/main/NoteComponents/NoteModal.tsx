@@ -2,6 +2,7 @@ import React, {useRef, useEffect, useState,  useLayoutEffect} from 'react'
 import MainStyles from '../MainStyles.module.css'
 import NoteStyles from './NoteStyles.module.css'
 import { NoteType } from '../../../interfaces';
+import useClickOutside from '../../../hooks/useClickOutside';
 
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 }
 
 
-const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, noteState, note}) => {
+const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
   const [title, setTitle] = useState<string>(`${note.title}`)
   const [body, setBody] = useState<string>(`${note.body}`)
@@ -40,35 +41,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, noteState, note
   }, [note.body]); // Recalculate height whenever the note body changes
 
 
-
-  const divRef = useRef<HTMLDivElement>(null);
-
-
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      setTimeout(()=> {
-        if (divRef.current && !divRef.current.contains(event.target as Node)) {
-          handleBlur();
-        }
-      }, 100)
-    };
-    if (noteState) {
-        document.addEventListener("mousedown", handleClickOutside);
-    } 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [title, body]);
-
-  
-  const handleUpdateNote = async () => {
-    // return updateNoteState.execute({title, body, id: note._id})
-    // .then(note => {
-    //   updateLocalNote(note);
-    // })
-  }
-    
   const handleBlur = () => {
     if (!title && !body) {
       handleDelete()
@@ -79,10 +51,18 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, noteState, note
     setNoteState(false)
   }
 
+  const noteRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(noteRef, handleBlur)
+  
+  
+  const handleUpdateNote = async () => {
+ 
+  }
 
   return (
     <div className={NoteStyles.modalContainer}>
-      <div className={NoteStyles.modal} ref={divRef}>
+      <div className={NoteStyles.modal} ref={noteRef}>
         <input 
           className={MainStyles.titleInput}
           placeholder='Title'

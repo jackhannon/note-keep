@@ -1,18 +1,20 @@
 import React, { useState, useRef } from 'react';
 import NoteStyles from './NoteStyles.module.css';
 import MainStyles from '../MainStyles.module.css'
+import optionModalStyles from '../../optionModalStyles.module.css'
 import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faCheck, faEllipsisVertical, faMapPin, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faCheck, faEllipsisVertical, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
 import { useNotes } from '../../../context/NoteContext';
 import { LabelType, NoteType } from '../../../interfaces';
 import { useParams } from 'react-router-dom';
 import { NOTE_TOGGLE_CLICKED } from '../../../reducers/selectedNotesReducer';
 import useSingleNoteMutation from '../../../services/queryHooks/useSingleNoteMutation';
-import ClickToggleableOptionsModal from '../../ClickToggleableOptionsModal';
 import LabelModal from '../Multiselect-components/LabelModal';
 import useLabelsQuery from '../../../services/queryHooks/useLabelsQuery';
-// import useClickOutside from '../../../hooks/useClickOutside';
+import useClickOutside from '../../../hooks/useClickOutside';
+import NotePinButton from './NotePinButton';
+
 interface Props {
   note: NoteType;
 }
@@ -33,6 +35,17 @@ const Note: React.FC<Props> = ({ note }) => {
 
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
+
+
+
+
+  const handleClickOutsideOptionModal = () => {
+    setOptionsModal(false)
+  }
+
+  const optionsModalRef = useRef<HTMLUListElement>(null)
+
+  useClickOutside(optionsModalRef, handleClickOutsideOptionModal)
   // useLayoutEffect(() => {
   //   if (textareaRef.current) {
   //     // Calculate the scroll height of the textarea content
@@ -51,7 +64,6 @@ const Note: React.FC<Props> = ({ note }) => {
   const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     if (!optionsModalState) {
-      console.log("true")
       setOptionsModal(true);
     } 
   }
@@ -107,25 +119,6 @@ const Note: React.FC<Props> = ({ note }) => {
     setNoteState(true);
   };
 
-  // useClickOutside(containerRef, [noteHoverState, optionsModalState], [setNoteHoverState, setOptionsModal])
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     setTimeout(()=> {
-  //       if ((containerRef.current && !containerRef.current.contains(event.target as Node))) {
-  //         setNoteHoverState(false);
-  //         setOptionsModal(false);
-  //       }
-  //     }, 100)
-  //   };
-  
-  //   document.addEventListener("mousedown", handleClickOutside);
-   
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };  
-  // }, []);
-
-
   const shouldNoteShowCheckMark = () => {
     if (noteHoverState && selectedNoteIds.includes(note._id)) {
       return false
@@ -152,23 +145,10 @@ const Note: React.FC<Props> = ({ note }) => {
           </div>
         )}
 
-
-        {/* make into component */}
-        {(note.isPinned && !["Trash", "Archive", "Query"].includes(labelId || "")) ? (
-          <div className={NoteStyles.pin}>
-            <button className={NoteStyles.options} id={NoteStyles.removePin} onClick={(e)=>handleNotePinToggle(e)}>
-              <FontAwesomeIcon icon={faMapPin} />
-            </button>
-          </div>
-        ) : (noteHoverState && !["Trash", "Archive", "Query"].includes(labelId || "")) ? (
-          <div className={NoteStyles.pin}>
-            <button className={NoteStyles.options} onClick={(e)=>handleNotePinToggle(e)}>
-              <FontAwesomeIcon icon={faMapPin} />
-            </button>
-          </div>
-        ) : null}
-
-
+        {((note.isPinned || noteHoverState) && !["Trash", "Archive"].includes(labelId || "")) && (
+          <NotePinButton handleNotePinToggle={handleNotePinToggle} isPinned={note.isPinned}/>
+        )}
+      
         <input
           className={MainStyles.titleInput}
           placeholder="Title"
@@ -183,19 +163,17 @@ const Note: React.FC<Props> = ({ note }) => {
           value={note.body || ''}
           readOnly
         />
+
         {optionsModalState && 
-        <ClickToggleableOptionsModal setOptionsModal={setOptionsModal} optionsModalState={optionsModalState}>
+        <ul className={optionModalStyles.modal} ref={optionsModalRef}>
           {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
           <li onClick={(e)=>handleTrash(e)}>Delete</li>
           {(labels && labels.length > 0) &&
           <li onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</li>}
           <li onClick={(e) => handleCopy(e)}>Make a copy</li>
-        </ClickToggleableOptionsModal>
+        </ul>
         }
 
-        
-
-        {/* refactor to component */}
         {(noteHoverState && !["Trash", "Archive"].includes(labelId || "")) ? (
           <div className={NoteStyles.tools} ref={optionRef}>
              <button className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>

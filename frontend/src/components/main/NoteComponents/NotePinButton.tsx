@@ -4,13 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 
 type NotePinButtonProps = {
-  handlePinClick: (e: Event) => void
+  handleNotePinToggle: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  isPinned: boolean;
 }
-const NotePinButton:React.FC<NotePinButtonProps> = ({handlePinClick}) => {
+const NotePinButton:React.FC<NotePinButtonProps> = ({handleNotePinToggle, isPinned}) => {
   return (
   
       <div className={NoteStyles.pin}>
-        <button className={NoteStyles.options} id={NoteStyles.removePin} onClick={(e)=>handlePinClick(e)}>
+        <button className={NoteStyles.options} id={isPinned ? NoteStyles.removePin : ""} onClick={(e)=>handleNotePinToggle(e)}>
           <FontAwesomeIcon icon={faMapPin} />
         </button>
       </div>
