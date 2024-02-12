@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query"
-import { archiveOnNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote, updateNoteContents, updateNoteLabels,} from "../noteServices"
+import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote, updateNoteContents, updateNoteLabels,} from "../noteServices"
 import { useNotes } from "../../context/NoteContext"
 import { useParams } from "react-router"
 import { LabelType, NoteType, NotesData } from "../../interfaces"
@@ -7,17 +7,18 @@ import { removeNote } from "../optimisticUpdates"
 
 const useSingleNoteMutation = (boundNote: NoteType) => {
   const queryClient = useQueryClient()
-  const {setQueryData, getQueryData} = queryClient
   const {query, currentLabel} = useNotes()
   const {labelId} = useParams()
 
   
   const toggleNotePin = useMutation({
-    
     mutationFn: () => togglePinOnNote(boundNote._id, !boundNote.isPinned),
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query]);
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      console.log("dwdwdwdwdwdw")
+
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query]);
+      console.log("dwdwdw")
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         if (boundNote.isPinned) {
           const newPinnedNotes = prevNotes.pinnedNotes.filter(note => note._id !== boundNote._id);
           const newPlainNotes = [...prevNotes.plainNotes, {...boundNote, isPinned: false}];
@@ -31,7 +32,7 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     }
   })
 
@@ -41,15 +42,15 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return archiveOnNote(boundNote._id)
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeNote(boundNote._id, prevNotes)
       })
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
 
@@ -59,15 +60,15 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return trashOnNote(boundNote._id)
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeNote(boundNote._id, prevNotes)
       })
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
 
@@ -77,15 +78,15 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return restoreOnNote(boundNote._id)
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeNote(boundNote._id, prevNotes)
       })
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
 
@@ -95,16 +96,41 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return deleteNote(boundNote._id)
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeNote(boundNote._id, prevNotes)
       })
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
+  })
+
+
+  type NotesDetails = {
+    title?: string;
+    body?: string;
+    labels: LabelType[] 
+  }
+
+  const noteCreate = useMutation({
+    mutationFn: (content: NotesDetails) => {
+      return createNote(content.labels, content.title, content.body);
+    },
+    onMutate: (content) => {
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query]);
+      
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+        const newPlainNotes = [...prevNotes.plainNotes, {title: content.title, body: content.body, labels: content.labels}];
+        return {...prevNotes, plainNotes: newPlainNotes };
+      });
+      return { previousNotes };
+    },
+    onError: (err, newNotes, context) => {
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes);
+    }
   })
 
 
@@ -112,32 +138,33 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
     title: string;
     body: string;
   }
+
   const noteContentUpdate = useMutation({
     mutationFn: (contents: NoteContents) => {
       return updateNoteContents(boundNote._id, contents.title, contents.body)
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeNote(boundNote._id, prevNotes)
       })
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
 
-  
+
   const noteLabelUpdate = useMutation({
     mutationFn: (labels: LabelType[]) => {
       return updateNoteLabels(boundNote._id, labels)
     },
     onMutate: (labels) => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         if (!labels.some(label => label._id === currentLabel._id)) {
           return removeNote(boundNote._id, prevNotes);
         }
@@ -163,11 +190,11 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
       return { previousNotes }
     },
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
 
-  return {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteContentUpdate, noteLabelUpdate}
+  return {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteContentUpdate, noteLabelUpdate, noteCreate}
 }
 
 

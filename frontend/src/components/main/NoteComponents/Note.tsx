@@ -1,17 +1,17 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import NoteStyles from './NoteStyles.module.css';
 import MainStyles from '../MainStyles.module.css'
 import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faCheck, faEllipsisVertical, faMapPin, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
 import { useNotes } from '../../../context/NoteContext';
-import OptionsModal from '../Multiselect-components/OptionsModal';
-import { NoteType } from '../../../interfaces';
+import { LabelType, NoteType } from '../../../interfaces';
 import { useParams } from 'react-router-dom';
 import { NOTE_TOGGLE_CLICKED } from '../../../reducers/selectedNotesReducer';
 import useSingleNoteMutation from '../../../services/queryHooks/useSingleNoteMutation';
-import { Query, useQueryClient } from '@tanstack/react-query';
-import useNotesQuery from '../../../services/queryHooks/useNotesQuery';
+import ClickToggleableOptionsModal from '../../ClickToggleableOptionsModal';
+import LabelModal from '../Multiselect-components/LabelModal';
+import useLabelsQuery from '../../../services/queryHooks/useLabelsQuery';
 // import useClickOutside from '../../../hooks/useClickOutside';
 interface Props {
   note: NoteType;
@@ -22,15 +22,17 @@ const Note: React.FC<Props> = ({ note }) => {
   const [noteHoverState, setNoteHoverState] = useState<boolean>(false);
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
   const {selectedNotesState, dispatchSelectedNotes} = useNotes()
+  const [labelModalState, setLabelModal] = useState<boolean>(false)
+
   const {notes: selectedNotes} = selectedNotesState
   const selectedNoteIds = selectedNotes.map(note => note._id)
-  const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete} = useSingleNoteMutation(note)
+  const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteCreate, noteLabelUpdate} = useSingleNoteMutation(note)
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const optionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null)
-  const {query, currentLabel} = useNotes()
+
+  const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
-  
   // useLayoutEffect(() => {
   //   if (textareaRef.current) {
   //     // Calculate the scroll height of the textarea content
@@ -61,28 +63,48 @@ const Note: React.FC<Props> = ({ note }) => {
   const handleArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     noteArchive.mutate();
-  }
+  };
 
   const handleTrash = (e: React.MouseEvent) => {
     e.stopPropagation();
     noteTrash.mutate();
-  }
+  };
 
   const handleRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     noteRestore.mutate();
-  }
+  };
 
   const handleDelete = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.stopPropagation();
     noteDelete.mutate();
-  }
+  };
+
+  const handleCopy = (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.stopPropagation();
+    noteCreate.mutate({title: note.title, body: note.body, labels: note.labels});
+  };
   
   const handleMouseLeave = () => {
     if (!optionsModalState) {
       setNoteHoverState(false);
     } 
   }
+
+  const handleLabelToggle = (labels: LabelType[]) => {
+    noteLabelUpdate.mutate(labels);
+  };
+
+  const handleToggleLabelsModalOn = async (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    e.stopPropagation()
+    if (!labelModalState) {
+      setLabelModal(true);
+    }
+  }
+  
+  const handleFocus = () => {
+    setNoteState(true);
+  };
 
   // useClickOutside(containerRef, [noteHoverState, optionsModalState], [setNoteHoverState, setOptionsModal])
   // useEffect(() => {
@@ -103,7 +125,6 @@ const Note: React.FC<Props> = ({ note }) => {
   // }, []);
 
 
-  //determines whether we should show a checkmark on a note
   const shouldNoteShowCheckMark = () => {
     if (noteHoverState && selectedNoteIds.includes(note._id)) {
       return false
@@ -161,7 +182,16 @@ const Note: React.FC<Props> = ({ note }) => {
           value={note.body || ''}
           readOnly
         />
-        {optionsModalState && <OptionsModal notes={[note]} setOptionsModal={setOptionsModal} optionRef={optionRef} />}
+        {optionsModalState && 
+        <ClickToggleableOptionsModal setOptionsModal={setOptionsModal}>
+          {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} setLabelModal={setLabelModal} labels={note.labels} /> : null}
+          <li onClick={(e)=>handleTrash(e)}>Delete</li>
+          {(labels && labels.length > 0) &&
+          <li onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</li>}
+          <li onClick={(e) => handleCopy(e)}>Make a copy</li>
+
+        </ClickToggleableOptionsModal>
+        }
 
         
 

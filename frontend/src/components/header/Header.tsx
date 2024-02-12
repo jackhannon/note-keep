@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import headerStyles from "./headerStyles.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars,faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
-import OptionsModal from '../main/Multiselect-components/OptionsModal';
 import { useNotes } from '../../context/NoteContext';
 import SearchBar from './SearchBar';
 import useMultiNoteMutation from '../../services/queryHooks/useMultiNoteMutation';
 import { TOGGLED_MODE_OFF } from '../../reducers/selectedNotesReducer';
+import ClickToggleableOptionsModal from '../ClickToggleableOptionsModal';
 
 
 const Header: React.FC = () => {
   const {selectedNotesState, dispatchSelectedNotes, setIsSidebarOpen, isSidebarOpen, currentLabel} = useNotes()
   const {notes: selectedNotes, modeOn: multiSelectModeOn} = selectedNotesState
 
-  const [modalState, setModalState] = useState<boolean>(false)
-  console.log(selectedNotesState)
+  const [optionsModalState, setOptionsModal] = useState<boolean>(false);
 
   const {toggleSelectedNotesPin, archiveSelectedNotes, trashSelectedNotes, deleteSelectedNotes, restoreSelectedNotes} = useMultiNoteMutation(selectedNotes)
 
@@ -44,6 +43,10 @@ const Header: React.FC = () => {
   const handleSelectedNotesRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     restoreSelectedNotes.mutate()
+  }
+
+  const handleSelectedNotesCopy = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    e.stopPropagation();
   }
 
   const handleMultiSelectCancel = () => {
@@ -95,11 +98,14 @@ const Header: React.FC = () => {
             <button onClick={(e) => handleSelectedNotesArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faArchive} />
             </button>
-            <button onClick={() => setModalState(!modalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+            <button onClick={() => setOptionsModal(!optionsModalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
               <FontAwesomeIcon icon={faEllipsisVertical} />
             </button>
-            {modalState ? (
-              <OptionsModal notes={selectedNotes} setOptionsModal={setModalState} isFromHeader={true}/>
+            {optionsModalState ? (
+              <ClickToggleableOptionsModal setOptionsModal={setOptionsModal}>
+                <li onClick={(e) => handleSelectedNotesTrash(e)}>Delete</li>
+                <li onClick={(e) => handleSelectedNotesCopy(e)}>Make a copy</li>
+              </ClickToggleableOptionsModal>
             ) : null}
           </div>
         ) : currentLabel._id === "Trash" ? (

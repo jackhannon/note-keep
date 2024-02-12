@@ -7,7 +7,7 @@ export function getNotes(labelId: string, query: string) {
   return makeRequest(url);
 }
 
-export function createNote(labels:LabelType[], title?: string, body?: string) {
+export function createNote(labels: LabelType[], title?: string, body?: string) {
   if (!Array.isArray(labels)) {
     labels = [labels]
   }
@@ -24,6 +24,7 @@ export function createNote(labels:LabelType[], title?: string, body?: string) {
 }
 
 export function togglePinOnNote(noteId: number, newPinStatus: boolean): Promise<unknown> {
+
   const requestData = {
     isPinned: newPinStatus
   };

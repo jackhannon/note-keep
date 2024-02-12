@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
 import MainStyles from './MainStyles.module.css'
-import { useNotes } from '../../context/NoteContext'
 import { createNote } from '../../services/noteServices'
 import { useAsyncFn } from '../../hooks/useAsync'
 

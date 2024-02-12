@@ -12,7 +12,6 @@ const Notes: React.FC = () => {
 
   const {data, isPending, isError, error} = useNotesQuery();
 
-
   // useEffect(() => {
   //   if (query) {
   //     setQuery("")
