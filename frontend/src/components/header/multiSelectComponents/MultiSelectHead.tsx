@@ -1,72 +1,8 @@
-import React, { useState } from 'react';
-import headerStyles from "./headerStyles.module.css";
-import optionModalStyles from '../optionModalStyles.module.css'
+import React from 'react'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars,faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
-import { useNotes } from '../../context/NoteContext';
-import SearchBar from './SearchBar';
-import useMultiNoteMutation from '../../services/queryHooks/useMultiNoteMutation';
-import { TOGGLED_MODE_OFF } from '../../reducers/selectedNotesReducer';
-import ClickToggleableOptionsModal from '../ClickToggleableOptionsModal';
-import DefaultHead from './defaultHead';
-
-
-const Header: React.FC = () => {
-  const {selectedNotesState, dispatchSelectedNotes, setIsSidebarOpen, isSidebarOpen, currentLabel} = useNotes()
-  const {notes: selectedNotes, modeOn: multiSelectModeOn} = selectedNotesState
-
-  const [optionsModalState, setOptionsModal] = useState<boolean>(false);
-
-  const {toggleSelectedNotesPin, archiveSelectedNotes, trashSelectedNotes, deleteSelectedNotes, restoreSelectedNotes} = useMultiNoteMutation(selectedNotes)
-
-  //if all notes are unpinned, pin all the notes.
-  //if any note is pinned, unpin all the notes
-  const handleToggleAllPins = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    toggleSelectedNotesPin.mutate()
-  }
-
-
-  const handleSelectedNotesArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    archiveSelectedNotes.mutate()
-  }
-
-  const handleSelectedNotesTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation();
-    trashSelectedNotes.mutate()
-  }
-
-  const handleSelectedNotesDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    deleteSelectedNotes.mutate()
-  }
-  
-  const handleSelectedNotesRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    restoreSelectedNotes.mutate()
-  }
-
-  const handleSelectedNotesCopy = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    e.stopPropagation();
-  }
-
-  const handleMultiSelectCancel = () => {
-    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
-  }
-
-  const handleToggleSidebar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    setIsSidebarOpen(!isSidebarOpen)
-  }
-
+const MultiSelectHead = () => {
   return (
-    <header>
-      {!multiSelectModeOn ? (
-        <DefaultHead handleToggleSidebar={handleToggleSidebar}/>
-      ) : (
-      <>
+    <>
         <div className={headerStyles.left}>
           <button onClick={() => handleMultiSelectCancel()} className={headerStyles.noteSelectBtn}>
             <FontAwesomeIcon icon={faX} /> 
@@ -122,10 +58,7 @@ const Header: React.FC = () => {
         )}
         
       </>
-      )}
-    </header>
-  
   )
 }
 
-export default Header;
+export default MultiSelectHead

@@ -1,31 +1,19 @@
-import React, {useRef, useEffect, ReactNode} from 'react'
+import React, {useRef, ReactNode} from 'react'
 import optionModalStyles from './optionModalStyles.module.css'
+import useClickOutside from '../hooks/useClickOutside';
 
 
 interface Props { 
   setOptionsModal: React.Dispatch<React.SetStateAction<boolean>>;
   children: ReactNode
   positioningClass?: string
+  optionsModalState: boolean
 }
 
-const ClickToggleableOptionsModal: React.FC<Props> = ({children, setOptionsModal, positioningClass}) => {
+const ClickToggleableOptionsModal: React.FC<Props> = ({children, optionsModalState, setOptionsModal, positioningClass}) => {
   
   const modalRef = useRef<HTMLUListElement>(null)
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      setTimeout(()=> {
-        if ((modalRef.current && !modalRef.current.contains(event.target as Node))) {
-          setOptionsModal(false);
-        }
-      }, 100)
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };  
-  }, []);
-
+  useClickOutside(modalRef, [optionsModalState], [setOptionsModal])
 
   return (
     <ul className={`${optionModalStyles.modal} ${positioningClass ? optionModalStyles[`${positioningClass}`] : ""}`} ref={modalRef}>

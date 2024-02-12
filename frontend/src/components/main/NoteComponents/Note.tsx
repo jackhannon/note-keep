@@ -51,6 +51,7 @@ const Note: React.FC<Props> = ({ note }) => {
   const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     if (!optionsModalState) {
+      console.log("true")
       setOptionsModal(true);
     } 
   }
@@ -183,13 +184,12 @@ const Note: React.FC<Props> = ({ note }) => {
           readOnly
         />
         {optionsModalState && 
-        <ClickToggleableOptionsModal setOptionsModal={setOptionsModal}>
-          {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} setLabelModal={setLabelModal} labels={note.labels} /> : null}
+        <ClickToggleableOptionsModal setOptionsModal={setOptionsModal} optionsModalState={optionsModalState}>
+          {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
           <li onClick={(e)=>handleTrash(e)}>Delete</li>
           {(labels && labels.length > 0) &&
           <li onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</li>}
           <li onClick={(e) => handleCopy(e)}>Make a copy</li>
-
         </ClickToggleableOptionsModal>
         }
 

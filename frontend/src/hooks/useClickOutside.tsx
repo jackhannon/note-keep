@@ -9,8 +9,9 @@ const useClickOutside = (
 ): void => {
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
+        event.stopPropagation()
         if (states.some(state => state)) {
           setters.forEach(setState => {
             setState(false)
@@ -18,9 +19,9 @@ const useClickOutside = (
         }
       }
     }
-    document.addEventListener("click", handleClickOutside)
+    document.addEventListener("click", handleClickOutside, true)
 
-    return () => document.removeEventListener("click", handleClickOutside)
-  }, [state, ref, setters])
+    return () => document.removeEventListener("click", handleClickOutside, true)
+  }, [states, ref, setters])
 }
 export default useClickOutside

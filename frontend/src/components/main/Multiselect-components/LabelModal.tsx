@@ -28,6 +28,7 @@ const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels})
     };  
   }, [setLabelModal, labels]);
 
+  
 
 
   const handleLabelClick = (label: LabelType, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
