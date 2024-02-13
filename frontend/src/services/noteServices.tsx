@@ -46,8 +46,9 @@ export function archiveOnNote(noteId: number): Promise<unknown> {
 }
 
 export function trashOnNote(noteId: number): Promise<unknown> {
+  console.log()
   const requestData = {
-    isTrash: true,
+    isTrashed: true,
     isArchived: false
   };
   return makeRequest(`/notes/${noteId}`, {

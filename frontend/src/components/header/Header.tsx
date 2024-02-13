@@ -5,7 +5,7 @@ import MultiSelectHead from './multiSelectHeaderComponents/MultiSelectHead';
 
 
 const Header: React.FC = () => {
-  const {selectedNotesState, setIsSidebarOpen, isSidebarOpen} = useNotes()
+  const {selectedNotesState} = useNotes()
   const {modeOn: multiSelectModeOn} = selectedNotesState
 
 

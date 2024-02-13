@@ -4,7 +4,8 @@ import { RefObject, useEffect } from 'react'
 
 const useClickOutside = (
   ref: RefObject<HTMLElement>,
-  handler: () => void
+  handler: () => void,
+  trigger: boolean = true
 ): void => {
 
   useEffect(() => {
@@ -14,7 +15,9 @@ const useClickOutside = (
         handler()
       }
     }
-    document.addEventListener("click", handleClickOutside, true)
+    if (trigger) {
+      document.addEventListener("click", handleClickOutside, true)
+    }
 
     return () => document.removeEventListener("click", handleClickOutside, true)
   }, [ref, handler])

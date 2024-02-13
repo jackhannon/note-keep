@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState,  useLayoutEffect} from 'react'
+import React, {useRef, useState,  useLayoutEffect} from 'react'
 import MainStyles from '../MainStyles.module.css'
 import NoteStyles from './NoteStyles.module.css'
 import { NoteType } from '../../../interfaces';
@@ -55,7 +55,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
   useClickOutside(noteRef, handleBlur)
   
-  
+
   const handleUpdateNote = async () => {
  
   }
@@ -70,14 +70,12 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
           value={title}
           ref={titleInputRef}
           onChange={(e) => handleTitleChange(e)}
-          // onBlur={() => handleBlur()}
         />
         <textarea
           placeholder='Take a note...'
           className={NoteStyles.bodyInput}
           value={body}
           ref={textareaRef}
-          // onBlur={() => handleBlur()}
           onChange={(e)=>handleBodyChange(e)}
         />
       </div>

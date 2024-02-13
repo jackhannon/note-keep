@@ -10,7 +10,7 @@ import { LabelType, NoteType } from '../../../interfaces';
 import { useParams } from 'react-router-dom';
 import { NOTE_TOGGLE_CLICKED } from '../../../reducers/selectedNotesReducer';
 import useSingleNoteMutation from '../../../services/queryHooks/useSingleNoteMutation';
-import LabelModal from '../Multiselect-components/LabelModal';
+import LabelModal from '../LabelModal';
 import useLabelsQuery from '../../../services/queryHooks/useLabelsQuery';
 import useClickOutside from '../../../hooks/useClickOutside';
 import NotePinButton from './NotePinButton';
@@ -63,6 +63,7 @@ const Note: React.FC<Props> = ({ note }) => {
 
   const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
+
     if (!optionsModalState) {
       setOptionsModal(true);
     } 

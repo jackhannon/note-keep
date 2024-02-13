@@ -5,7 +5,7 @@ import { useParams } from "react-router"
 import { LabelType, NoteType, NotesData } from "../../interfaces"
 import { removeNote } from "../optimisticUpdates"
 
-const useSingleNoteMutation = (boundNote: NoteType) => {
+const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinned: false, isTrashed:  false, isArchived:  false}) => {
   const queryClient = useQueryClient()
   const {query, currentLabel} = useNotes()
   const {labelId} = useParams()
@@ -14,10 +14,7 @@ const useSingleNoteMutation = (boundNote: NoteType) => {
   const toggleNotePin = useMutation({
     mutationFn: () => togglePinOnNote(boundNote._id, !boundNote.isPinned),
     onMutate: () => {
-      console.log("dwdwdwdwdwdw")
-
       const previousNotes = queryClient.getQueryData(['notes', labelId, query]);
-      console.log("dwdwdw")
       queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         if (boundNote.isPinned) {
           const newPinnedNotes = prevNotes.pinnedNotes.filter(note => note._id !== boundNote._id);

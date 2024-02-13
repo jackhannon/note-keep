@@ -1,7 +1,8 @@
-import React, {useRef, useEffect, useState } from 'react'
-import optionModalStyles from '../../optionModalStyles.module.css'
-import { LabelType } from '../../../interfaces';
-import useLabelsQuery from '../../../services/queryHooks/useLabelsQuery';
+import React, {useRef, useState } from 'react'
+import optionModalStyles from '../optionModalStyles.module.css'
+import { LabelType } from '../../interfaces';
+import useLabelsQuery from '../../services/queryHooks/useLabelsQuery';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface Props {
   setLabelModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,25 +12,15 @@ interface Props {
 
 const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels}) => {
   const {data: allLabels} = useLabelsQuery()
-  const labelModalRef = useRef<HTMLDivElement>(null)
   const [checkedLabels, setCheckedLabels] = useState<LabelType[]>(labels)
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      setTimeout(()=> {
-        if ((labelModalRef.current && !labelModalRef.current.contains(event.target as Node))) {
-          setLabelModal(false);
-        }
-      }, 100)
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };  
-  }, [setLabelModal, labels]);
+  const labelModalRef = useRef<HTMLDivElement>(null)
 
-  
+  const handleSetLabelModalFalse = () => {
+    setLabelModal(false);
+  }
 
+  useClickOutside(labelModalRef, handleSetLabelModalFalse)
 
   const handleLabelClick = (label: LabelType, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()

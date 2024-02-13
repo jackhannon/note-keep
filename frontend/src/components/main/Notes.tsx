@@ -1,5 +1,5 @@
 import React from 'react'
-import EditNote from './EditNote.tsx'
+import CreateNote from './CreateNote.tsx'
 import Note from './NoteComponents/Note.tsx';
 import MainStyles from './MainStyles.module.css'
 import Masonry from 'react-masonry-css'
@@ -64,7 +64,7 @@ const Notes: React.FC = () => {
 
     return (
       <div className={MainStyles.container}>
-        {!["Trash", "Archive"].includes(labelId || "") ? (<EditNote />) : null}
+        {!["Trash", "Archive"].includes(labelId || "") ? (<CreateNote />) : null}
         {/* className={NoteStyles.notesContainer} */}
         <Masonry   
         breakpointCols={breakpoints}
