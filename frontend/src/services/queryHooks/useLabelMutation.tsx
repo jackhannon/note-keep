@@ -2,22 +2,27 @@ import { useMutation, useQueryClient, } from "@tanstack/react-query";
 import { createLabel, updateLabel } from "../labelServices";
 import { LabelType } from "../../interfaces";
 
-export const useLabelMutation = (labelId: number) => {
+export const useLabelMutation = () => {
   const queryClient = useQueryClient();
   const {setQueryData, getQueryData} = queryClient
 
   
+  type ExistingLabel = {
+    _id: number,
+    title: string
+  }
+  
   const updateLabelName = useMutation({
-    mutationFn: (title: string) => {
-      return updateLabel(labelId, title)
+    mutationFn: (labelDetails: ExistingLabel) => {
+      return updateLabel(labelDetails._id, labelDetails.title)
     },
-    onMutate: (title: string) => {
+    onMutate: (labelDetails) => {
       const previousLabels = getQueryData(['labels'])
 
       setQueryData(['labels'], (prevLabels: LabelType[]) => {
         return prevLabels.map(label => {
-          if (label._id === labelId) {
-            label.title = title
+          if (label._id === labelDetails._id) {
+            label.title = labelDetails.title
           }
           return label
         })
@@ -31,12 +36,12 @@ export const useLabelMutation = (labelId: number) => {
   })
 
 
-  const addLabel = useMutation({
+  const createLabel = useMutation({
     mutationFn: (title: string) => {
       return createLabel(title)
     },
     onMutate: (title: string) => {
-      const previousLabels = getQueryData(['labels', labelId])
+      const previousLabels = getQueryData(['labels'])
 
       setQueryData(['labels'], (prevLabels: LabelType[]) => {
         return prevLabels.push({title: title})
@@ -68,7 +73,7 @@ export const useLabelMutation = (labelId: number) => {
     },
   })
 
-  return {updateLabelName, deleteLabel, addLabel}
+  return {updateLabelName, deleteLabel, createLabel}
 }
 
 export default useLabelMutation

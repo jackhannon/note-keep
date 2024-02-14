@@ -25,11 +25,11 @@
 
 
   },
-  "baseUrl": ".",
+  "baseUrl": "./frontend",
   "typeRoots": ["./node_modules/@types", "./custom-types"],
   "paths": {
-    "*": ["*.css"]
+    "*": ["*.module.css"]
   },
-  "include": ["frontend/src"],
+  "include": ["/src", "/src/globals.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

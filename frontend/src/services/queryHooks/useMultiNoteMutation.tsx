@@ -134,8 +134,7 @@ export const useMultiNoteMutation = (selectedNotes) => {
     onError: (err, newNotes, context) => {
       setQueryData(['notes', labelId, query], context?.previousNotes)
     },
-  }) 
-
+  })
 
   return {toggleSelectedNotesPin, trashSelectedNotes, archiveSelectedNotes, deleteSelectedNotes, restoreSelectedNotes}
 }

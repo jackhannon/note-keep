@@ -15,7 +15,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     navigate(`/Notes`);
-  }, [navigate])
+  }, [])
 
   return (
     <>

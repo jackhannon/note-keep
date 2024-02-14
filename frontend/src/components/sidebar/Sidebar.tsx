@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
   const [modalState, setModalState] = useState<boolean>(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
-  const {data} = useLabelsQuery()
+  const {data: labels} = useLabelsQuery()
 
 
   const handleHover = () => {
@@ -53,8 +53,8 @@ const Sidebar: React.FC = () => {
           </div>
         </Link>
         
-        {data &&
-          data.map((label: LabelType) => (
+        {labels &&
+          labels.map((label: LabelType) => (
             <Label label={label} key={label._id}/>
           ))
         }

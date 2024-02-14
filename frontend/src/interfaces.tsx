@@ -3,6 +3,11 @@ export interface LabelType {
   title: string;
 }
 
+export interface CreatedLabelType {
+  _id?: number;
+  title: string;
+}
+
 export interface NoteType {
   _id: number;
   title?: string;

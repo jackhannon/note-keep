@@ -30,8 +30,6 @@ const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
     notes: [],
     modeOn: false
   };
-
-  
   
   const [selectedNotesState, dispatchSelectedNotes] = useReducer(selectedNotesReducer, initialState);
   const [query, setQuery] = useState("")
@@ -43,42 +41,6 @@ const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
     setCurrentLabel(label)
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
-
-
-
-  
-  // function updateLocalNoteLabels(note: NoteType) {
-  //   setNotes(prevNotes => {
-  //     if (note.isPinned) {
-  //       const newPinnedNotes = prevNotes.pinnedNotes.map(prevNote => {
-  //         return prevNote._id !== note._id ? prevNote : note
-  //       })
-  //       return {
-  //         ...prevNotes,
-  //         pinnedNotes: newPinnedNotes,
-  //       }
-  //     } else {
-  //       const newPlainNotes = prevNotes.plainNotes.map(prevNote => {
-  //         return prevNote._id !== note._id ? prevNote : note
-  //       })
-  //       return {
-  //         ...prevNotes,
-  //         plainNotes: newPlainNotes,
-  //       }
-  //     }
-  //   })
-  // }
-
-  // function createLocalNote(note: NoteType) {
-  //   setNotes(prevNotes => { 
-  //     return {
-  //       ...prevNotes,
-  //       plainNotes: [note ,...prevNotes.plainNotes]
-  //     }
-  //   })
-  // }
-
-
 
   const context: ContextType = {
     query,
