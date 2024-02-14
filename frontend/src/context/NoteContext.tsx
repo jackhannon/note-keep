@@ -40,6 +40,7 @@ const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
   function handleSetLabel(label: LabelType) {
     setCurrentLabel(label)
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
+    window.scrollTo(0, 0)
   }
 
   const context: ContextType = {
