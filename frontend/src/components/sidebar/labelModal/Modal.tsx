@@ -14,14 +14,14 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = ({ setModalState}) => {
-  const {createLabel} = useLabelMutation()
+  const {addLabel} = useLabelMutation()
   const {data: labels} = useLabelsQuery()
 
   const [newLabelState, setNewLabelState] = useState<boolean>(false)
   const [newLabel, setNewLabel] = useState<string>("")
 
   const onLabelCreate = () => {
-    createLabel.mutate(newLabel)
+    addLabel.mutate(newLabel)
   }
 
   const divRef = useRef<HTMLDivElement>(null);

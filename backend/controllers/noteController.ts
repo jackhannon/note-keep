@@ -15,28 +15,59 @@ interface Label {
   title: string;
 }
 
-const getQuery = async (req: Request, res: Response, next: NextFunction) => {
-  const query: string = req.query.query as string
-  const labelId: string = req.query.labelId as string;
 
+const getQuery = async (req: Request, res: Response, next: NextFunction) => {
+  const labelId: string = req.params.labelId as string;
+  const query: string = req.query.query as string;
 
   try {
-    const notes: Collection<Note> | undefined = await db.collection("notes")
+    const notes: Collection<Note> | undefined = await db.collection("notes");
+  
+    if (["Trash", "Archive"].includes(labelId)) {
+      const plainNotes = await notes?.find({
+        $or: [
+          { title: { $regex: query, $options: "i" } },
+          { body: { $regex: query, $options: "i" } },
+        ],
+        isTrashed: labelId === "Trash",
+        isArchived: labelId === "Archive",
+        labels: { $elemMatch: {} }
+      }).limit(50).toArray();
+
+      return res.send({pinnedNotes: [], plainNotes}).status(200);
+    }
+    
+    const pinnedNotes = await notes?.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { body: { $regex: query, $options: "i" } },
+      ],
+      isPinned: true,
+      isTrashed: labelId === "Trash",
+      isArchived: labelId === "Archive",
+      labels: { $elemMatch: { _id: labelId } }
+    }).limit(50).toArray()
+
     const plainNotes = await notes?.find({
       $or: [
-        { title: { $regex: query, $options: "i" } }, // Case-insensitive search in the title
-        { body: { $regex: query, $options: "i" } },  // Case-insensitive search in the body
+        { title: { $regex: query, $options: "i" } },
+        { body: { $regex: query, $options: "i" } },
       ],
-      labels: { $elemMatch: { _id: labelId} }
+      isPinned: false,
+      isTrashed: labelId === "Trash",
+      isArchived: labelId === "Archive",
+      labels: { $elemMatch: { _id: labelId } }
     }).limit(50).toArray()
-    if (plainNotes) {
-      return res.send(plainNotes).status(200)
+
+    if (pinnedNotes && plainNotes) {
+      return res.send({pinnedNotes, plainNotes}).status(200)
     } 
     throw new AppError(500, "Could not get query")
   } catch (error) {
     next(error)
   }
 }
+
 
 const getNote = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params
@@ -208,6 +239,16 @@ const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   const labelId = req.params.id
 
   try {
+    const notes: Collection<Label> | undefined = db.collection("notes")
+
+    const notesToDeleteCursor = await notes.find({
+      labels: { $size: 2, $all: [labelId] }
+    });
+
+    const notesToDelete = await notesToDeleteCursor.toArray();
+
+    await notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
+
     const labels: Collection<Label> | undefined = db.collection("labels")
     const result = await labels?.findOneAndDelete(
       {_id: new ObjectId(labelId)}

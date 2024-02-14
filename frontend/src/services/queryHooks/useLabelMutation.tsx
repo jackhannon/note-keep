@@ -36,7 +36,7 @@ export const useLabelMutation = () => {
   })
 
 
-  const createLabel = useMutation({
+  const addLabel = useMutation({
     mutationFn: (title: string) => {
       return createLabel(title)
     },
@@ -73,7 +73,7 @@ export const useLabelMutation = () => {
     },
   })
 
-  return {updateLabelName, deleteLabel, createLabel}
+  return {updateLabelName, deleteLabel, addLabel}
 }
 
 export default useLabelMutation

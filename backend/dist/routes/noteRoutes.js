@@ -12,9 +12,7 @@ router.post("/label", noteController_js_1.postLabel);
 router.patch("/label/:id", noteController_js_1.patchLabel);
 router.delete("/label/:id", noteController_js_1.deleteLabel);
 // Getting notes
-router.get("/:labelId", noteController_js_1.getNotes);
-router.get("/note/:labelId/:id", noteController_js_1.getNote);
-router.get("/search/query", noteController_js_1.getQuery);
+router.get("/:labelId", noteController_js_1.getQuery);
 // Mutating the notes
 router.post("/newnote", noteController_js_1.postNote);
 router.patch("/:id", noteController_js_1.patchNote);

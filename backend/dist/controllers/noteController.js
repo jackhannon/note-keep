@@ -14,19 +14,44 @@ const mongodb_1 = require("mongodb");
 const conn_js_1 = require("../config/conn.js");
 const appErr_js_1 = require("../middleware/appErr.js");
 const getQuery = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const labelId = req.params.labelId;
     const query = req.query.query;
-    const labelId = req.query.labelId;
     try {
         const notes = yield conn_js_1.db.collection("notes");
+        if (["Trash", "Archive"].includes(labelId)) {
+            const plainNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
+                $or: [
+                    { title: { $regex: query, $options: "i" } },
+                    { body: { $regex: query, $options: "i" } },
+                ],
+                isTrashed: labelId === "Trash",
+                isArchived: labelId === "Archive",
+                labels: { $elemMatch: {} }
+            }).limit(50).toArray());
+            return res.send({ pinnedNotes: [], plainNotes }).status(200);
+        }
+        const pinnedNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
+            $or: [
+                { title: { $regex: query, $options: "i" } },
+                { body: { $regex: query, $options: "i" } },
+            ],
+            isPinned: true,
+            isTrashed: labelId === "Trash",
+            isArchived: labelId === "Archive",
+            labels: { $elemMatch: { _id: labelId } }
+        }).limit(50).toArray());
         const plainNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
             $or: [
                 { title: { $regex: query, $options: "i" } },
-                { body: { $regex: query, $options: "i" } }, // Case-insensitive search in the body
+                { body: { $regex: query, $options: "i" } },
             ],
+            isPinned: false,
+            isTrashed: labelId === "Trash",
+            isArchived: labelId === "Archive",
             labels: { $elemMatch: { _id: labelId } }
         }).limit(50).toArray());
-        if (plainNotes) {
-            return res.send(plainNotes).status(200);
+        if (pinnedNotes && plainNotes) {
+            return res.send({ pinnedNotes, plainNotes }).status(200);
         }
         throw new appErr_js_1.AppError(500, "Could not get query");
     }
@@ -194,6 +219,12 @@ exports.patchLabel = patchLabel;
 const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const labelId = req.params.id;
     try {
+        const notes = conn_js_1.db.collection("notes");
+        const notesToDeleteCursor = yield notes.find({
+            labels: { $size: 2, $all: [labelId] }
+        });
+        const notesToDelete = yield notesToDeleteCursor.toArray();
+        yield notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
         const labels = conn_js_1.db.collection("labels");
         const result = yield (labels === null || labels === void 0 ? void 0 : labels.findOneAndDelete({ _id: new mongodb_1.ObjectId(labelId) }));
         if (result) {

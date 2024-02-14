@@ -10,9 +10,7 @@ router.patch("/label/:id", patchLabel);
 router.delete("/label/:id", deleteLabel);
 
 // Getting notes
-router.get("/:labelId", getNotes);
-router.get("/note/:labelId/:id", getNote);
-router.get("/search/query", getQuery);
+router.get("/:labelId", getQuery);
 
 // Mutating the notes
 router.post("/newnote", postNote);
