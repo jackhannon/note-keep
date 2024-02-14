@@ -17,6 +17,8 @@ const EditNote: React.FC = () => {
     if (title || body) {
       noteCreate.mutate({title: title, body: body, labels: [currentLabel]})
     }
+    setTitle("")
+    setBody("")
     setCreateNoteIsFocused(false)
   }
 
