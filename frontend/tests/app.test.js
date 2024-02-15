@@ -13,15 +13,15 @@ describe('modifying individual notes', () => {
   });
 
   it("note disappears when archived", () => {
-    // probably working
+    //working
   });
 
-  it("note disappears when deleted", () => {
-    
+  it("note disappears and goes to deleted label when deleted", () => {
+    //working
   });
 
-  it("note disappears when restored", () => {
-    
+  it("note disappears goes to respective label(s) when restored", () => {
+    //working
   });
 
   it("note disappears when current label is removed from the notes labels", () => {
@@ -29,7 +29,7 @@ describe('modifying individual notes', () => {
   });
 
   it("note created upon correct trigger", () => {
-    
+    //working
   });
 
   it("note contents mutable", () => {

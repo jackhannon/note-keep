@@ -52,6 +52,10 @@ export const useLabelMutation = () => {
     onError: (err, newNotes, context) => {
       setQueryData(['labels'], context?.previousLabels)
     },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['labels'] })
+    },
   })
 
 
@@ -59,6 +63,7 @@ export const useLabelMutation = () => {
     mutationFn: (labelId) => {
       return deleteLabel(labelId)
     },
+    
     onMutate: (labelId) => {
       const previousLabels = getQueryData(['labels'])
 
