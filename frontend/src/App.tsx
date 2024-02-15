@@ -23,10 +23,10 @@ const App: React.FC = () => {
         <Header />
         <Routes>
           <Route path='/:labelId' element={
-              <div className="container">
-                <Sidebar />
-                <Notes/>
-              </div>
+            <div className="container">
+              <Sidebar />
+              <Notes/>
+            </div>
           } />
         </Routes>
       </NoteProvider>
