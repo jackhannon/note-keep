@@ -1,18 +1,19 @@
 import { describe, it } from 'vitest';
 
 describe('switching labels', () => {
-  it("current label switches when another label is clicked", () => {
+  it("current label and notes switches when another label is clicked", () => {
 
   });
 });
 
-describe('modifying notes', () => {
+
+describe('modifying individual notes', () => {
   it("note disappears when trashed", () => {
-    
+    // working
   });
 
   it("note disappears when archived", () => {
-    
+    // probably working
   });
 
   it("note disappears when deleted", () => {
@@ -22,14 +23,46 @@ describe('modifying notes', () => {
   it("note disappears when restored", () => {
     
   });
-});
 
-describe('modifying labels', () => {
-  it("label name changable", () => {
+  it("note disappears when current label is removed from the notes labels", () => {
     
   });
 
-  it("label removable", () => {
+  it("note created upon correct trigger", () => {
+    
+  });
+
+  it("note contents mutable", () => {
+    
+  });
+});
+
+
+describe('modifying multiple notes', () => {
+  it("selected notes disappears when trashed", () => {
+    
+  });
+
+  it("selected notes disappear when archived", () => {
+    
+  });
+
+  it("selected notes disappear when deleted", () => {
+    
+  });
+
+  it("selected notes disappears when restored", () => {
+    
+  });
+});
+
+
+describe('modifying labels', () => {
+  it("default labels present", () => {
+
+  });
+
+  it("label name mutable", () => {
     
   });
 

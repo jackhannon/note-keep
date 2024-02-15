@@ -37,7 +37,7 @@ export function togglePinOnNote(noteId: number, newPinStatus: boolean): Promise<
 export function archiveOnNote(noteId: number): Promise<unknown> {
   const requestData = {
     isArchived: true,
-    isTrash: false
+    isTrashed: false
   };
   return makeRequest(`/notes/${noteId}`, {
     method: "PATCH",
@@ -46,7 +46,6 @@ export function archiveOnNote(noteId: number): Promise<unknown> {
 }
 
 export function trashOnNote(noteId: number): Promise<unknown> {
-  console.log()
   const requestData = {
     isTrashed: true,
     isArchived: false
@@ -59,7 +58,7 @@ export function trashOnNote(noteId: number): Promise<unknown> {
 
 export function restoreOnNote(noteId: number): Promise<unknown> {
   const requestData = {
-    isTrash: false,
+    isTrashed: false,
     isArchived: false
   };
   return makeRequest(`/notes/${noteId}`, {
