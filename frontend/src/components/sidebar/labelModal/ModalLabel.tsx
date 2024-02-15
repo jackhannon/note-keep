@@ -91,9 +91,9 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
       <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
     </button>
     <div className={sidebarStyles.edit} 
-      onMouseOver={()=>handleFocusAndHover(setTagHoverState, true)} 
-      onMouseLeave={()=>handleFocusAndHover(setTagHoverState, false)} 
-      onFocus={()=>handleFocusAndHover(setExistingLabelFocusState, true)}
+      onMouseOver={()=> setTagHoverState(true)} 
+      onMouseLeave={()=> setTagHoverState(false)} 
+      onFocus={()=>setExistingLabelFocusState(true)}
     >
       <input 
         value={title} 

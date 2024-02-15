@@ -160,7 +160,6 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
     },
     onMutate: (labels) => {
       const previousNotes = queryClient.getQueryData(['notes', labelId, query])
-      
       queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         if (!labels.some(label => label._id === currentLabel._id)) {
           return removeNote(boundNote._id, prevNotes);
@@ -173,15 +172,17 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
             }
             return note
           })
-          return {...pinnedNotes, ...prevNotes.plainNotes}
+          return {...prevNotes, pinnedNotes: [...pinnedNotes]}
         } else {
-          const plainNotes = prevNotes.pinnedNotes.map(note => {
+          const plainNotes = prevNotes.plainNotes.map(note => {
             if (note._id === boundNote._id) {
               return {...note, labels: labels}
             }
             return note
           })
-          return {...prevNotes.pinnedNotes, ...plainNotes}
+          console.log(plainNotes)
+
+          return {...prevNotes, plainNotes: [...plainNotes]}
         }       
       })
       return { previousNotes }

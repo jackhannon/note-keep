@@ -24,14 +24,15 @@ const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels})
 
   const handleLabelClick = (label: LabelType, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
-    setCheckedLabels(prevCheckedLabels => {
-      if (prevCheckedLabels.some(checkedLabel => checkedLabel._id === label._id)) {
-        return prevCheckedLabels.filter(checkedLabel => checkedLabel._id !== label._id);
-      } else {
-        return [...prevCheckedLabels, label];
-      }
-    });
-    handleLabelToggle([...checkedLabels, label])
+    let newLabels: LabelType[];
+    if (checkedLabels.some(checkedLabel => checkedLabel._id === label._id)) {
+      const filteredLabels = checkedLabels.filter(checkedLabel => checkedLabel._id !== label._id);
+      newLabels = filteredLabels
+    } else {
+      newLabels = [...checkedLabels, label];
+    }
+    setCheckedLabels(newLabels);
+    handleLabelToggle(newLabels)
   }
   
   return (
