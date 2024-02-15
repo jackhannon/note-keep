@@ -1,6 +1,6 @@
 header {
   position: sticky;
-  top: 0;
+  top: 0px;
   z-index: 999;
   padding: .4em 0 .4em .0em;
   background-color: rgb(51, 50, 50);
@@ -9,9 +9,8 @@ header {
   grid-template-columns: 1fr 3fr 1fr;
   width: 100%;
   border-bottom: 1px solid rgb(116, 116, 116);
-
-
 }
+
 
 .left {
   display: flex;
