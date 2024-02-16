@@ -75,7 +75,7 @@ describe('modifying labels', () => {
   });
 
   it("add a label", () => {
-    // not working
+    // working
   });
 });
 
@@ -87,3 +87,7 @@ describe('modifying labels', () => {
 // when you click the options button on notes and then click outside to close the modal,
 // the check will not go away until another mouse exit even occurs, this can lead to highlighting
 // multiple notes when multi select mode is not even on 
+
+
+
+//be VERY careful with useoutsideclick, can cause subtle bugs

@@ -220,7 +220,6 @@ const patchLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.patchLabel = patchLabel;
 const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const labelId = req.params.id;
-    console.log(labelId);
     try {
         const notes = conn_js_1.db.collection("notes");
         const notesToDeleteCursor = yield notes.find({
@@ -231,7 +230,6 @@ const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const labels = conn_js_1.db.collection("labels");
         const result = yield (labels === null || labels === void 0 ? void 0 : labels.findOneAndDelete({ _id: new mongodb_1.ObjectId(labelId) }));
         if (result) {
-            console.log(result);
             return res.send(result.value).status(200);
         }
         else {

@@ -40,7 +40,7 @@ export const useLabelMutation = () => {
       const previousLabels = queryClient.getQueryData(['labels'])
 
       queryClient.setQueryData(['labels'], (prevLabels: LabelType[]) => {
-        return prevLabels.push({_id: "", title: title})
+        return [...prevLabels, {_id: "", title: title}]
       })
       return { previousLabels }
     },

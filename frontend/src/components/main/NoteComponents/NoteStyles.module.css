@@ -26,6 +26,7 @@
   display: flex;
   align-items: center;
   resize: none;
+  
   overflow: hidden;
   max-height: min-content;
   padding: .5rem .5rem .5rem .5rem;
@@ -43,7 +44,7 @@
 .modalContainer {
   background-color: rgba(0, 0, 0, 0.226);
   z-index: 999;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

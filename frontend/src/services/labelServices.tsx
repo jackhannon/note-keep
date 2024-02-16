@@ -6,7 +6,6 @@ export function getLabels() {
 }
 
 export function deleteLabel(labelId: string) {
-  console.log("ddwddw")
   return makeRequest(`/notes/label/${labelId}`, {
     method: "DELETE",
   })

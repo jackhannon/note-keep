@@ -16,27 +16,27 @@ interface Props {
 const Modal: React.FC<Props> = ({ setModalState }) => {
   const {addLabel} = useLabelMutation()
   const {data: labels} = useLabelsQuery()
-
   const [newLabelState, setNewLabelState] = useState<boolean>(false)
   const [newLabel, setNewLabel] = useState<string>("")
 
   const onLabelCreate = () => {
-    addLabel.mutate(newLabel)
+    if (newLabel.length > 0) {
+      addLabel.mutate(newLabel)
+    }
   }
 
-  const divRef = useRef<HTMLDivElement>(null);
+  const labelsModalRef = useRef<HTMLDivElement>(null);
 
   const handleSetModalStateFalse = () => {
     setModalState(false)
   }
 
-  useClickOutside(divRef, handleSetModalStateFalse)
-
+  useClickOutside(labelsModalRef, handleSetModalStateFalse)
 
 
   return (
-      <div className={sidebarStyles.modalContainer}>
-        <div className={sidebarStyles.modal} ref={divRef}>
+    <div className={sidebarStyles.modalContainer}>
+      <div ref={labelsModalRef} className={sidebarStyles.modal}>
         <div className={sidebarStyles.message}>Edit labels</div>
 
         <div className={sidebarStyles.newLabel}>
@@ -45,23 +45,23 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
             className={`${sidebarStyles.newLabelField} ${newLabelState ? sidebarStyles.input : null}`} 
             placeholder={"Enter a new label"}
             onChange={(e)=>setNewLabel(e.target.value)} 
-            value = {newLabel}
+            value={newLabel}
             onFocus={()=>setNewLabelState(true)} 
             onBlur={()=>setTimeout(() => {
               setNewLabel("") 
             }, 100)}
             />
           <button className={`${newLabelState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
-            onClick={() => onLabelCreate()}>
+            onClick={onLabelCreate}>
             <FontAwesomeIcon icon={faCheck}/>
           </button>
-          </div>
-          {labels && labels.map((label)=> {
-          return <ModalLabel key={Date.now()} label={label} newLabelState={newLabelState} setNewLabelState={setNewLabelState}/>
+        </div>
+        {labels && labels.map((label)=> {
+          return <ModalLabel key={label._id + Date.now()} label={label} newLabelState={newLabelState} setNewLabelState={setNewLabelState}/>
         }
         )}
-        </div>
       </div>
+    </div>
   )
 }
 

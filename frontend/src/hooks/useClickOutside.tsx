@@ -20,6 +20,6 @@ const useClickOutside = (
     }
 
     return () => document.removeEventListener("click", handleClickOutside, true)
-  }, [ref, handler])
+  }, [ref, handler, trigger])
 }
 export default useClickOutside

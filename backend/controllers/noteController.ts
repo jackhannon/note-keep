@@ -243,7 +243,6 @@ const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   const labelId = req.params.id
-  console.log(labelId)
 
   try {
     const notes: Collection<Label> | undefined = db.collection("notes")
@@ -261,7 +260,6 @@ const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
       {_id: new ObjectId(labelId)}
     )
     if (result) {
-      console.log(result)
       return res.send(result.value).status(200)
     } else {
       throw new AppError(500, "Could not delete label")

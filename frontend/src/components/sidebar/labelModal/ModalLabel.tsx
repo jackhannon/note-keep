@@ -33,10 +33,10 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
     setDeletionModal(!deletionModal)
   }
 
-  const handleDelete = () => {
-    removeLabel.mutate(label._id)
+  const handleDelete = async () => {
+    await removeLabel.mutateAsync(label._id)
     handleToggleDeletionModal()
-    if (currentLabel._id === label._id) {
+    if (currentLabel._id === label._id && removeLabel.isIdle) {
       navigate("/Notes")
     }
   }
@@ -45,9 +45,9 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
     setExistingLabelFocusState(false);
   }
 
-  const divRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(divRef, handleBlur)
+  useClickOutside(labelRef, handleBlur)
 
 
   
@@ -72,7 +72,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
   
   return (
   
-  <div className={sidebarStyles.field} ref={divRef}>
+  <div className={sidebarStyles.field}>
     {deletionModal && 
       <DeleteModal 
         labelTitle={label.title} 
