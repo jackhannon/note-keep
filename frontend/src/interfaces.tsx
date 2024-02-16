@@ -1,15 +1,15 @@
 export interface LabelType {
-  _id?: number | string;
+  _id: string;
   title: string;
 }
 
 export interface CreatedLabelType {
-  _id?: number;
+  _id: string;
   title: string;
 }
 
 export interface NoteType {
-  _id: number;
+  _id: string;
   title?: string;
   body?: string;
   labels: LabelType[];

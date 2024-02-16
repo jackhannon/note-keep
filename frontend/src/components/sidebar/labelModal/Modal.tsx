@@ -13,7 +13,7 @@ interface Props {
   setModalState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal: React.FC<Props> = ({ setModalState}) => {
+const Modal: React.FC<Props> = ({ setModalState }) => {
   const {addLabel} = useLabelMutation()
   const {data: labels} = useLabelsQuery()
 

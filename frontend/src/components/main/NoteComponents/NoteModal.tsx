@@ -3,6 +3,7 @@ import MainStyles from '../MainStyles.module.css'
 import NoteStyles from './NoteStyles.module.css'
 import { NoteType } from '../../../interfaces';
 import useClickOutside from '../../../hooks/useClickOutside';
+import useSingleNoteMutation from '../../../services/queryHooks/useSingleNoteMutation';
 
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
 
 
 const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
-
+  const { noteContentUpdate } = useSingleNoteMutation(note)
   const [title, setTitle] = useState<string>(`${note.title}`)
   const [body, setBody] = useState<string>(`${note.body}`)
 
@@ -57,7 +58,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
   
 
   const handleUpdateNote = async () => {
- 
+    noteContentUpdate.mutate({title, body})
   }
 
   return (

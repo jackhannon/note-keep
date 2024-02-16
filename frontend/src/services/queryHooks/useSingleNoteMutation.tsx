@@ -5,7 +5,7 @@ import { useParams } from "react-router"
 import { LabelType, NoteType, NotesData } from "../../interfaces"
 import { removeNote } from "../optimisticUpdates"
 
-const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinned: false, isTrashed:  false, isArchived:  false}) => {
+const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPinned: false, isTrashed:  false, isArchived:  false}) => {
   const queryClient = useQueryClient()
   const {query, currentLabel} = useNotes()
   const {labelId} = useParams()
@@ -143,11 +143,27 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
     mutationFn: (contents: NoteContents) => {
       return updateNoteContents(boundNote._id, contents.title, contents.body)
     },
-    onMutate: () => {
+    onMutate: (contents) => {
       const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       
       queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
-        return removeNote(boundNote._id, prevNotes)
+        if (boundNote.isPinned) {
+          const pinnedNotes = prevNotes.pinnedNotes.map(note => {
+            if (note._id === boundNote._id) {
+              return {...note, body: contents.body, title: contents.title}
+            }
+            return note
+          })
+          return {...prevNotes, pinnedNotes: [...pinnedNotes]}
+        } else {
+          const plainNotes = prevNotes.plainNotes.map(note => {
+            if (note._id === boundNote._id) {
+              return {...note, body: contents.body, title: contents.title}
+            }
+            return note
+          })
+          return {...prevNotes, plainNotes: [...plainNotes]}
+        }  
       })
       return { previousNotes }
     },
@@ -155,7 +171,6 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
       queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   })
-
 
   const noteLabelUpdate = useMutation({
     mutationFn: (labels: LabelType[]) => {
@@ -167,8 +182,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
         if (!labels.some(label => label._id === currentLabel._id)) {
           return removeNote(boundNote._id, prevNotes);
         }
-        const noteInPinnedNotes = prevNotes.pinnedNotes.find(note => note._id === boundNote._id);
-        if (noteInPinnedNotes) {
+        if (boundNote.isPinned) {
           const pinnedNotes = prevNotes.pinnedNotes.map(note => {
             if (note._id === boundNote._id) {
               return {...note, labels: labels}
@@ -183,8 +197,6 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: 0, labels: [], isPinn
             }
             return note
           })
-          console.log(plainNotes)
-
           return {...prevNotes, plainNotes: [...plainNotes]}
         }       
       })

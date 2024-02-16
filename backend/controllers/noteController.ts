@@ -31,7 +31,6 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         ],
         isTrashed: labelId === "Trash",
         isArchived: labelId === "Archive",
-        labels: { $elemMatch: {} }
       }).limit(50).toArray();
 
       return res.send({pinnedNotes: [], plainNotes}).status(200);
@@ -43,8 +42,8 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         { body: { $regex: query, $options: "i" } },
       ],
       isPinned: true,
-      isTrashed: labelId === "Trash",
-      isArchived: labelId === "Archive",
+      isTrashed: false,
+      isArchived: false,
       labels: { $elemMatch: { _id: labelId } }
     }).limit(50).toArray()
 
@@ -54,8 +53,8 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         { body: { $regex: query, $options: "i" } },
       ],
       isPinned: false,
-      isTrashed: labelId === "Trash",
-      isArchived: labelId === "Archive",
+      isTrashed: false,
+      isArchived: false,
       labels: { $elemMatch: { _id: labelId } }
     }).limit(50).toArray()
 
@@ -112,7 +111,10 @@ const getNotes = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-
+type labelType = {
+  title: string
+  _id: string
+}
 
 const postNote = async (req: Request, res: Response, next: NextFunction) => {
   const newDoc = req.body;
@@ -121,6 +123,10 @@ const postNote = async (req: Request, res: Response, next: NextFunction) => {
   newDoc.isTrashed = false
   newDoc.isArchived = false
   newDoc.isPinned = false
+  
+  if (!newDoc.labels.some((label: labelType) => label._id === "Notes")) {
+    newDoc.labels.push({ title: 'Notes', _id: 'Notes' })
+  }
   try {
     const notes: Collection<Note> | undefined = db.collection('notes');
     const result: InsertOneResult<Note> | undefined = await notes?.insertOne(newDoc);
@@ -237,6 +243,7 @@ const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   const labelId = req.params.id
+  console.log(labelId)
 
   try {
     const notes: Collection<Label> | undefined = db.collection("notes")

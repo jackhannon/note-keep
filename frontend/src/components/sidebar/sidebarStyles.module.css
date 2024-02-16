@@ -1,3 +1,6 @@
+.container {
+}
+
 .sidebar {
   position: fixed;
   padding: .7rem 0.3rem 0 .3rem;
@@ -90,12 +93,13 @@
 .modalContainer {
   background-color: rgba(0, 0, 0, 0.226);
   z-index: 999;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
+  bottom: 0;
   transform: translate(-50%, -50%);
-  min-width: 100%;
   min-height: 100%;
+  min-width: 100%;
 }
 
 .modal {

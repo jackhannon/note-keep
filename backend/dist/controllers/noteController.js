@@ -26,7 +26,6 @@ const getQuery = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                 ],
                 isTrashed: labelId === "Trash",
                 isArchived: labelId === "Archive",
-                labels: { $elemMatch: {} }
             }).limit(50).toArray());
             return res.send({ pinnedNotes: [], plainNotes }).status(200);
         }
@@ -36,8 +35,8 @@ const getQuery = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                 { body: { $regex: query, $options: "i" } },
             ],
             isPinned: true,
-            isTrashed: labelId === "Trash",
-            isArchived: labelId === "Archive",
+            isTrashed: false,
+            isArchived: false,
             labels: { $elemMatch: { _id: labelId } }
         }).limit(50).toArray());
         const plainNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
@@ -46,8 +45,8 @@ const getQuery = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                 { body: { $regex: query, $options: "i" } },
             ],
             isPinned: false,
-            isTrashed: labelId === "Trash",
-            isArchived: labelId === "Archive",
+            isTrashed: false,
+            isArchived: false,
             labels: { $elemMatch: { _id: labelId } }
         }).limit(50).toArray());
         if (pinnedNotes && plainNotes) {
@@ -113,6 +112,9 @@ const postNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     newDoc.isTrashed = false;
     newDoc.isArchived = false;
     newDoc.isPinned = false;
+    if (!newDoc.labels.some((label) => label._id === "Notes")) {
+        newDoc.labels.push({ title: 'Notes', _id: 'Notes' });
+    }
     try {
         const notes = conn_js_1.db.collection('notes');
         const result = yield (notes === null || notes === void 0 ? void 0 : notes.insertOne(newDoc));
@@ -218,6 +220,7 @@ const patchLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.patchLabel = patchLabel;
 const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const labelId = req.params.id;
+    console.log(labelId);
     try {
         const notes = conn_js_1.db.collection("notes");
         const notesToDeleteCursor = yield notes.find({

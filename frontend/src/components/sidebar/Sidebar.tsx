@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className={sidebarStyles.container}>
       {modalState ? <Modal setModalState={setModalState}/> : null}
       <div className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} onMouseOver={()=>handleHover()} onMouseLeave={(e)=>handleUnhover(e)}>
         <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 

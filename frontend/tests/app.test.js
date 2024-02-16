@@ -25,6 +25,10 @@ describe('modifying individual notes', () => {
   });
 
   it("note disappears when current label is removed from the notes labels", () => {
+    //prob working
+  });
+
+  it("notes delete when their labels are deleted", () => {
     
   });
 
@@ -33,7 +37,7 @@ describe('modifying individual notes', () => {
   });
 
   it("note contents mutable", () => {
-    
+    // working
   });
 });
 
@@ -59,18 +63,27 @@ describe('modifying multiple notes', () => {
 
 describe('modifying labels', () => {
   it("default labels present", () => {
-
+    //working
   });
 
   it("label name mutable", () => {
-    
+    //working
   });
 
   it("label removable", () => {
-    
+    // working
   });
 
   it("add a label", () => {
-    
+    // not working
   });
 });
+
+//validate inputs and make add an ellipsis cutoff for the labels modal on notes
+
+//fixed the modals overlaying, they are not spanning the entire height of the page
+
+//fix the note hover issue: 
+// when you click the options button on notes and then click outside to close the modal,
+// the check will not go away until another mouse exit even occurs, this can lead to highlighting
+// multiple notes when multi select mode is not even on 

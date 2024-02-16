@@ -8,13 +8,10 @@ import useLabelMutation from '../../../services/queryHooks/useLabelMutation'
 import DeleteModal from './DeleteModal'
 import { useNavigate} from 'react-router-dom';
 import { useNotes } from '../../../context/NoteContext'
+import { LabelType } from '../../../interfaces'
 
-type ExistingLabel = {
-  _id: number,
-  title: string
-}
 interface Props {
-  label: ExistingLabel;
+  label: LabelType;
   newLabelState: boolean;
   setNewLabelState: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -28,16 +25,16 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
 
   const [tagHoverState, setTagHoverState] = useState<boolean>(false)
   const [existingLabelFocusState, setExistingLabelFocusState] = useState<boolean>(false)
-  const {updateLabelName, deleteLabel} = useLabelMutation()
+  const {updateLabelName, removeLabel} = useLabelMutation()
 
   const [deletionModal, setDeletionModal] = useState<boolean>(false)
 
   const handleToggleDeletionModal = () => {
-    setDeletionModal(false)
+    setDeletionModal(!deletionModal)
   }
 
   const handleDelete = () => {
-    deleteLabel.mutate(label._id)
+    removeLabel.mutate(label._id)
     handleToggleDeletionModal()
     if (currentLabel._id === label._id) {
       navigate("/Notes")
@@ -52,10 +49,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
 
   useClickOutside(divRef, handleBlur)
 
-  
-  const handleFocusAndHover = (setter: React.Dispatch<React.SetStateAction<boolean>>, desiredState: boolean) => {
-    setter(desiredState)
-  }
+
   
   const handleTrashClick = () => {
     newLabelState ? setNewLabelState(false) : null;
@@ -70,7 +64,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
     newLabelState ? setNewLabelState(false) : null
     if (!existingLabelFocusState) {
       setExistingLabelFocusState(true)
-    } else if (!deletionModal) {
+    } else {
       updateLabelName.mutate({_id: label._id, title: title})
       handleBlur()
     }
@@ -87,7 +81,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
       />
     }
 
-    <button className={sidebarStyles.deleteLabel} onClick={()=> handleTrashClick()} onMouseOver={()=>(handleFocusAndHover(setTagHoverState, true))} onMouseLeave={()=>(handleFocusAndHover(setTagHoverState, false))}>
+    <button className={sidebarStyles.deleteLabel} onClick={()=> handleTrashClick()} onMouseOver={()=>setTagHoverState(true)} onMouseLeave={()=>setTagHoverState(false)}>
       <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
     </button>
     <div className={sidebarStyles.edit} 

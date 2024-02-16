@@ -5,13 +5,14 @@ export function getLabels() {
   return makeRequest('/notes/label')
 }
 
-export function deleteLabel(labelId: number) {
+export function deleteLabel(labelId: string) {
+  console.log("ddwddw")
   return makeRequest(`/notes/label/${labelId}`, {
     method: "DELETE",
   })
 }
 
-export function updateLabel(labelId: number, title: string) {
+export function updateLabel(labelId: string, title: string) {
   const requestData = {
     title
   };

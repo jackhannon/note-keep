@@ -23,7 +23,7 @@ export function createNote(labels: LabelType[], title?: string, body?: string) {
   })
 }
 
-export function togglePinOnNote(noteId: number, newPinStatus: boolean): Promise<unknown> {
+export function togglePinOnNote(noteId: string, newPinStatus: boolean): Promise<unknown> {
 
   const requestData = {
     isPinned: newPinStatus
@@ -34,7 +34,7 @@ export function togglePinOnNote(noteId: number, newPinStatus: boolean): Promise<
   })
 }
 
-export function archiveOnNote(noteId: number): Promise<unknown> {
+export function archiveOnNote(noteId: string): Promise<unknown> {
   const requestData = {
     isArchived: true,
     isTrashed: false
@@ -45,7 +45,7 @@ export function archiveOnNote(noteId: number): Promise<unknown> {
   })
 }
 
-export function trashOnNote(noteId: number): Promise<unknown> {
+export function trashOnNote(noteId: string): Promise<unknown> {
   const requestData = {
     isTrashed: true,
     isArchived: false
@@ -56,7 +56,7 @@ export function trashOnNote(noteId: number): Promise<unknown> {
   })
 }
 
-export function restoreOnNote(noteId: number): Promise<unknown> {
+export function restoreOnNote(noteId: string): Promise<unknown> {
   const requestData = {
     isTrashed: false,
     isArchived: false
@@ -67,13 +67,13 @@ export function restoreOnNote(noteId: number): Promise<unknown> {
   })
 }
 
-export function deleteNote(noteId: number): Promise<unknown> {
+export function deleteNote(noteId: string): Promise<unknown> {
   return makeRequest(`/notes/${noteId}`, {
     method: "DELETE"
   })
 }
 
-export function updateNoteContents(noteId: number, title: string, body: string): Promise<unknown> {
+export function updateNoteContents(noteId: string, title: string, body: string): Promise<unknown> {
   const requestData = {
     body,
     title,
@@ -84,7 +84,7 @@ export function updateNoteContents(noteId: number, title: string, body: string):
   })
 }
 
-export function updateNoteLabels(noteId: number, labels): Promise<unknown> {
+export function updateNoteLabels(noteId: string, labels): Promise<unknown> {
   const requestData = {
    labels
   };

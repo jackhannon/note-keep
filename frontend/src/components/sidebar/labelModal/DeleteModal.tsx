@@ -6,8 +6,8 @@ interface Props {
   handleDelete: () => void;
   handleToggleDeletionModal: () => void
 }
-
 const DeleteModal: React.FC<Props> = ({labelTitle, handleDelete, handleToggleDeletionModal}) => {
+
   return (
     <div className={sidebarStyles.confirmModal}>
       <div className={sidebarStyles.message}>
