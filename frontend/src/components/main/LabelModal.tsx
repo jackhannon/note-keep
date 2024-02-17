@@ -1,18 +1,20 @@
 import React, {useRef, useState } from 'react'
 import optionModalStyles from '../optionModalStyles.module.css'
-import { LabelType } from '../../interfaces';
 import useLabelsQuery from '../../services/queryHooks/useLabelsQuery';
 import useClickOutside from '../../hooks/useClickOutside';
+import { LabelType } from '../../interfaces';
 
 interface Props {
   setLabelModal: React.Dispatch<React.SetStateAction<boolean>>;
-  handleLabelToggle: (labels: LabelType[]) => void
-  labels: LabelType[]
+  handleLabelToggle: (labels: string[]) => void
+  labels: string[]
 }
 
 const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels}) => {
   const {data: allLabels} = useLabelsQuery()
-  const [checkedLabels, setCheckedLabels] = useState<LabelType[]>(labels)
+  //find out why usequery refetches labels
+
+  const [checkedLabelIds, setCheckedLabels] = useState<string[]>(labels)
 
   const labelModalRef = useRef<HTMLDivElement>(null)
 
@@ -24,12 +26,12 @@ const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels})
 
   const handleLabelClick = (label: LabelType, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
-    let newLabels: LabelType[];
-    if (checkedLabels.some(checkedLabel => checkedLabel._id === label._id)) {
-      const filteredLabels = checkedLabels.filter(checkedLabel => checkedLabel._id !== label._id);
+    let newLabels: string[];
+    if (checkedLabelIds.some(checkedLabelId => checkedLabelId === label._id)) {
+      const filteredLabels = checkedLabelIds.filter(checkedLabelId => checkedLabelId !== label._id);
       newLabels = filteredLabels
     } else {
-      newLabels = [...checkedLabels, label];
+      newLabels = [...checkedLabelIds, label._id];
     }
     setCheckedLabels(newLabels);
     handleLabelToggle(newLabels)
@@ -44,7 +46,7 @@ const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels})
              <input
               type="checkbox"
               value={label.title}
-              checked={checkedLabels.some(checkedLabel => checkedLabel._id === label._id)}
+              checked={checkedLabelIds.some(checkedLabelId => checkedLabelId === label._id)}
               readOnly
             />
             <span>{label.title}</span>

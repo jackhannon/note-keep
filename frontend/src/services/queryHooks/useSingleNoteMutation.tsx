@@ -2,7 +2,7 @@ import { useMutation, useQueryClient, } from "@tanstack/react-query"
 import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote, updateNoteContents, updateNoteLabels,} from "../noteServices"
 import { useNotes } from "../../context/NoteContext"
 import { useParams } from "react-router"
-import { LabelType, NoteType, NotesData } from "../../interfaces"
+import { NoteType, NotesData } from "../../interfaces"
 import { removeNote } from "../optimisticUpdates"
 
 const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPinned: false, isTrashed:  false, isArchived:  false}) => {
@@ -109,7 +109,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
   type NotesDetails = {
     title?: string;
     body?: string;
-    labels: LabelType[] 
+    labels: string[]
   }
 
   const noteCreate = useMutation({
@@ -173,13 +173,13 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
   })
 
   const noteLabelUpdate = useMutation({
-    mutationFn: (labels: LabelType[]) => {
+    mutationFn: (labels: string[]) => {
       return updateNoteLabels(boundNote._id, labels)
     },
     onMutate: (labels) => {
       const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
-        if (!labels.some(label => label._id === currentLabel._id)) {
+        if (!labels.some(label => label === currentLabel._id) && currentLabel._id !== "Notes") {
           return removeNote(boundNote._id, prevNotes);
         }
         if (boundNote.isPinned) {

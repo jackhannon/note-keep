@@ -70,11 +70,13 @@ const Notes: React.FC = () => {
         breakpointCols={breakpoints}
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column">
-          {data.pinnedNotes.map((note) => (
-          <Note key={note._id} note={note} />
+          {data.pinnedNotes.map((note, index) => (
+
+            // the key shoudl remain the same between renders
+          <Note key={note._id + index} note={note} />
           ))}
-          {data.plainNotes.map((note) => (
-          <Note key={note._id} note={note} />
+          {data.plainNotes.map((note, index) => (
+          <Note key={note._id + index} note={note} />
           ))}
         </Masonry>
       </div>

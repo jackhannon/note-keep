@@ -29,7 +29,7 @@ describe('modifying individual notes', () => {
   });
 
   it("notes delete when their labels are deleted", () => {
-    
+    //working
   });
 
   it("note created upon correct trigger", () => {

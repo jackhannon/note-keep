@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query";
 import { createLabel, updateLabel, deleteLabel } from "../labelServices";
 import { LabelType } from "../../interfaces";
+import { useNotes } from "../../context/NoteContext";
+import { useParams } from "react-router";
 
 export const useLabelMutation = () => {
+  const {labelId} = useParams()
+  const { query } = useNotes()
+
   const queryClient = useQueryClient();
-
-  
-
   
   const updateLabelName = useMutation({
     mutationFn: (labelDetails: LabelType) => {
@@ -70,6 +72,10 @@ export const useLabelMutation = () => {
 
     onError: (err, newNotes, context) => {
       queryClient.setQueryData(['labels'], context?.previousLabels)
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes", labelId, query] })
     },
   })
 

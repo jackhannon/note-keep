@@ -6,7 +6,7 @@ import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faCheck, faEllipsisVertical, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
 import { useNotes } from '../../../context/NoteContext';
-import { LabelType, NoteType } from '../../../interfaces';
+import { NoteType } from '../../../interfaces';
 import { useParams } from 'react-router-dom';
 import { NOTE_TOGGLE_CLICKED } from '../../../reducers/selectedNotesReducer';
 import useSingleNoteMutation from '../../../services/queryHooks/useSingleNoteMutation';
@@ -105,7 +105,7 @@ const Note: React.FC<Props> = ({ note }) => {
     } 
   }
 
-  const handleLabelToggle = (labels: LabelType[]) => {
+  const handleLabelToggle = (labels: string[]) => {
     noteLabelUpdate.mutate(labels);
   };
 

@@ -3,16 +3,11 @@ export interface LabelType {
   title: string;
 }
 
-export interface CreatedLabelType {
-  _id: string;
-  title: string;
-}
-
 export interface NoteType {
   _id: string;
   title?: string;
   body?: string;
-  labels: LabelType[];
+  labels: string[];
   isPinned: boolean;
   isTrashed: boolean;
   isArchived: boolean

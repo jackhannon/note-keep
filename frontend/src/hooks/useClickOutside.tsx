@@ -11,6 +11,7 @@ const useClickOutside = (
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
+        console.log("wdwdwdwd")
         event.stopPropagation()
         handler()
       }

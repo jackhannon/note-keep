@@ -1,4 +1,3 @@
-import { LabelType } from "../interfaces";
 import makeRequest from "../utils/makeRequests";
 
 
@@ -7,7 +6,7 @@ export function getNotes(labelId: string, query: string) {
   return makeRequest(url);
 }
 
-export function createNote(labels: LabelType[], title?: string, body?: string) {
+export function createNote(labels: string[], title?: string, body?: string) {
   if (!Array.isArray(labels)) {
     labels = [labels]
   }

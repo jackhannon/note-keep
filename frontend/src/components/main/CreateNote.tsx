@@ -15,7 +15,7 @@ const EditNote: React.FC = () => {
 
   const handleBlur = async () => {
     if (title || body) {
-      noteCreate.mutate({title: title, body: body, labels: [currentLabel]})
+      noteCreate.mutate({title: title, body: body, labels: [currentLabel._id]})
     }
     setTitle("")
     setBody("")
