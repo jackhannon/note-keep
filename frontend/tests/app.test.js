@@ -2,7 +2,7 @@ import { describe, it } from 'vitest';
 
 describe('switching labels', () => {
   it("current label and notes switches when another label is clicked", () => {
-
+    //working
   });
 });
 
@@ -25,7 +25,7 @@ describe('modifying individual notes', () => {
   });
 
   it("note disappears when current label is removed from the notes labels", () => {
-    //prob working
+    //working
   });
 
   it("notes delete when their labels are deleted", () => {

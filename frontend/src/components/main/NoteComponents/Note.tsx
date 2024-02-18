@@ -26,7 +26,7 @@ const Note: React.FC<Props> = ({ note }) => {
   const {selectedNotesState, dispatchSelectedNotes} = useNotes()
   const [labelModalState, setLabelModal] = useState<boolean>(false)
 
-  const {notes: selectedNotes} = selectedNotesState
+  const {notes: selectedNotes, modeOn: multiSelectMode} = selectedNotesState
   const selectedNoteIds = selectedNotes.map(note => note._id)
   const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteCreate, noteLabelUpdate} = useSingleNoteMutation(note)
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -165,47 +165,52 @@ const Note: React.FC<Props> = ({ note }) => {
           readOnly
         />
 
-        {optionsModalState && 
-        <ul className={optionModalStyles.modal} ref={optionsModalRef}>
-          {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
-          <li onClick={(e)=>handleTrash(e)}>Delete</li>
-          {(labels && labels.length > 0) &&
-          <li onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</li>}
-          <li onClick={(e) => handleCopy(e)}>Make a copy</li>
-        </ul>
-        }
 
-        {(noteHoverState && !["Trash", "Archive"].includes(labelId || "")) ? (
-          <div className={NoteStyles.tools} ref={optionRef}>
-             <button className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
-              <FontAwesomeIcon icon={faArchive} />
-            </button>
-            <button className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
-              <FontAwesomeIcon icon={faEllipsisVertical} />
-            </button>
-          </div>
-        ) : (noteHoverState && labelId === "Trash") ? (
+        {(!multiSelectMode && optionsModalState) && (
+          <ul className={optionModalStyles.modal} ref={optionsModalRef}>
+            {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
+            <li onClick={(e)=>handleTrash(e)}>Delete</li>
+            {(labels && labels.length > 0) &&
+              <li onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</li>
+            }
+            <li onClick={(e) => handleCopy(e)}>Make a copy</li>
+          </ul>)
+        }
+          
+        {(!multiSelectMode && noteHoverState) ? 
+          !["Trash", "Archive"].includes(labelId || "") ? (
+            <div className={NoteStyles.tools} ref={optionRef}>
+              <button className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+                <FontAwesomeIcon icon={faArchive} />
+              </button>
+              <button className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </button>
+            </div>
+          ) : (labelId === "Trash") ? (
+            <div className={NoteStyles.tools} ref={optionRef}>
+              <button className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
+                <FontAwesomeIcon icon={faTrashRestore} />
+              </button>
+              <button className={NoteStyles.options} onClick={(e)=>handleDelete(e)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+              <button className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+                <FontAwesomeIcon icon={faArchive} />
+              </button>
+            </div>
+          ) : (labelId === "Archive") ? (
           <div className={NoteStyles.tools} ref={optionRef}>
             <button className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
-              <FontAwesomeIcon icon={faTrashRestore} />
+              <FontAwesomeIcon icon={faUndo} />
             </button>
-            <button className={NoteStyles.options} onClick={(e)=>handleDelete(e)}>
+            <button className={NoteStyles.options} onClick={(e)=>handleTrash(e)}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
-            <button className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
-              <FontAwesomeIcon icon={faArchive} />
-            </button>
           </div>
-        ) : (noteHoverState && labelId === "Archive") ? (
-        <div className={NoteStyles.tools} ref={optionRef}>
-          <button className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
-            <FontAwesomeIcon icon={faUndo} />
-          </button>
-          <button className={NoteStyles.options} onClick={(e)=>handleTrash(e)}>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </div>
-       ) : null}
+        ) : null
+      : null}
+          
       </div>
     </div>
   );

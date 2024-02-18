@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query"
-import { archiveOnNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote } from "../noteServices"
+import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote } from "../noteServices"
 import { useNotes } from "../../context/NoteContext"
 import { useParams } from "react-router"
 import {  NotesData } from "../../interfaces"
@@ -7,7 +7,6 @@ import { removeSelectedNotes } from "../optimisticUpdates"
 
 export const useMultiNoteMutation = (selectedNotes) => {
   const queryClient = useQueryClient()
-  const {setQueryData, getQueryData} = queryClient
 
   const {query} = useNotes()
   const {labelId} = useParams()
@@ -17,38 +16,47 @@ export const useMultiNoteMutation = (selectedNotes) => {
 
 
   const toggleSelectedNotesPin = useMutation({
+    
     mutationFn: () => {
         return selectedNoteIds.forEach(noteId => {
           togglePinOnNote(noteId, !pinStatusToToggle)
         });
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
-
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         let newPinnedNotes;
         let newPlainNotes;
         
         if (pinStatusToToggle) {
           const notesToUnpin = prevNotes.pinnedNotes
             .filter(note => selectedNoteIds.includes(note._id))
-            .map(note => note.isPinned = false)
-          newPinnedNotes = prevNotes.pinnedNotes.filter(note => !selectedNoteIds.includes(note._id))
-          newPlainNotes = [...prevNotes.plainNotes, ...notesToUnpin]
+            .map(note => {
+              return {...note, isPinned: false}
+            });
+            
+          newPinnedNotes = prevNotes.pinnedNotes.filter(note => !selectedNoteIds.includes(note._id));
+          newPlainNotes = [...prevNotes.plainNotes, ...notesToUnpin];
+          console.log(newPlainNotes)
+
         } else {
           const notesToPin = prevNotes.plainNotes
             .filter(note => selectedNoteIds.includes(note._id))
-            .map(note => note.isPinned = true)
-          newPinnedNotes = [...prevNotes.pinnedNotes, ...notesToPin]
-          newPlainNotes = prevNotes.plainNotes.filter(note => !selectedNoteIds.includes(note._id))
+            .map(note => {
+              return {...note, isPinned: true}
+            });
+            
+          newPinnedNotes = [...prevNotes.pinnedNotes, ...notesToPin];
+          newPlainNotes = prevNotes.plainNotes.filter(note => !selectedNoteIds.includes(note._id));
         }
+        console.log(newPinnedNotes, newPlainNotes)
         return {pinnedNotes: newPinnedNotes, plainNotes: newPlainNotes}
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   }) 
 
@@ -60,16 +68,17 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
-
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      console.log(prevNotes)
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
+
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   }) 
 
@@ -81,16 +90,16 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
 
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   }) 
 
@@ -102,16 +111,16 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });    
     },
     onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
 
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
     },
   }) 
 
@@ -122,21 +131,50 @@ export const useMultiNoteMutation = (selectedNotes) => {
         restoreOnNote(noteId)
       });    
     },
-    onMutate: () => {
-      const previousNotes = getQueryData(['notes', labelId, query])
 
-      setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+    onMutate: () => {
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+    },
+  })
+  
+  const copySelectedNotes = useMutation({
+    mutationFn: () => {
+      return selectedNotes.forEach(note => {
+        return createNote(note.labels, note.title, note.body);
+      });    
+    },
+
+    onMutate: () => {
+      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+
+      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+        const pinnedSelectedNotes = prevNotes.pinnedNotes.filter(note => selectedNoteIds.includes(note._id));
+        const plainSelectedNotes =  prevNotes.plainNotes.filter(note => selectedNoteIds.includes(note._id));
+
+        return {...prevNotes, plainNotes: [...prevNotes.plainNotes, ...pinnedSelectedNotes, ...plainSelectedNotes]}
+      })
+      return { previousNotes }
+    },
+
+    onError: (err, newNotes, context) => {
+      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', labelId, query] })
     },
   })
 
-  return {toggleSelectedNotesPin, trashSelectedNotes, archiveSelectedNotes, deleteSelectedNotes, restoreSelectedNotes}
+  return {toggleSelectedNotesPin, trashSelectedNotes, archiveSelectedNotes, deleteSelectedNotes, restoreSelectedNotes, copySelectedNotes}
 }
 
 

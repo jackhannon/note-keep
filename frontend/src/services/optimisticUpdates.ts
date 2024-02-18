@@ -10,7 +10,8 @@ export function removeNote(noteId, notes) {
 
 
 export function removeSelectedNotes(noteIds, notes) {
+
   const pinnedNotes = notes.pinnedNotes.filter(note => !noteIds.includes(note._id))
   const plainNotes = notes.plainNotes.filter(note => !noteIds.includes(note._id))
-  return {pinnedNotes, plainNotes}
+  return {...pinnedNotes, ...plainNotes}
 }

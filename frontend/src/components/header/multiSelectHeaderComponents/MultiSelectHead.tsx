@@ -3,9 +3,9 @@ import { useNotes } from '../../../context/NoteContext';
 import useMultiNoteMutation from '../../../services/queryHooks/useMultiNoteMutation';
 import { TOGGLED_MODE_OFF } from '../../../reducers/selectedNotesReducer';
 import headerStyles from "../headerStyles.module.css";
+import optionModalStyles from '../../optionModalStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapPin, faEllipsisVertical, faArchive, faX, faTrash, faTrashRestore, faUndo } from '@fortawesome/free-solid-svg-icons';
-import optionModalStyles from '../../optionModalStyles.module.css'
 import useClickOutside from '../../../hooks/useClickOutside';
 
 const MultiSelectHead = () => {
@@ -15,7 +15,7 @@ const MultiSelectHead = () => {
 
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
 
-  const {toggleSelectedNotesPin, archiveSelectedNotes, trashSelectedNotes, deleteSelectedNotes, restoreSelectedNotes} = useMultiNoteMutation(selectedNotes)
+  const {toggleSelectedNotesPin, archiveSelectedNotes, trashSelectedNotes, deleteSelectedNotes, restoreSelectedNotes, copySelectedNotes} = useMultiNoteMutation(selectedNotes)
 
 
   const handleClickOutsideOptionModal = () => {
@@ -30,31 +30,40 @@ const MultiSelectHead = () => {
   const handleToggleAllPins = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     toggleSelectedNotesPin.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
 
   const handleSelectedNotesArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     archiveSelectedNotes.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
   const handleSelectedNotesTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
+    console.log(selectedNotes)
     trashSelectedNotes.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
   const handleSelectedNotesDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     deleteSelectedNotes.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
   
   const handleSelectedNotesRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     restoreSelectedNotes.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
   const handleSelectedNotesCopy = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     e.stopPropagation();
+    copySelectedNotes.mutate()
+    dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
+
   }
 
   const handleMultiSelectCancel = () => {

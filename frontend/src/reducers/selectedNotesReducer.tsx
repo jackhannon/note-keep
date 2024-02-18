@@ -19,6 +19,7 @@ type ToggledModeOn = {
   payload: NoteType
 }
 
+
 export type SelectedNotesActions = ChangedMultiSelectMode | NoteToggleClicked | ToggledModeOff | ToggledModeOn;
 
 export type SelectedNotesReducerState = {
