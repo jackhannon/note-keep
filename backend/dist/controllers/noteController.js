@@ -29,26 +29,18 @@ const getQuery = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             }).limit(50).toArray());
             return res.send({ pinnedNotes: [], plainNotes }).status(200);
         }
-        const pinnedNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
-            $or: [
+        let labelFilter = {};
+        if (labelId !== "Notes") {
+            labelFilter = { labels: { $in: [labelId] } };
+        }
+        const pinnedNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find(Object.assign({ $or: [
                 { title: { $regex: query, $options: "i" } },
                 { body: { $regex: query, $options: "i" } },
-            ],
-            isPinned: true,
-            isTrashed: false,
-            isArchived: false,
-            labels: { $elemMatch: { _id: labelId } }
-        }).limit(50).toArray());
-        const plainNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find({
-            $or: [
+            ], isPinned: true, isTrashed: false, isArchived: false }, labelFilter)).limit(50).toArray());
+        const plainNotes = yield (notes === null || notes === void 0 ? void 0 : notes.find(Object.assign({ $or: [
                 { title: { $regex: query, $options: "i" } },
                 { body: { $regex: query, $options: "i" } },
-            ],
-            isPinned: false,
-            isTrashed: false,
-            isArchived: false,
-            labels: { $elemMatch: { _id: labelId } }
-        }).limit(50).toArray());
+            ], isPinned: false, isTrashed: false, isArchived: false }, labelFilter)).limit(50).toArray());
         if (pinnedNotes && plainNotes) {
             return res.send({ pinnedNotes, plainNotes }).status(200);
         }
@@ -112,9 +104,6 @@ const postNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     newDoc.isTrashed = false;
     newDoc.isArchived = false;
     newDoc.isPinned = false;
-    if (!newDoc.labels.some((label) => label._id === "Notes")) {
-        newDoc.labels.push({ title: 'Notes', _id: 'Notes' });
-    }
     try {
         const notes = conn_js_1.db.collection('notes');
         const result = yield (notes === null || notes === void 0 ? void 0 : notes.insertOne(newDoc));
@@ -151,6 +140,7 @@ const patchNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 exports.patchNote = patchNote;
 const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const noteId = req.params.id;
+    console.log(noteId);
     try {
         const notes = conn_js_1.db.collection("notes");
         const result = yield (notes === null || notes === void 0 ? void 0 : notes.findOneAndDelete({ _id: new mongodb_1.ObjectId(noteId) }));
@@ -223,9 +213,10 @@ const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const notes = conn_js_1.db.collection("notes");
         const notesToDeleteCursor = yield notes.find({
-            labels: { $size: 2, $all: [labelId] }
+            labels: { $size: 1, $in: [labelId] }
         });
         const notesToDelete = yield notesToDeleteCursor.toArray();
+        console.log(notesToDelete);
         yield notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
         const labels = conn_js_1.db.collection("labels");
         const result = yield (labels === null || labels === void 0 ? void 0 : labels.findOneAndDelete({ _id: new mongodb_1.ObjectId(labelId) }));

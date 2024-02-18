@@ -36,6 +36,11 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       return res.send({pinnedNotes: [], plainNotes}).status(200);
     }
     
+    let labelFilter = {};
+    if (labelId !== "Notes") {
+      labelFilter = { labels: { $in: [labelId] } };
+    }
+
     const pinnedNotes = await notes?.find({
       $or: [
         { title: { $regex: query, $options: "i" } },
@@ -44,8 +49,10 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       isPinned: true,
       isTrashed: false,
       isArchived: false,
-      labels: { $elemMatch: { _id: labelId } }
-    }).limit(50).toArray()
+      ...labelFilter
+    })
+    .limit(50)
+    .toArray()
 
     const plainNotes = await notes?.find({
       $or: [
@@ -55,9 +62,10 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       isPinned: false,
       isTrashed: false,
       isArchived: false,
-      labels: { $elemMatch: { _id: labelId } }
-    }).limit(50).toArray()
-
+      ...labelFilter
+    })
+    .limit(50)
+    .toArray()
     if (pinnedNotes && plainNotes) {
       return res.send({pinnedNotes, plainNotes}).status(200)
     } 
@@ -111,11 +119,6 @@ const getNotes = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-type labelType = {
-  title: string
-  _id: string
-}
-
 const postNote = async (req: Request, res: Response, next: NextFunction) => {
   const newDoc = req.body;
   console.log(newDoc)
@@ -124,9 +127,6 @@ const postNote = async (req: Request, res: Response, next: NextFunction) => {
   newDoc.isArchived = false
   newDoc.isPinned = false
   
-  if (!newDoc.labels.some((label: labelType) => label._id === "Notes")) {
-    newDoc.labels.push({ title: 'Notes', _id: 'Notes' })
-  }
   try {
     const notes: Collection<Note> | undefined = db.collection('notes');
     const result: InsertOneResult<Note> | undefined = await notes?.insertOne(newDoc);
@@ -168,7 +168,7 @@ const patchNote = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
   const noteId = req.params.id;
-
+  console.log(noteId)
   try {
     const notes: Collection<Note> | undefined = db.collection("notes")
     const result = await notes?.findOneAndDelete(
@@ -243,16 +243,16 @@ const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   const labelId = req.params.id
-
   try {
     const notes: Collection<Label> | undefined = db.collection("notes")
 
     const notesToDeleteCursor = await notes.find({
-      labels: { $size: 2, $all: [labelId] }
+      labels: { $size: 1, $in: [labelId] }
     });
+   
 
     const notesToDelete = await notesToDeleteCursor.toArray();
-
+    console.log(notesToDelete)
     await notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
 
     const labels: Collection<Label> | undefined = db.collection("labels")
