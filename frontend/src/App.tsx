@@ -1,10 +1,10 @@
 import React, { useEffect }  from 'react'
-import Header from './components/header/Header';
+import Header from './features/Header/components/Header';
 import Notes from './components/main/Notes';
 import Sidebar from './components/sidebar/Sidebar'
 import './App.css'
-import { NoteProvider } from './context/NoteContext';
 import { Routes, Route, useNavigate} from 'react-router-dom'
+import { GlobalProvider } from './context/GlobalContext';
 
 
 
@@ -14,13 +14,13 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     navigate(`/Notes`);
-  }, [])
+  }, [navigate])
 
 
 
   return (
     <>
-      <NoteProvider>
+      <GlobalProvider>
         <Routes>
           <Route path='/:labelId' element={
             <>
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             </>
           } />
         </Routes>
-      </NoteProvider>
+      </GlobalProvider>
     </>
   )
 }
