@@ -41,6 +41,7 @@ const Note: React.FC<Props> = ({ note }) => {
 
   const handleClickOutsideOptionModal = () => {
     setOptionsModal(false)
+    setNoteHoverState(false)
   }
 
   const optionsModalRef = useRef<HTMLUListElement>(null)

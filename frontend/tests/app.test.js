@@ -44,20 +44,25 @@ describe('modifying individual notes', () => {
 
 describe('modifying multiple notes', () => {
   it("selected notes disappears when trashed", () => {
-    
+    //working
   });
 
   it("selected notes disappear when archived", () => {
-    
+    //working
   });
 
   it("selected notes disappear when deleted", () => {
-    
+    //working
   });
 
   it("selected notes disappears when restored", () => {
-    
+    //working 
   });
+
+  it("selected notes copy when copied", () => {
+    //working 
+  });
+
 });
 
 
@@ -79,15 +84,28 @@ describe('modifying labels', () => {
   });
 });
 
+
+describe('querying', () => {
+  it("only notes within labels are retrieved when searching", () => {
+    //working
+  });
+
+  it("query dissapears when label switches", () => {
+    //working
+  });
+  
+  it("'No notes found!' message displayed when no nots are present after query", () => {
+    //working
+  });
+});
+
+
 //validate inputs and make add an ellipsis cutoff for the labels modal on notes
 
 //fixed the modals overlaying, they are not spanning the entire height of the page
+ 
 
-//fix the note hover issue: 
-// when you click the options button on notes and then click outside to close the modal,
-// the check will not go away until another mouse exit even occurs, this can lead to highlighting
-// multiple notes when multi select mode is not even on 
-
-
+//when clicking outside new label field onto other label when 
+// field isnot empty it will flicker
 
 //be VERY careful with useoutsideclick, can cause subtle bugs

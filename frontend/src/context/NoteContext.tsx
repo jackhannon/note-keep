@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 import selectedNotesReducer, { SelectedNotesActions, TOGGLED_MODE_OFF, SelectedNotesReducerState } from "../reducers/selectedNotesReducer";
 import { LabelType } from "../interfaces";
 
@@ -9,6 +9,7 @@ type NoteProviderProps = {
 type ContextType = {
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
+  handleClickWhileMultiSelect: (e: Event) => void
   dispatchSelectedNotes: React.Dispatch<SelectedNotesActions>;
   selectedNotesState: SelectedNotesReducerState;
   isSidebarOpen: boolean;
@@ -40,12 +41,19 @@ const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
   function handleSetLabel(label: LabelType) {
     setCurrentLabel(label)
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
+    setQuery("")
     window.scrollTo(0, 0)
+  }
+
+
+  function handleClickWhileMultiSelect(e: Event) {
+    e.stopPropagation()
   }
 
   const context: ContextType = {
     query,
     setQuery,
+    handleClickWhileMultiSelect,
     dispatchSelectedNotes,
     selectedNotesState,
     isSidebarOpen,

@@ -6,7 +6,6 @@ import { faTag, faTrash, faCheck, faPencil } from '@fortawesome/free-solid-svg-i
 import useClickOutside from '../../../hooks/useClickOutside'
 import useLabelMutation from '../../../services/queryHooks/useLabelMutation'
 import DeleteModal from './DeleteModal'
-import { useNavigate} from 'react-router-dom';
 import { useNotes } from '../../../context/NoteContext'
 import { LabelType } from '../../../interfaces'
 
@@ -19,8 +18,7 @@ interface Props {
 
 
 const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) => {
-  const navigate = useNavigate()
-  const {currentLabel} = useNotes()
+  const {currentLabel, handleSetLabel} = useNotes()
   const [title, setTitle] = useState<string>(label.title)
 
   const [tagHoverState, setTagHoverState] = useState<boolean>(false)
@@ -36,8 +34,8 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
   const handleDelete = async () => {
     await removeLabel.mutateAsync(label._id)
     handleToggleDeletionModal()
-    if (currentLabel._id === label._id && removeLabel.isIdle) {
-      navigate("/Notes")
+    if (currentLabel._id === label._id) {
+      handleSetLabel({title: "Notes", _id: "Notes"})
     }
   }
 

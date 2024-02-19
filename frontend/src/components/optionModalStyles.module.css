@@ -54,12 +54,20 @@ ul {
 
 .label {
   padding: 0.5rem;
-  gap: 5px;
-  display: flex;
-  align-items: center;
-  /* overflow: hidden; */
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  max-width: 5rem;
+
+}
+
+.inputLabel {
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+span {
+  vertical-align: middle;
 }
 
 .label:hover {
@@ -67,6 +75,6 @@ ul {
 }
 
 
-input {
-  display: flex;
-}
+
+
+

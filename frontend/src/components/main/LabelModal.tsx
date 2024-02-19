@@ -44,6 +44,7 @@ const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels})
         return (
           <div key={label._id || label.title} className={optionModalStyles.label} onClick={(e) => handleLabelClick(label, e)}>
              <input
+              className={optionModalStyles.inputLabel}
               type="checkbox"
               value={label.title}
               checked={checkedLabelIds.some(checkedLabelId => checkedLabelId === label._id)}

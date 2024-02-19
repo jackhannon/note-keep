@@ -4,7 +4,7 @@ import Notes from './components/main/Notes';
 import Sidebar from './components/sidebar/Sidebar'
 import './App.css'
 import { NoteProvider } from './context/NoteContext';
-import { Routes, Route, useNavigate, useParams} from 'react-router-dom'
+import { Routes, Route, useNavigate} from 'react-router-dom'
 
 
 
@@ -24,7 +24,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path='/:labelId' element={
             <>
-              <Header />
+              <Header/>
               <div className="container">
                 <Sidebar />
                 <Notes/>

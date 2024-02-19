@@ -5,11 +5,12 @@ import MainStyles from './MainStyles.module.css'
 import Masonry from 'react-masonry-css'
 import { useParams } from 'react-router-dom';
 import useNotesQuery from '../../services/queryHooks/useNotesQuery.tsx';
+import { useNotes } from '../../context/NoteContext.tsx';
 
 const Notes: React.FC = () => {
 
   const { labelId } = useParams()
-
+  const {query} = useNotes()
   const {data, isPending, isError, error} = useNotesQuery();
 
   // useEffect(() => {
@@ -52,7 +53,7 @@ const Notes: React.FC = () => {
   }
 
   if (data) {
-    if (!data.plainNotes && !data.pinnedNotes || ((data.plainNotes.length === 0) && 
+    if (!data.plainNotes.length && !data.pinnedNotes.length || ((!data.plainNotes.length) && 
       ["Trash", "Archive"].includes(labelId || ""))) 
     {
       return (
@@ -64,15 +65,14 @@ const Notes: React.FC = () => {
 
     return (
       <div className={MainStyles.container}>
-        {!["Trash", "Archive"].includes(labelId || "") ? (<CreateNote />) : null}
-        {/* className={NoteStyles.notesContainer} */}
+        {!query && !["Trash", "Archive"].includes(labelId || "") ? (<CreateNote />) : null}
         <Masonry   
         breakpointCols={breakpoints}
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column">
           {data.pinnedNotes.map((note, index) => (
 
-            // the key shoudl remain the same between renders
+            // the key should remain the same between renders
           <Note key={note._id + index} note={note} />
           ))}
           {data.plainNotes.map((note, index) => (

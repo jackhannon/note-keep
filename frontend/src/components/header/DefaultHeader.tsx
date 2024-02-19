@@ -9,7 +9,7 @@ import { useNotes } from '../../context/NoteContext';
 
 const DefaultHeader: React.FC = () => {
 
-  const {setIsSidebarOpen, isSidebarOpen, currentLabel} = useNotes()
+  const {setIsSidebarOpen, isSidebarOpen} = useNotes()
 
   const handleToggleSidebar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -26,7 +26,7 @@ const DefaultHeader: React.FC = () => {
       </div>
 
       <div className={headerStyles.center}>
-        <SearchBar key={currentLabel._id}/>
+        <SearchBar/>
       </div>
 
       <div className={headerStyles.right}>
