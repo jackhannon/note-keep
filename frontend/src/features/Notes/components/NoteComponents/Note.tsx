@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import NoteStyles from '../styles/NoteStyles.module.css';
-import MainStyles from '../styles/MainStyles.module.css'
-import optionModalStyles from '../../optionModalStyles.module.css'
+import NoteStyles from '../../styles/NoteStyles.module.css';
+import MainStyles from '../../styles/MainStyles.module.css'
+import optionModalStyles from '../../../../styles/optionModalStyles.module.css'
 import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faCheck, faEllipsisVertical, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';

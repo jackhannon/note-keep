@@ -1,5 +1,5 @@
 import React, {useState, useRef } from 'react'
-import sidebarStyles from '../sidebarStyles.module.css'
+import sidebarStyles from '../styles/sidebarStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTag, faTrash, faCheck, faPencil } from '@fortawesome/free-solid-svg-icons'
 

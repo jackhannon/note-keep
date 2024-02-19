@@ -1,5 +1,5 @@
 import React from 'react'
-import NoteStyles from './NoteStyles.module.css'
+import NoteStyles from '../../styles/NoteStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapPin } from '@fortawesome/free-solid-svg-icons'
 import { useGlobalContext } from '../../../../context/GlobalContext'

@@ -1,7 +1,7 @@
 import React, { useEffect }  from 'react'
 import Header from './features/Header/components/Header';
-import Notes from './components/main/Notes';
-import Sidebar from './components/sidebar/Sidebar'
+import Sidebar from './features/Labels/components/Sidebar'
+import Notes from './features/Notes/components/Notes'
 import './App.css'
 import { Routes, Route, useNavigate} from 'react-router-dom'
 import { GlobalProvider } from './context/GlobalContext';

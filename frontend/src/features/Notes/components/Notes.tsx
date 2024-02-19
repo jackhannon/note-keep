@@ -1,7 +1,7 @@
 import React from 'react'
 import CreateNote from './CreateNote.tsx'
 import Note from './NoteComponents/Note.tsx';
-import MainStyles from './MainStyles.module.css'
+import MainStyles from '../styles/MainStyles.module.css'
 import Masonry from 'react-masonry-css'
 import { useParams } from 'react-router-dom';
 import useNotesQuery from '../services/useNotesQuery.tsx';

@@ -1,6 +1,6 @@
 import React, {useRef, useState,  useLayoutEffect} from 'react'
-import MainStyles from '../styles/MainStyles.module.css'
-import NoteStyles from '../styles/NoteStyles.module.css'
+import MainStyles from '../..//styles/MainStyles.module.css'
+import NoteStyles from '../../styles/NoteStyles.module.css'
 import useSingleNoteMutation from '../../services/useSingleNoteMutation';
 import { NoteType } from '../../../../interfaces';
 import useClickOutside from '../../../../hooks/useClickOutside';
