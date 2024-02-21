@@ -21,11 +21,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
 
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
 
-
+    "baseUrl": "./frontend",
   },
-  "baseUrl": "./frontend",
   "typeRoots": ["./node_modules/@types", "./custom-types"],
   "paths": {
     "*": ["*.module.css"]

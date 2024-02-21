@@ -21,20 +21,23 @@
   padding-bottom: 2rem;
 }
 
-.bodyInput {
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  resize: none;
+.modal {
+  min-width: 18rem;
+  max-width: 18rem;
   
-  overflow: hidden;
-  max-height: min-content;
-  padding: .5rem .5rem .5rem .5rem;
-  color: inherit
+}
+/* overflow: hidden; */
+
+.bodyInput {
+  resize: none;
+  padding: .5rem;
+  color: inherit;
+  overflow-y: auto;
+  max-height: 65vh;
 }
 
 .modal .bodyInput {
-  overflow: auto;
+
 }
 
 

@@ -15,6 +15,8 @@ const NotePinButton:React.FC<NotePinButtonProps> = ({handleNotePinToggle, isPinn
   return (
       <div className={NoteStyles.pin}>
         <button 
+          aria-label="pin"
+          role='button'
           className={NoteStyles.options} 
           id={isPinned ? NoteStyles.removePin : ""} 
           onClick={!multiSelectMode ? (e)=>handleNotePinToggle(e) : (e) => handleClickWhileMultiSelect(e)}>

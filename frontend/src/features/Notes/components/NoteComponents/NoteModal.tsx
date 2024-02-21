@@ -21,8 +21,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.target.value)
-    e.target.style.height = "auto"; // Reset the height to auto
-    e.target.style.height = `${e.target.scrollHeight}px`; // Set the new height
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,12 +32,19 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
   useLayoutEffect(() => {
     if (textareaRef.current) {
-      // Calculate the scroll height of the textarea content
+      textareaRef.current.style.height = 'auto';
+      
       const scrollHeight = textareaRef.current.scrollHeight;
-      // Set the textarea height to the scroll height
-      textareaRef.current.style.height = `${Math.min(scrollHeight, 200)}px`;
+      const viewportHeight = window.innerHeight;
+
+      const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
+
+      textareaRef.current.style.height = `${Math.min(
+        scrollHeightInVh,
+        65
+      )}vh`;
     }
-  }, [note.body]); // Recalculate height whenever the note body changes
+  }, [body]);
 
 
   const handleBlur = () => {
@@ -55,7 +60,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
   const noteRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(noteRef, handleBlur)
-  
 
   const handleUpdateNote = async () => {
     noteContentUpdate.mutate({title, body})

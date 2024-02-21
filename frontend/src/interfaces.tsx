@@ -10,7 +10,7 @@ export interface NoteType {
   labels: string[];
   isPinned: boolean;
   isTrashed: boolean;
-  isArchived: boolean
+  isArchived: boolean;
 }
 
 export interface NotesData {
