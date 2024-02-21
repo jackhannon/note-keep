@@ -24,20 +24,18 @@
 .modal {
   min-width: 18rem;
   max-width: 18rem;
-  
 }
-/* overflow: hidden; */
 
 .bodyInput {
+  overflow: hidden;
   resize: none;
   padding: .5rem;
   color: inherit;
-  overflow-y: auto;
-  max-height: 65vh;
+  height: auto;
 }
 
 .modal .bodyInput {
-
+  max-height: 65vh;
 }
 
 

@@ -33,12 +33,17 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
   useLayoutEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      
       const scrollHeight = textareaRef.current.scrollHeight;
+
       const viewportHeight = window.innerHeight;
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-
+      console.log(scrollHeightInVh)
+      if (scrollHeightInVh >= 65) {
+        textareaRef.current.style.overflowY = "auto"
+      } else {
+        textareaRef.current.style.overflowY = "hidden"
+      }
       textareaRef.current.style.height = `${Math.min(
         scrollHeightInVh,
         65
