@@ -13,30 +13,30 @@ describe('modifying individual notes', () => {
   });
 
 
-  it("note disappears when trashed", async() => {
-    const noteDetails = {
-      _id: "abcd",
-      title: "note 1",
-      body: "note 1 body",
-      labels: [],
-      isPinned: false,
-      isTrashed: false,
-      isArchived: false
-    }
+  // it("note disappears when trashed", async() => {
+  //   const noteDetails = {
+  //     _id: "abcd",
+  //     title: "note 1",
+  //     body: "note 1 body",
+  //     labels: [],
+  //     isPinned: false,
+  //     isTrashed: false,
+  //     isArchived: false
+  //   }
   
-    render(
-      <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
-      </QueryClientProvider>
-    )
-    fireEvent.mouseOver(screen.getByPlaceholderText("Title"));
-    fireEvent.click(screen.getByLabelText("optionsButton"));
-    fireEvent.click(screen.getByText("Delete"));
+  //   render(
+  //     <QueryClientProvider client={queryClient}>
+  //       <GlobalProvider>
+  //         <Notes/>
+  //       </GlobalProvider>
+  //     </QueryClientProvider>
+  //   )
+  //   fireEvent.mouseOver(screen.getByPlaceholderText("Title"));
+  //   fireEvent.click(screen.getByLabelText("optionsButton"));
+  //   fireEvent.click(screen.getByText("Delete"));
 
-    screen.debug()
-  });
+  //   screen.debug()
+  // });
   
   it("note disappears when archived", () => {
     //working

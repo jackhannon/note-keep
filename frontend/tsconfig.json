@@ -24,11 +24,12 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
 
     "baseUrl": "./frontend",
+    "paths": {
+      "*": ["*.module.css"]
+    },
   },
   "typeRoots": ["./node_modules/@types", "./custom-types"],
-  "paths": {
-    "*": ["*.module.css"]
-  },
-  "include": ["/src", "/src/globals.d.ts"],
+ 
+  "include": ["/src", "/tests", "/src/globals.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
