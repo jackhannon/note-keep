@@ -3,14 +3,12 @@ import CreateNote from './CreateNote.tsx'
 import Note from './NoteComponents/Note.tsx';
 import MainStyles from '../styles/MainStyles.module.css'
 import Masonry from 'react-masonry-css'
-import { useParams } from 'react-router-dom';
 import useNotesQuery from '../services/useNotesQuery.tsx';
 import { useGlobalContext } from '../../../context/GlobalContext.tsx';
 
 const Notes: React.FC = () => {
 
-  const { labelId } = useParams()
-  const {query} = useGlobalContext()
+  const {query, currentLabel} = useGlobalContext()
   const {data, isPending, isError, error} = useNotesQuery();
 
   const breakpoints = {
@@ -36,7 +34,7 @@ const Notes: React.FC = () => {
 
   if (data) {
     if (!data.plainNotes.length && !data.pinnedNotes.length || ((!data.plainNotes.length) && 
-      ["Trash", "Archive"].includes(labelId || ""))) 
+      ["Trash", "Archive"].includes(currentLabel._id || ""))) 
     {
       return (
         <div className={`${MainStyles.container}`}>
@@ -47,7 +45,7 @@ const Notes: React.FC = () => {
 
     return (
       <div className={MainStyles.container}>
-        {!query && !["Trash", "Archive"].includes(labelId || "") ? (<CreateNote />) : null}
+        {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
         <Masonry   
         breakpointCols={breakpoints}
         className="my-masonry-grid"

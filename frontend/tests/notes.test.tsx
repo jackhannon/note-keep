@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, expect, it, vi} from 'vitest';
 import {screen, render } from '@testing-library/react'
 import Notes from '../src/features/Notes/components/Notes'
@@ -5,33 +6,64 @@ import { GlobalProvider } from '../src/context/GlobalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach} from 'node:test';
 import axios from 'axios';
-import { MockedFunction } from 'vitest';
-import makeRequestMock from '../src/utils/__mocks__/makeRequests';
+vi.mock('axios', () => {
+  const mockNotes =  {
+    data: {
+      pinnedNotes: [
+        {
+          _id: '1',
+          title: 'note 1',
+          body: 'note 1 body',
+          labels: [],
+          isPinned: true,
+          isTrashed: false,
+          isArchived: false,
+        },
+        {
+          _id: '2',
+          title: 'note 2',
+          body: 'note 2 body',
+          labels: [],
+          isPinned: true,
+          isTrashed: false,
+          isArchived: false,
+        },
+      ],
+      plainNotes: [
+        {
+          _id: '3',
+          title: 'note 3',
+          body: 'note 3 body',
+          labels: [],
+          isPinned: false,
+          isTrashed: false,
+          isArchived: false,
+        },
+      ]
+    }
+  }
 
+  return {
+    default: {
+      post: vi.fn(),
+      get: vi.fn().mockResolvedValue(mockNotes),
+      delete: vi.fn(),
+      put: vi.fn(),
+      create: vi.fn().mockReturnThis(),
+      interceptors: {
+        request: {
+          use: vi.fn(),
+          eject: vi.fn(),
+        },
+        response: {
+          use: vi.fn(),
+          eject: vi.fn(),
+        },
+      },
+    },
+  };
+});
 
-// vi.mock('axios', () => {
-//   return {
-//     default: {
-//       post: vi.fn(),
-//       get: vi.fn(),
-//       delete: vi.fn(),
-//       put: vi.fn(),
-//       create: vi.fn().mockReturnThis(),
-//       interceptors: {
-//         request: {
-//           use: vi.fn(),
-//           eject: vi.fn(),
-//         },
-//         response: {
-//           use: vi.fn(),
-//           eject: vi.fn(),
-//         },
-//       },
-//     },
-//   };
-// });
-
-vi.mock('../src/utils/makeRequests')
 
 describe('notes rendering behaviour', () => {
   const queryClient = new QueryClient({
@@ -47,7 +79,6 @@ describe('notes rendering behaviour', () => {
 
 
   it("notes are displayed", async() => {
-
     render(
       <QueryClientProvider client={queryClient}>
         <GlobalProvider>
@@ -55,10 +86,8 @@ describe('notes rendering behaviour', () => {
         </GlobalProvider>
       </QueryClientProvider>
     )
-    screen.debug()
-    
-    await makeRequestMock();
-
+    const spy = vi.spyOn(axios, 'create')
+    expect(spy).toHaveBeenCalled()
     screen.debug();
   });
   

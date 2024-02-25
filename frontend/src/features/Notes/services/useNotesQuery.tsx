@@ -1,17 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import { getNotes } from "./noteServices";
-import { useParams } from "react-router";
 import { NotesData } from "../../../interfaces";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 
-export const useNotesQuery = () => {
-  const {labelId} = useParams()
-  const { query } = useGlobalContext()
+const useNotesQuery = () => {
+  const { query, currentLabel } = useGlobalContext()
 
   const {data, isSuccess, isPending, isError, error} = useQuery<NotesData, Error>({
-    queryKey: ["notes", labelId, query],
-    queryFn: () => getNotes(labelId || "", query),
+    queryKey: ["notes", currentLabel._id, query],
+    queryFn: () => getNotes(currentLabel._id || "", query),
   })
 
   return { data, isSuccess, isPending, isError, error};
