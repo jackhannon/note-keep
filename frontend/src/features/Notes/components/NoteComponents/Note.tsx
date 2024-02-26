@@ -4,7 +4,7 @@ import MainStyles from '../../styles/MainStyles.module.css'
 import optionModalStyles from '../../../../styles/optionModalStyles.module.css'
 import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faCheck, faEllipsisVertical, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faCheck, faEllipsisVertical, faMapPin, faTrash, faTrashRestore, faUndo, faX } from '@fortawesome/free-solid-svg-icons';
 import { useGlobalContext } from '../../../../context/GlobalContext';
 import { NoteType } from '../../../../interfaces';
 import { useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Note: React.FC<Props> = ({ note }) => {
   const [noteState, setNoteState] = useState<boolean>(false);
   const [noteHoverState, setNoteHoverState] = useState<boolean>(false);
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
-  const {selectedNotesState, dispatchSelectedNotes} = useGlobalContext()
+  const {selectedNotesState, dispatchSelectedNotes, handleClickWhileMultiSelect} = useGlobalContext()
   const [labelModalState, setLabelModal] = useState<boolean>(false)
 
   const {notes: selectedNotes, modeOn: multiSelectMode} = selectedNotesState
@@ -143,16 +143,29 @@ const Note: React.FC<Props> = ({ note }) => {
         onMouseEnter={() => setNoteHoverState(true)}
         onMouseLeave={() => handleMouseLeave()}
       >
-        {(noteHoverState || selectedNoteIds.includes(note._id)) && (
-          <div className={NoteStyles.check} >
-            <button aria-label="check" role="button" className={NoteStyles.options} id={NoteStyles.check} onClick={(e) => handleSelectNoteToggle(e)}>
-              <FontAwesomeIcon icon={shouldNoteShowCheckMark() ? faCheck : faX} />
-            </button>
-          </div>
-        )}
+    
+        <div className={`
+          ${NoteStyles.check} 
+          ${noteHoverState || selectedNoteIds.includes(note._id) ? NoteStyles.fadeIn : ""
+        }`}>
+          <button aria-label="check" role="button" className={NoteStyles.options} id={NoteStyles.check} onClick={(e) => handleSelectNoteToggle(e)}>
+            <FontAwesomeIcon icon={shouldNoteShowCheckMark() ? faCheck : faX} />
+          </button>
+        </div>
+      
 
-        {((note.isPinned || noteHoverState) && !["Trash", "Archive"].includes(labelId || "")) && (
-          <NotePinButton handleNotePinToggle={handleNotePinToggle} isPinned={note.isPinned}/>
+        {!["Trash", "Archive"].includes(labelId || "") && (
+          <div className={`${NoteStyles.pin} ${note.isPinned || noteHoverState ? NoteStyles.fadeIn : ""}`} >
+            <button 
+              aria-label="pin"
+              role='button'
+              className={`${NoteStyles.options}`} 
+              id={note.isPinned ? NoteStyles.removePin : ""} 
+              onClick={!multiSelectMode ? (e)=>handleNotePinToggle(e) : (e) => handleClickWhileMultiSelect(e)}
+            >
+              <FontAwesomeIcon icon={faMapPin} />
+            </button>
+          </div>       
         )}
       
         <input
@@ -182,9 +195,9 @@ const Note: React.FC<Props> = ({ note }) => {
           </div>)
         }
           
-        {(!multiSelectMode && noteHoverState) ? 
+        {!multiSelectMode ? 
           !["Trash", "Archive"].includes(labelId || "") ? (
-            <div className={NoteStyles.tools} ref={optionRef}>
+            <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
               <button role="button" aria-label="archiveButton" className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
                 <FontAwesomeIcon icon={faArchive} />
               </button>
@@ -193,7 +206,7 @@ const Note: React.FC<Props> = ({ note }) => {
               </button>
             </div>
           ) : (labelId === "Trash") ? (
-            <div className={NoteStyles.tools} ref={optionRef}>
+            <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
               <button role="button" aria-label="trashRestoreButton" className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
                 <FontAwesomeIcon icon={faTrashRestore} />
               </button>
@@ -205,7 +218,7 @@ const Note: React.FC<Props> = ({ note }) => {
               </button>
             </div>
           ) : (labelId === "Archive") ? (
-          <div className={NoteStyles.tools} ref={optionRef}>
+          <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
             <button role="button" aria-label="undoButton" className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
               <FontAwesomeIcon icon={faUndo} />
             </button>

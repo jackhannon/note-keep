@@ -1,9 +1,4 @@
-/* .notesContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));  
-  grid-auto-rows: minmax(100px, auto);  gap: 1em;
-  margin-top: 1em;
-} */
+
 
 .container {
   border-radius: 5px;
@@ -74,6 +69,7 @@
   position: absolute;
   top: -.5rem;
   left: -.5rem;
+  opacity: 0;
  }
 
 
@@ -88,6 +84,7 @@
   position: absolute;
   right: .5rem;
   top: .4rem;
+  opacity: 0;
  }
 
 .tools {
@@ -96,6 +93,12 @@
  gap: 5px;
  right: .5rem;
  bottom: .4rem;
+ opacity: 0;
+}
+
+.fadeIn {
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
 
 .options {
