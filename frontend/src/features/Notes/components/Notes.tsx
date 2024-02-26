@@ -33,8 +33,6 @@ const Notes: React.FC = () => {
   }
 
   if (data) {
-    console.log(data)
-
     if (!data.plainNotes.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
       return (
         <div className={`${MainStyles.container}`}>

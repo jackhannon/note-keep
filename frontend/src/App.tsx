@@ -3,7 +3,7 @@ import Header from './features/Header/components/Header';
 import Sidebar from './features/Labels/components/Sidebar'
 import Notes from './features/Notes/components/Notes'
 import './App.css'
-import { Routes, Route, useNavigate} from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate} from 'react-router-dom'
 import { GlobalProvider } from './context/GlobalContext';
 
 
@@ -11,10 +11,6 @@ import { GlobalProvider } from './context/GlobalContext';
 
 
 const App: React.FC = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate(`/Notes`);
-  }, [navigate])
 
 
 
@@ -22,6 +18,7 @@ const App: React.FC = () => {
     <>
       <GlobalProvider>
         <Routes>
+          <Route path="/" element={<Navigate to="/Notes" />} />
           <Route path='/:labelId' element={
             <>
               <Header/>
