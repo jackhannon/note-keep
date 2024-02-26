@@ -6,7 +6,6 @@ const api = axios.create({
 })
 
 const makeRequest = async (url: string, options?: object) => {
-console.log("dawdwdawwadawdawdddddd2222222222222222a")
   const result = await api(url, options)
   return result.data
 }

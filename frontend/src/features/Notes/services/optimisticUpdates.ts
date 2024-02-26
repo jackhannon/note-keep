@@ -1,7 +1,3 @@
-// function togglePinStatus(pinStatusToToggle, noteId, notes) {
-
-// }
-
 export function removeNote(noteId, notes) {
   const pinnedNotes = notes.pinnedNotes.filter(note => note._id !== noteId)
   const plainNotes = notes.plainNotes.filter(note => note._id !== noteId)
@@ -10,8 +6,7 @@ export function removeNote(noteId, notes) {
 
 
 export function removeSelectedNotes(noteIds, notes) {
-
   const pinnedNotes = notes.pinnedNotes.filter(note => !noteIds.includes(note._id))
   const plainNotes = notes.plainNotes.filter(note => !noteIds.includes(note._id))
-  return {...pinnedNotes, ...plainNotes}
+  return {pinnedNotes, plainNotes}
 }

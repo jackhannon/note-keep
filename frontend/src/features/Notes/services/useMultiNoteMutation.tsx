@@ -70,7 +70,6 @@ export const useMultiNoteMutation = (selectedNotes) => {
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', labelId, query])
       queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
-      console.log(prevNotes)
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
 

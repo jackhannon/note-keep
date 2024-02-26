@@ -21,49 +21,41 @@ const MultiSelectHead = () => {
   const handleClickOutsideOptionModal = () => {
     setOptionsModal(false)
   }
-  const optionsModalRef = useRef<HTMLUListElement>(null)
+  const optionsModalRef = useRef<HTMLDivElement>(null)
   
   useClickOutside(optionsModalRef, handleClickOutsideOptionModal)
 
   //if all notes are unpinned, pin all the notes.
   //if any note is pinned, unpin all the notes
-  const handleToggleAllPins = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleToggleAllPins = async () => {
     toggleSelectedNotesPin.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
 
-  const handleSelectedNotesArchive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleSelectedNotesArchive = () => {
     archiveSelectedNotes.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
-  const handleSelectedNotesTrash = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation();
-    console.log(selectedNotes)
+  const handleSelectedNotesTrash = () => {
     trashSelectedNotes.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
-  const handleSelectedNotesDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleSelectedNotesDelete = () => {
     deleteSelectedNotes.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
   
-  const handleSelectedNotesRestore = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleSelectedNotesRestore = () => {
     restoreSelectedNotes.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
   }
 
-  const handleSelectedNotesCopy = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleSelectedNotesCopy = () => {
     copySelectedNotes.mutate()
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
-
   }
 
   const handleMultiSelectCancel = () => {
@@ -83,44 +75,44 @@ const MultiSelectHead = () => {
       {!["Trash", "Archive"].includes(String(currentLabel._id)) ? (
         <div className={headerStyles.right}>
           <button 
-            onClick={(e) => handleToggleAllPins(e)} 
+            onClick={handleToggleAllPins} 
             className={`${headerStyles.option} 
                         ${headerStyles.noteSelectBtn}
                         ${selectedNotes.every(note => note.isPinned) ? headerStyles.removePin : ""}`}
           >
             <FontAwesomeIcon icon={faMapPin} />
           </button>
-          <button onClick={(e) => handleSelectedNotesArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faArchive} />
           </button>
           <button onClick={() => setOptionsModal(!optionsModalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faEllipsisVertical} />
           </button>
           {optionsModalState && (
-            <ul className={`${optionModalStyles.modal} ${optionModalStyles.headerModal}`} ref={optionsModalRef}>
-              <li onClick={(e) => handleSelectedNotesTrash(e)}>Delete</li>
-              <li onClick={(e) => handleSelectedNotesCopy(e)}>Make a copy</li>
-            </ul>
+            <div className={`${optionModalStyles.modal} ${optionModalStyles.headerModal}`} ref={optionsModalRef}>
+              <button className={optionModalStyles.modalBtn} onClick={handleSelectedNotesTrash}>Delete</button>
+              <button className={optionModalStyles.modalBtn} onClick={handleSelectedNotesCopy}>Make a copy</button>
+            </div>
           )}
         </div>
       ) : currentLabel._id === "Trash" ? (
         <div className={headerStyles.right}>
-          <button onClick={(e) => handleSelectedNotesArchive(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faArchive} />
           </button>
-          <button onClick={(e) => handleSelectedNotesDelete(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesDelete} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
-          <button onClick={(e) => handleSelectedNotesRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrashRestore} />
           </button>
         </div>
       ) : (
         <div className={headerStyles.right}>
-          <button onClick={(e) => handleSelectedNotesTrash(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesTrash} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
-          <button onClick={(e) => handleSelectedNotesRestore(e)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faUndo} />
           </button>
         </div>

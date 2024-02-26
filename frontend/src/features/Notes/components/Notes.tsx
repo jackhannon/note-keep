@@ -33,15 +33,24 @@ const Notes: React.FC = () => {
   }
 
   if (data) {
-    if (!data.plainNotes.length && !data.pinnedNotes.length || ((!data.plainNotes.length) && 
-      ["Trash", "Archive"].includes(currentLabel._id || ""))) 
-    {
+    console.log(data)
+
+    if (!data.plainNotes.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
       return (
         <div className={`${MainStyles.container}`}>
           <div className={MainStyles.noNotes}>No notes found!</div>
         </div> 
       )
-    } 
+    } else if (!data.plainNotes.length && !data.pinnedNotes.length) {
+      return (
+        <>
+        <div className={`${MainStyles.container}`}>
+          <CreateNote />
+          <div className={MainStyles.noNotes}>No notes found!</div>
+        </div> 
+        </>
+      )
+    }
 
     return (
       <div className={MainStyles.container}>
