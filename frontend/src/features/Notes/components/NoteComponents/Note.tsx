@@ -169,12 +169,11 @@ const Note: React.FC<Props> = ({ note }) => {
         {(!multiSelectMode && optionsModalState) && (
           <div className={optionModalStyles.modal} ref={optionsModalRef}>
             {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
-            <button id="delete" onClick={(e)=>handleTrash(e)}>Delete</button>
+            <button className={optionModalStyles.modalBtn} onClick={(e)=>handleTrash(e)}>Delete</button>
             {(labels && labels.length > 0) &&
-              
-              <button id="change-labels" onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</button>
+              <button className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</button>
             }
-            <button id="copy-note" onClick={(e) => handleCopy(e)}>Make a copy</button>
+            <button className={optionModalStyles.modalBtn} onClick={(e) => handleCopy(e)}>Make a copy</button>
           </div>)
         }
           
