@@ -2,27 +2,19 @@ import React, {useRef, useState } from 'react'
 import optionModalStyles from '../../../styles/optionModalStyles.module.css'
 import useLabelsQuery from '../../Labels/services/useLabelsQuery';
 import { LabelType } from '../../../interfaces';
-import useClickOutside from '../../../hooks/useClickOutside';
 
 interface Props {
-  setLabelModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleLabelToggle: (labels: string[]) => void
   labels: string[]
 }
 
-const LabelModal: React.FC<Props> = ({setLabelModal, handleLabelToggle, labels}) => {
+const LabelModal: React.FC<Props> = ({handleLabelToggle, labels}) => {
   const {data: allLabels} = useLabelsQuery()
   //find out why usequery refetches labels
 
   const [checkedLabelIds, setCheckedLabels] = useState<string[]>(labels)
 
   const labelModalRef = useRef<HTMLDivElement>(null)
-
-  const handleSetLabelModalFalse = () => {
-    setLabelModal(false);
-  }
-
-  useClickOutside(labelModalRef, handleSetLabelModalFalse)
 
   const handleLabelClick = (label: LabelType, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()

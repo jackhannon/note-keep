@@ -36,17 +36,24 @@ const Note: React.FC<Props> = ({ note }) => {
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
 
+//all you need to do is remove the stop propagation from the labels modal.
+//  since the labels is already within the optionsmodal, you dont have to account for the 
+// risk of opening the note 
 
 
-
-  const handleClickOutsideOptionModal = () => {
+  const handleClickOutsideOptionModal = (e: MouseEvent) => {
+    e.stopPropagation()
     setOptionsModal(false)
+    setLabelModal(false)
     setNoteHoverState(false)
   }
 
   const optionsModalRef = useRef<HTMLDivElement>(null)
 
   useClickOutside(optionsModalRef, handleClickOutsideOptionModal)
+
+
+
 
   useLayoutEffect(() => {
     if (textareaRef.current) {
@@ -109,11 +116,9 @@ const Note: React.FC<Props> = ({ note }) => {
     noteLabelUpdate.mutate(labels);
   };
 
-  const handleToggleLabelsModalOn = async (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+  const handleToggleLabelsModal = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
-    if (!labelModalState) {
-      setLabelModal(true);
-    }
+    setLabelModal(!labelModalState);
   }
   
   const handleFocus = () => {
@@ -168,10 +173,10 @@ const Note: React.FC<Props> = ({ note }) => {
 
         {(!multiSelectMode && optionsModalState) && (
           <div className={optionModalStyles.modal} ref={optionsModalRef}>
-            {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle}  setLabelModal={setLabelModal} labels={note.labels} /> : null}
+            {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} labels={note.labels} /> : null}
             <button className={optionModalStyles.modalBtn} onClick={(e)=>handleTrash(e)}>Delete</button>
             {(labels && labels.length > 0) &&
-              <button className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModalOn(e)}>Change labels</button>
+              <button className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModal(e)}>Change labels</button>
             }
             <button className={optionModalStyles.modalBtn} onClick={(e) => handleCopy(e)}>Make a copy</button>
           </div>)
