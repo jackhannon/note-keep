@@ -35,9 +35,6 @@ const Note: React.FC<Props> = ({ note }) => {
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
 
-//all you need to do is remove the stop propagation from the labels modal.
-//  since the labels is already within the optionsmodal, you dont have to account for the 
-// risk of opening the note 
 
 
   const handleClickOutsideOptionModal = (e: MouseEvent) => {
@@ -138,6 +135,7 @@ const Note: React.FC<Props> = ({ note }) => {
 
       <div
         className={NoteStyles.note}
+        aria-label={`note-item-${note._id}`}
         onClick={() => !noteState ? handleFocus() : null}
         onMouseEnter={() => setNoteHoverState(true)}
         onMouseLeave={() => handleMouseLeave()}
@@ -186,42 +184,42 @@ const Note: React.FC<Props> = ({ note }) => {
         {(!multiSelectMode && optionsModalState) && (
           <div className={optionModalStyles.modal} ref={optionsModalRef}>
             {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} labels={note.labels} /> : null}
-            <button className={optionModalStyles.modalBtn} onClick={(e)=>handleTrash(e)}>Delete</button>
+            <button role="button" aria-label={`trash-button-for-${note._id}`} className={optionModalStyles.modalBtn} onClick={(e)=>handleTrash(e)}>Delete</button>
             {(labels && labels.length > 0) &&
-              <button className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModal(e)}>Change labels</button>
+              <button role="button" aria-label={`change-labels-button-for-${note._id}`} className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModal(e)}>Change labels</button>
             }
-            <button className={optionModalStyles.modalBtn} onClick={(e) => handleCopy(e)}>Make a copy</button>
+            <button role="button" aria-label={`copy-button-for-${note._id}`} className={optionModalStyles.modalBtn} onClick={(e) => handleCopy(e)}>Make a copy</button>
           </div>)
         }
           
         {!multiSelectMode ? 
           !["Trash", "Archive"].includes(labelId || "") ? (
             <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-              <button role="button" aria-label="archiveButton" className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+              <button role="button" aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
                 <FontAwesomeIcon icon={faArchive} />
               </button>
-              <button role="button" aria-label="optionsButton" className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
+              <button role="button" aria-label={`options-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
             </div>
           ) : (labelId === "Trash") ? (
             <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-              <button role="button" aria-label="trashRestoreButton" className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
+              <button role="button" aria-label={`trash-restore-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
                 <FontAwesomeIcon icon={faTrashRestore} />
               </button>
-              <button role="button" aria-label="trashButton" className={NoteStyles.options} onClick={(e)=>handleDelete(e)}>
+              <button role="button" aria-label={`trash-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleDelete(e)}>
                 <FontAwesomeIcon icon={faTrash} />
               </button>
-              <button role="button" aria-label="archiveButton" className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+              <button role="button" aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
                 <FontAwesomeIcon icon={faArchive} />
               </button>
             </div>
           ) : (labelId === "Archive") ? (
           <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-            <button role="button" aria-label="undoButton" className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
+            <button role="button" aria-label={`undo-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
               <FontAwesomeIcon icon={faUndo} />
             </button>
-            <button role="button" aria-label="trashButton" className={NoteStyles.options} onClick={(e)=>handleTrash(e)}>
+            <button role="button" aria-label={`trash-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleTrash(e)}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>

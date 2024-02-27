@@ -29,10 +29,13 @@ const Notes: React.FC = () => {
   }
     
   if (isError) {
-    return (<h1 className="error-msg">{error?.message}</h1>)
-  }
+    return (
+      <div className={MainStyles.container}>
+        <h1 className='error-msg'>{error?.message}</h1>
+      </div>
+    )  }
 
-  if (data) {
+  if (data?.pinnedNotes || data?.plainNotes) {
     if (!data.plainNotes.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
       return (
         <div className={`${MainStyles.container}`}>

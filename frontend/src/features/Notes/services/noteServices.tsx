@@ -45,10 +45,12 @@ export function archiveOnNote(noteId: string): Promise<unknown> {
 }
 
 export function trashOnNote(noteId: string): Promise<unknown> {
+
   const requestData = {
     isTrashed: true,
     isArchived: false
   };
+
   return makeRequest(`/notes/${noteId}`, {
     method: "PATCH",
     data: requestData

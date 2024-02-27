@@ -7,7 +7,7 @@ const api = axios.create({
 
 const makeRequest = async (url: string, options?: object) => {
   const result = await api(url, options)
-  return result.data
+  return result.data;
 }
 
 export default makeRequest
