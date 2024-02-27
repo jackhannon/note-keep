@@ -12,7 +12,6 @@ import { NOTE_TOGGLE_CLICKED } from '../../../../reducers/selectedNotesReducer';
 import useSingleNoteMutation from '../../services/useSingleNoteMutation';
 import LabelModal from '../LabelModal';
 import useLabelsQuery from '../../../Labels/services/useLabelsQuery';
-import NotePinButton from './NotePinButton';
 import useClickOutside from '../../../../hooks/useClickOutside';
 
 interface Props {
