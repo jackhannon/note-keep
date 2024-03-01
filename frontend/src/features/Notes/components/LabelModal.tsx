@@ -34,7 +34,7 @@ const LabelModal: React.FC<Props> = ({handleLabelToggle, labels}) => {
       <span className={optionModalStyles.title}>Label Note</span>
       {allLabels && allLabels.map(label=> {
         return (
-          <div key={label._id || label.title} className={optionModalStyles.label} onClick={(e) => handleLabelClick(label, e)}>
+          <div key={label._id || label.title} aria-label={`label-toggle-for-label-${label._id}`} className={optionModalStyles.label} onClick={(e) => handleLabelClick(label, e)}>
              <input
               className={optionModalStyles.inputLabel}
               type="checkbox"

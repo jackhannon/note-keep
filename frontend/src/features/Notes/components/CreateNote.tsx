@@ -37,6 +37,7 @@ const EditNote: React.FC = () => {
     <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
       {createNoteIsFocused ? (
         <input 
+          aria-label={"new-note-title"}
           className={MainStyles.titleInput}
           placeholder='Title'
           type="text" 
@@ -45,6 +46,7 @@ const EditNote: React.FC = () => {
         />
       ) : null}
         <textarea
+          aria-label={"new-note-body"}
           placeholder='Take a note...'
           className={MainStyles.bodyInput}
           onFocus={() => setCreateNoteIsFocused(true)}

@@ -27,6 +27,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
     setTitle(e.target.value)
   }
 
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
 
@@ -64,6 +65,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
     setNoteState(false)
   }
 
+
   const noteRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(noteRef, handleBlur)
@@ -76,6 +78,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
     <div className={NoteStyles.modalContainer}>
       <div className={NoteStyles.modal} ref={noteRef}>
         <input 
+          aria-label={"active-note-title"}
           className={MainStyles.titleInput}
           placeholder='Title'
           type="text" 
@@ -84,6 +87,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
           onChange={(e) => handleTitleChange(e)}
         />
         <textarea
+          aria-label={"active-note-body"}
           placeholder='Take a note...'
           className={NoteStyles.bodyInput}
           value={body}

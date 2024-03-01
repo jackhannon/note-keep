@@ -66,7 +66,6 @@ const Note: React.FC<Props> = ({ note }) => {
 
   const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-
     if (!optionsModalState) {
       setOptionsModal(true);
     } 
@@ -166,6 +165,7 @@ const Note: React.FC<Props> = ({ note }) => {
         )}
       
         <input
+          aria-label={`note-title-for-note-${note._id}`}
           className={MainStyles.titleInput}
           placeholder="Title"
           type="text"
@@ -173,6 +173,7 @@ const Note: React.FC<Props> = ({ note }) => {
           readOnly
         />
         <textarea
+          aria-label={`note-body-for-note-${note._id}`}
           placeholder="Take a note..."
           className={NoteStyles.bodyInput}
           ref={textareaRef}

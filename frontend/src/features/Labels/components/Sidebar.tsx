@@ -5,15 +5,13 @@ import { faTrash, faEdit, faArchive, faLightbulb} from '@fortawesome/free-solid-
 import Modal from './Modal';
 import { LabelType } from '../../../interfaces';
 import Label from './Label'
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useLabelsQuery from '../services/useLabelsQuery';
 import { useGlobalContext } from '../../../context/GlobalContext';
 
-
 const Sidebar: React.FC = () => {
-  const { labelId } =  useParams()
-  const {isSidebarOpen, handleSetLabel} = useGlobalContext()
-
+  const {isSidebarOpen, handleSetLabel, currentLabel} = useGlobalContext()
+  const {_id: labelId} = currentLabel
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -62,7 +60,7 @@ const Sidebar: React.FC = () => {
         <button className={sidebarStyles.child} onClick={() => setModalState(!modalState)}>
           <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
           <span className={sidebarStyles.catagory}>
-          Edit Labels
+            Edit Labels
           </span>
         </button>
         <Link to={`/Archive`} onClick={() => handleSetLabel({title: "Archive", _id: "Archive"})} 

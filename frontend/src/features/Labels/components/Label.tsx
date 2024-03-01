@@ -12,7 +12,7 @@ interface Props {
 const Label: React.FC<Props> = ({label}) => {
   const { currentLabel, handleSetLabel } = useGlobalContext()
   return (
-    <Link to={`/${label._id}`} onClick={() => handleSetLabel({title: label.title, _id: label._id})}
+    <Link to={`/${label._id}`} aria-label={`label-for-${label._id}`} onClick={() => handleSetLabel({title: label.title, _id: label._id})}
       className={`${sidebarStyles.child} ${
         currentLabel._id === label._id ? sidebarStyles.activeLabel : ""
     }`}>
