@@ -40,7 +40,7 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
         <div className={sidebarStyles.message}>Edit labels</div>
 
         <div className={sidebarStyles.newLabel}>
-          <button aria-label="toggle-create-new-label-focus" className={sidebarStyles.addNewLabelBtn} onClick={() => newLabelState ? setNewLabelState(false) : setNewLabelState(true)}><FontAwesomeIcon icon={newLabelState ? faX : faPlus}/></button>
+          <button aria-label="toggle-create-new-label-focus" className={sidebarStyles.addNewLabelBtn} onClick={() => setNewLabelState(prevState => !prevState)}><FontAwesomeIcon icon={newLabelState ? faX : faPlus}/></button>
           <input 
             aria-label="create-new-label"
             className={`${sidebarStyles.newLabelField} ${newLabelState ? sidebarStyles.input : null}`} 
