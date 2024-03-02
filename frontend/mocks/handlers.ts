@@ -11,11 +11,12 @@ export const handlers = [
   }),
 
   http.post("notes/label", () => {
-    return HttpResponse.json(notes)
+    labels.push({_id: "4", title: "New, better label"})
+    return new HttpResponse("success", {status: 200})
   }),
 
   http.patch("notes/label/*", () => {
-    return HttpResponse.json(notes)
+    return new HttpResponse("success", {status: 200})
   }),
 
   http.delete("notes/label/*", () => {

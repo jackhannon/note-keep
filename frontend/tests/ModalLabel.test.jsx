@@ -161,7 +161,7 @@ describe('modifying labels', () => {
     fireEvent.click(confirmCreateButton)
 
     await waitFor(() => {
-      expect(newLabelInput.value).toBe(newTitle);
-    });
+      expect(screen.queryAllByLabelText(/input-label-title-for-[a-zA-Z | \d]+/).length).toBe(4);
+    })
   })
 })
