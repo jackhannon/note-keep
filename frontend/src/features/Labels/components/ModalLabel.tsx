@@ -17,7 +17,7 @@ interface Props {
 
 
 
-const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) => {
+const ModalLabel: React.FC<Props> = ({label, setNewLabelState}) => {
   const {currentLabel, handleSetLabel} = useGlobalContext()
   const [title, setTitle] = useState<string>(label.title)
 
