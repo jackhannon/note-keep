@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query";
 import { createLabel, updateLabel, deleteLabel } from "./labelServices";
 import { LabelType } from "../../../interfaces";
-import { useParams } from "react-router";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 export const useLabelMutation = () => {
-  const {labelId} = useParams()
-  const { query } = useGlobalContext()
+  const { query, currentLabel } = useGlobalContext()
 
   const queryClient = useQueryClient();
   
@@ -75,7 +73,7 @@ export const useLabelMutation = () => {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes", labelId, query] })
+      queryClient.invalidateQueries({ queryKey: ["notes", currentLabel._id, query] })
     },
   })
 

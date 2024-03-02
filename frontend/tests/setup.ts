@@ -19,6 +19,6 @@ afterAll(() => server.close())
 
 
 
-server.events.on('request:start', ({ request, requestId }) => {
+server.events.on('request:start', ({ request }) => {
   console.log('Outgoing request:', request.method, request.url)
 })

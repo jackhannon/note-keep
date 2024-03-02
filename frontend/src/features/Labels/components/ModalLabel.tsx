@@ -79,7 +79,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
       />
     }
 
-    <button className={sidebarStyles.deleteLabel} onClick={()=> handleTrashClick()} onMouseOver={()=>setTagHoverState(true)} onMouseLeave={()=>setTagHoverState(false)}>
+    <button aria-label={`trash-button-for-label-${label._id}`} className={sidebarStyles.deleteLabel} onClick={()=> handleTrashClick()} onMouseOver={()=>setTagHoverState(true)} onMouseLeave={()=>setTagHoverState(false)}>
       <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
     </button>
     <div className={sidebarStyles.edit} 
@@ -88,13 +88,14 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
       onFocus={()=>setExistingLabelFocusState(true)}
     >
       <input 
+        aria-label={`input-label-title-for-${label._id}`}
         value={title} 
         className={`${sidebarStyles.label} ${existingLabelFocusState ? sidebarStyles.input : null}`} 
         onClick={() => newLabelState ? setNewLabelState(false) : null} 
         onChange={e=> setTitle(e.target.value)}
       />
     </div>
-    <button className={sidebarStyles.renameLabel} onClick={() => handlePatchLabel()}>
+    <button aria-label={existingLabelFocusState ? `confirm-edit-button-for-label-${label._id}` : `edit-button-for-label-${label._id}`} className={sidebarStyles.renameLabel} onClick={() => handlePatchLabel()}>
       <FontAwesomeIcon icon={existingLabelFocusState ? faCheck : faPencil}/>
     </button>
   </div>

@@ -40,8 +40,9 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
         <div className={sidebarStyles.message}>Edit labels</div>
 
         <div className={sidebarStyles.newLabel}>
-          <button className={sidebarStyles.addNewLabelBtn} onClick={() => newLabelState ? setNewLabelState(false) : setNewLabelState(true)}><FontAwesomeIcon icon={newLabelState ? faX : faPlus}/></button>
+          <button aria-label="toggle-create-new-label-focus" className={sidebarStyles.addNewLabelBtn} onClick={() => newLabelState ? setNewLabelState(false) : setNewLabelState(true)}><FontAwesomeIcon icon={newLabelState ? faX : faPlus}/></button>
           <input 
+            aria-label="create-new-label"
             className={`${sidebarStyles.newLabelField} ${newLabelState ? sidebarStyles.input : null}`} 
             placeholder={"Enter a new label"}
             onChange={(e)=>setNewLabel(e.target.value)} 
@@ -51,13 +52,13 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
               setNewLabel("") 
             }, 100)}
             />
-          <button className={`${newLabelState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
+          <button aria-label="confirm-new-label-creation" className={`${newLabelState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
             onClick={onLabelCreate}>
             <FontAwesomeIcon icon={faCheck}/>
           </button>
         </div>
-        {labels && labels.map((label)=> {
-          return <ModalLabel key={label._id + Date.now()} label={label} newLabelState={newLabelState} setNewLabelState={setNewLabelState}/>
+        {labels && labels.map((label, index)=> {
+          return <ModalLabel key={label._id + index} label={label} newLabelState={newLabelState} setNewLabelState={setNewLabelState}/>
         }
         )}
       </div>

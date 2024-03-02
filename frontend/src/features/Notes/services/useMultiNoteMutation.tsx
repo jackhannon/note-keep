@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query"
 import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote } from "./noteServices"
-import { useParams } from "react-router"
 import {  NotesData } from "../../../interfaces"
 import { removeSelectedNotes } from "./optimisticUpdates"
 import { useGlobalContext } from "../../../context/GlobalContext"
@@ -8,8 +7,7 @@ import { useGlobalContext } from "../../../context/GlobalContext"
 export const useMultiNoteMutation = (selectedNotes) => {
   const queryClient = useQueryClient()
 
-  const {query} = useGlobalContext()
-  const {labelId} = useParams()
+  const {query, currentLabel } = useGlobalContext()
 
   const pinStatusToToggle = selectedNotes.some(note => note.isPinned)
   const selectedNoteIds = selectedNotes.map(note => note._id)
@@ -23,8 +21,8 @@ export const useMultiNoteMutation = (selectedNotes) => {
         });
     },
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         let newPinnedNotes;
         let newPlainNotes;
         
@@ -56,7 +54,7 @@ export const useMultiNoteMutation = (selectedNotes) => {
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   }) 
 
@@ -68,8 +66,8 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });
     },
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
 
@@ -77,7 +75,7 @@ export const useMultiNoteMutation = (selectedNotes) => {
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   }) 
 
@@ -89,16 +87,16 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });
     },
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   }) 
 
@@ -110,16 +108,16 @@ export const useMultiNoteMutation = (selectedNotes) => {
       });    
     },
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   }) 
 
@@ -132,16 +130,16 @@ export const useMultiNoteMutation = (selectedNotes) => {
     },
 
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         return removeSelectedNotes(selectedNoteIds, prevNotes)
       })
       return { previousNotes }
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
   
@@ -153,9 +151,9 @@ export const useMultiNoteMutation = (selectedNotes) => {
     },
 
     onMutate: () => {
-      const previousNotes = queryClient.getQueryData(['notes', labelId, query])
+      const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
-      queryClient.setQueryData(['notes', labelId, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
         const pinnedSelectedNotes = prevNotes.pinnedNotes.filter(note => selectedNoteIds.includes(note._id));
         const plainSelectedNotes =  prevNotes.plainNotes.filter(note => selectedNoteIds.includes(note._id));
 
@@ -165,11 +163,11 @@ export const useMultiNoteMutation = (selectedNotes) => {
     },
 
     onError: (err, newNotes, context) => {
-      queryClient.setQueryData(['notes', labelId, query], context?.previousNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes', labelId, query] })
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
     },
   })
 

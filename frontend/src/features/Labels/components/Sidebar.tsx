@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
           ))
         }
       
-        <button className={sidebarStyles.child} onClick={() => setModalState(!modalState)}>
+        <button aria-label={"edit-labels"} className={sidebarStyles.child} onClick={() => setModalState(!modalState)}>
           <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
           <span className={sidebarStyles.catagory}>
             Edit Labels
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
             </span>
           </div>
         </Link>
-        <Link to={`/Trash`} onClick={() => handleSetLabel({title: "Trash", _id: "Trash"})} 
+        <Link aria-label='' to={`/Trash`} onClick={() => handleSetLabel({title: "Trash", _id: "Trash"})} 
           className={`${sidebarStyles.child} ${labelId === "Trash" ? sidebarStyles.activeLabel : ""}`}
         >
           <div className={sidebarStyles.catagory}>

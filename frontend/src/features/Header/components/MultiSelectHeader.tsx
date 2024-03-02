@@ -65,7 +65,7 @@ const MultiSelectHead = () => {
   return (
     <>
       <div className={headerStyles.left}>
-        <button onClick={() => handleMultiSelectCancel()} className={headerStyles.noteSelectBtn}>
+        <button aria-label={"multi-select-off"} onClick={() => handleMultiSelectCancel()} className={headerStyles.noteSelectBtn}>
           <FontAwesomeIcon icon={faX} /> 
         </button>
 
@@ -75,6 +75,7 @@ const MultiSelectHead = () => {
       {!["Trash", "Archive"].includes(String(currentLabel._id)) ? (
         <div className={headerStyles.right}>
           <button 
+            aria-label={"multi-select-pin-toggle"}
             onClick={handleToggleAllPins} 
             className={`${headerStyles.option} 
                         ${headerStyles.noteSelectBtn}
@@ -82,10 +83,10 @@ const MultiSelectHead = () => {
           >
             <FontAwesomeIcon icon={faMapPin} />
           </button>
-          <button onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-archive"} onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faArchive} />
           </button>
-          <button onClick={() => setOptionsModal(!optionsModalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-options"} onClick={() => setOptionsModal(optionsModalState => !optionsModalState)} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faEllipsisVertical} />
           </button>
           {optionsModalState && (
@@ -97,22 +98,22 @@ const MultiSelectHead = () => {
         </div>
       ) : currentLabel._id === "Trash" ? (
         <div className={headerStyles.right}>
-          <button onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-archive"} onClick={handleSelectedNotesArchive} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faArchive} />
           </button>
-          <button onClick={handleSelectedNotesDelete} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-trash"} onClick={handleSelectedNotesDelete} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
-          <button onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-trash-restore"} onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrashRestore} />
           </button>
         </div>
       ) : (
         <div className={headerStyles.right}>
-          <button onClick={handleSelectedNotesTrash} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-trash"} onClick={handleSelectedNotesTrash} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
-          <button onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
+          <button aria-label={"multi-select-undo"}onClick={handleSelectedNotesRestore} className={`${headerStyles.option} ${headerStyles.noteSelectBtn}`}>
             <FontAwesomeIcon icon={faUndo} />
           </button>
         </div>
