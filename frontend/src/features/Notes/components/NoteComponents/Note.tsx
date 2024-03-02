@@ -114,7 +114,7 @@ const Note: React.FC<Props> = ({ note }) => {
 
   const handleToggleLabelsModal = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
-    setLabelModal(!labelModalState);
+    setLabelModal(prevState => !prevState);
   }
   
   const handleFocus = () => {
