@@ -28,7 +28,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
   const [deletionModal, setDeletionModal] = useState<boolean>(false)
 
   const handleToggleDeletionModal = () => {
-    setDeletionModal(!deletionModal)
+    setDeletionModal(prevState => !prevState)
   }
 
   const handleDelete = async () => {
@@ -50,7 +50,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
 
   
   const handleTrashClick = () => {
-    newLabelState ? setNewLabelState(false) : null;
+    setNewLabelState(prevState => prevState ? false : true)
     if (existingLabelFocusState) {
       handleBlur()
     } else if (!deletionModal) {
@@ -59,7 +59,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
   };
 
   const handlePatchLabel = async () => {
-    newLabelState ? setNewLabelState(false) : null
+    setNewLabelState(prevState => prevState ? false : true)
     if (!existingLabelFocusState) {
       setExistingLabelFocusState(true)
     } else {
@@ -91,7 +91,7 @@ const ModalLabel: React.FC<Props> = ({label, newLabelState, setNewLabelState}) =
         aria-label={`input-label-title-for-${label._id}`}
         value={title} 
         className={`${sidebarStyles.label} ${existingLabelFocusState ? sidebarStyles.input : null}`} 
-        onClick={() => newLabelState ? setNewLabelState(false) : null} 
+        onClick={() => setNewLabelState(prevState => prevState ? false : true)} 
         onChange={e=> setTitle(e.target.value)}
       />
     </div>
