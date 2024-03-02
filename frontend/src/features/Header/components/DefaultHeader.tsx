@@ -9,11 +9,11 @@ import { useGlobalContext } from '../../../context/GlobalContext';
 
 const DefaultHeader: React.FC = () => {
 
-  const {setIsSidebarOpen, isSidebarOpen} = useGlobalContext()
+  const {setIsSidebarOpen} = useGlobalContext()
 
   const handleToggleSidebar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setIsSidebarOpen(!isSidebarOpen)
+    setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)
   }
 
   return (
