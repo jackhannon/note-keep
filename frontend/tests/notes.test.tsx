@@ -127,4 +127,7 @@ describe('notes rendering behaviour', () => {
       expect(screen.getByLabelText("note-title-for-note-1").value).toBe(newNoteTitle)
     })
   });
+
+
+  
 });

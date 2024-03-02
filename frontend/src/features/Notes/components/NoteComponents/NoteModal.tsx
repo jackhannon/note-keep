@@ -39,7 +39,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
       const viewportHeight = window.innerHeight;
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-      console.log(scrollHeightInVh)
       if (scrollHeightInVh >= 65) {
         textareaRef.current.style.overflowY = "auto"
       } else {

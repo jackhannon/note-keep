@@ -53,10 +53,11 @@ const Note: React.FC<Props> = ({ note }) => {
 
   useLayoutEffect(() => {
     if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
       const scrollHeight = textareaRef.current.scrollHeight;
       textareaRef.current.style.height = `${Math.min(scrollHeight, 200)}px`;
     }
-  }, []);
+  }, [note.body]);
 
 
   const handleSelectNoteToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
