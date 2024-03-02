@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
           ))
         }
       
-        <button aria-label={"edit-labels"} className={sidebarStyles.child} onClick={() => setModalState(!modalState)}>
+        <button aria-label={"edit-labels"} className={sidebarStyles.child} onClick={() => setModalState(prevState => !prevState)}>
           <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
           <span className={sidebarStyles.catagory}>
             Edit Labels
