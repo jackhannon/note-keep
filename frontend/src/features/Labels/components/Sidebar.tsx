@@ -27,8 +27,7 @@ const Sidebar: React.FC = () => {
     }
   }
 
-  const handleUnhover = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleUnhover = () => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
@@ -39,7 +38,11 @@ const Sidebar: React.FC = () => {
   return (
     <div className={sidebarStyles.container}>
       {modalState ? <Modal setModalState={setModalState}/> : null}
-      <div className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} onMouseOver={()=>handleHover()} onMouseLeave={(e)=>handleUnhover(e)}>
+      <div 
+        className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
+        onMouseOver={()=>handleHover()} 
+        onMouseLeave={()=>handleUnhover()}
+      >
         <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 
           className={`${sidebarStyles.child} ${labelId === "Notes" ? sidebarStyles.activeLabel : ""}`}
         >
