@@ -35,7 +35,6 @@ export const useMultiNoteMutation = (selectedNotes) => {
             
           newPinnedNotes = prevNotes.pinnedNotes.filter(note => !selectedNoteIds.includes(note._id));
           newPlainNotes = [...prevNotes.plainNotes, ...notesToUnpin];
-          console.log(newPlainNotes)
 
         } else {
           const notesToPin = prevNotes.plainNotes
@@ -47,7 +46,6 @@ export const useMultiNoteMutation = (selectedNotes) => {
           newPinnedNotes = [...prevNotes.pinnedNotes, ...notesToPin];
           newPlainNotes = prevNotes.plainNotes.filter(note => !selectedNoteIds.includes(note._id));
         }
-        console.log(newPinnedNotes, newPlainNotes)
         return {pinnedNotes: newPinnedNotes, plainNotes: newPlainNotes}
       })
       return { previousNotes }

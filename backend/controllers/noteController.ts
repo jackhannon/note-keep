@@ -121,7 +121,6 @@ const getNotes = async (req: Request, res: Response, next: NextFunction) => {
 
 const postNote = async (req: Request, res: Response, next: NextFunction) => {
   const newDoc = req.body;
-  console.log(newDoc)
   newDoc.date = new Date();
   newDoc.isTrashed = false
   newDoc.isArchived = false
@@ -168,7 +167,6 @@ const patchNote = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
   const noteId = req.params.id;
-  console.log(noteId)
   try {
     const notes: Collection<Note> | undefined = db.collection("notes")
     const result = await notes?.findOneAndDelete(
@@ -252,7 +250,6 @@ const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
    
 
     const notesToDelete = await notesToDeleteCursor.toArray();
-    console.log(notesToDelete)
     await notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
 
     const labels: Collection<Label> | undefined = db.collection("labels")

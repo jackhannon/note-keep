@@ -1,11 +1,6 @@
 import { MongoClient, Db } from "mongodb";
 import envConfig from "./envConfig";
 const connectionString = envConfig.ATLAS_URI || "";
-console.log(connectionString)
-// const clientOptions: MongoClientOptions = {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// };
 
 let client: MongoClient | undefined;
 let db: Db;
