@@ -16,11 +16,6 @@ exports.db = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
 const envConfig_1 = __importDefault(require("./envConfig"));
 const connectionString = envConfig_1.default.ATLAS_URI || "";
-console.log(connectionString);
-// const clientOptions: MongoClientOptions = {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// };
 let client;
 let db;
 const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {

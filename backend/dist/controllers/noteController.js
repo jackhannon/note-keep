@@ -99,7 +99,6 @@ const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 exports.getNotes = getNotes;
 const postNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const newDoc = req.body;
-    console.log(newDoc);
     newDoc.date = new Date();
     newDoc.isTrashed = false;
     newDoc.isArchived = false;
@@ -140,7 +139,6 @@ const patchNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 exports.patchNote = patchNote;
 const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const noteId = req.params.id;
-    console.log(noteId);
     try {
         const notes = conn_js_1.db.collection("notes");
         const result = yield (notes === null || notes === void 0 ? void 0 : notes.findOneAndDelete({ _id: new mongodb_1.ObjectId(noteId) }));
@@ -216,7 +214,6 @@ const deleteLabel = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             labels: { $size: 1, $in: [labelId] }
         });
         const notesToDelete = yield notesToDeleteCursor.toArray();
-        console.log(notesToDelete);
         yield notes.deleteMany({ _id: { $in: notesToDelete.map(note => note._id) } });
         const labels = conn_js_1.db.collection("labels");
         const result = yield (labels === null || labels === void 0 ? void 0 : labels.findOneAndDelete({ _id: new mongodb_1.ObjectId(labelId) }));
