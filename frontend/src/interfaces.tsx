@@ -7,18 +7,18 @@ export interface NoteType {
   _id: string;
   title?: string;
   body?: string;
-  labels: LabelType[];
+  labels: string[];
   isPinned: boolean;
   isTrashed: boolean;
-  isArchived: boolean
+  isArchived: boolean;
 }
 
-export interface notesState {
+export interface NotesData {
   plainNotes: NoteType[]
   pinnedNotes: NoteType[]
 }
 
-export interface userInfo {
+export interface UserInfo {
   username: string
   password: string
 }

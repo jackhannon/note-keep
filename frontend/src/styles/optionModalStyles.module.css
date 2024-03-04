@@ -1,0 +1,75 @@
+.modal {
+  position: absolute;
+  max-width: 6rem;
+  right: .5rem;
+  bottom: 1.7rem;
+  border: 1px solid rgb(116, 116, 116);
+  border-radius: 4px;
+  background-color: rgb(51, 50, 50);
+
+}
+
+.headerModal {
+  bottom: -2.2rem;
+}
+
+.modalBtn {
+  border-radius: 0px;
+  width: 100%;
+  max-height: 1.4rem;
+  padding: 0.5rem;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  background-color: transparent;
+  color: inherit;
+}
+
+.modalBtn:hover {
+  background-color: rgba(128, 126, 126, 0.521);
+  cursor: pointer;
+}
+
+.labelModal {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: rgb(51, 50, 50);
+  border: 1px solid rgb(116, 116, 116);
+  right: 5.5rem;
+  top: -1px;
+  z-index: 997;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 5.5rem;
+  min-width: 5.5rem;
+}
+
+.title {
+  padding: .2rem 0 .2rem .3rem;
+}
+
+.label {
+  padding: 0.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 5.5rem;
+
+}
+
+.inputLabel {
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+span {
+  vertical-align: middle;
+}
+
+.label:hover {
+  background-color: rgba(128, 126, 126, 0.521);
+}

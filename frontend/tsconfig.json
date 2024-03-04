@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "types": ["node", "vite/client"],
+
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
@@ -12,14 +14,22 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+
+    "baseUrl": "./frontend",
+    "paths": {
+      "*": ["*.module.css"]
+    },
   },
-  "include": ["frontend/src"],
+  "typeRoots": ["./node_modules/@types", "./custom-types"],
+ 
+  "include": ["/src", "/tests", "/src/globals.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
