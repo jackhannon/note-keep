@@ -48,9 +48,7 @@ const ModalLabel: React.FC<Props> = ({label}) => {
   
 
   const handleTrashClick = () => {
-    if (existingLabelFocusState) {
-      handleBlurLabel()
-    } else if (!deletionModal) {
+    if (!deletionModal) {
       handleToggleDeletionModal()
     }
   };
