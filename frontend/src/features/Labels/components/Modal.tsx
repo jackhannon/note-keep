@@ -16,7 +16,7 @@ interface Props {
 const Modal: React.FC<Props> = ({ setModalState }) => {
   const {addLabel} = useLabelMutation()
   const {data: labels} = useLabelsQuery()
-  const [newLabelState, setNewLabelState] = useState<boolean>(false)
+  const [newLabelFocusState, setNewLabelFocusState] = useState<boolean>(false)
   const [newLabel, setNewLabel] = useState<string>("")
 
   const onLabelCreate = () => {
@@ -27,38 +27,52 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
 
   const labelsModalRef = useRef<HTMLDivElement>(null);
 
-  const handleSetModalStateFalse = () => {
+  const handleCloseLabelModal = () => {
     setModalState(false)
   }
 
-  useClickOutside(labelsModalRef, handleSetModalStateFalse)
+  useClickOutside(labelsModalRef, handleCloseLabelModal)
 
+  
+  const modalLabelRef = useRef<HTMLDivElement>(null);
+
+  const handleBlurLabel = () => {
+    setNewLabelFocusState(false)
+  }
+
+  useClickOutside(modalLabelRef, handleBlurLabel)
 
   return (
     <div className={sidebarStyles.modalContainer}>
       <div ref={labelsModalRef} className={sidebarStyles.modal}>
         <div className={sidebarStyles.message}>Edit labels</div>
 
-        <div className={sidebarStyles.newLabel}>
-          <button aria-label="toggle-create-new-label-focus" className={sidebarStyles.addNewLabelBtn} onClick={() => setNewLabelState(prevState => !prevState)}><FontAwesomeIcon icon={newLabelState ? faX : faPlus}/></button>
+        <div className={sidebarStyles.newLabel} ref={modalLabelRef}>
+          <button 
+            aria-label="toggle-create-new-label-focus" 
+            className={sidebarStyles.addNewLabelBtn} 
+            onClick={() => setNewLabelFocusState(prevState => !prevState)}
+          >
+            <FontAwesomeIcon icon={newLabelFocusState ? faX : faPlus}/>
+          </button>
           <input 
             aria-label="create-new-label"
-            className={`${sidebarStyles.newLabelField} ${newLabelState ? sidebarStyles.input : null}`} 
+            className={`${sidebarStyles.newLabelField} ${newLabelFocusState ? sidebarStyles.input : null}`} 
             placeholder={"Enter a new label"}
             onChange={(e)=>setNewLabel(e.target.value)} 
             value={newLabel}
-            onFocus={()=>setNewLabelState(true)} 
+            onFocus={()=>setNewLabelFocusState(true)} 
             onBlur={()=>setTimeout(() => {
               setNewLabel("") 
             }, 100)}
             />
-          <button aria-label="confirm-new-label-creation" className={`${newLabelState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
+          <button aria-label="confirm-new-label-creation" className={`${newLabelFocusState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
             onClick={onLabelCreate}>
             <FontAwesomeIcon icon={faCheck}/>
           </button>
         </div>
         {labels && labels.map((label, index)=> {
-          return <ModalLabel key={label._id + index} label={label} newLabelState={newLabelState} setNewLabelState={setNewLabelState}/>
+          return <ModalLabel key={label._id + index} label={label}/>
         }
         )}
       </div>
