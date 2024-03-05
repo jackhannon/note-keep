@@ -1,4 +1,4 @@
-Note Keeper is a simple note keeping web app that give users an intuitive way to
+Note Keeper is a simple note keeping web app that gives users an intuitive way to
 organize and select notes. Users are presented with an intuitive range of base organization
 features, such as "archive" and "trash". Users are also able to organize notes customizably with labels,
 so notes are associated with eachother.
