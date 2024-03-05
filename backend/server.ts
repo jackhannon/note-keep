@@ -10,7 +10,7 @@ import envConfig from "./config/envConfig.js";
 
 
 async function startServer() {
-  const port = Number(envConfig.PORT);
+  const port = Number(envConfig.PORT) || 3000;
 
   await connectToDatabase();
   const app: Express = express();
