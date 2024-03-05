@@ -8,6 +8,7 @@ interface Note {
   _id: ObjectId;
   title: string;
   body: string;
+  isPinned: boolean
 }
 
 interface Label {
@@ -19,6 +20,7 @@ interface Label {
 const getQuery = async (req: Request, res: Response, next: NextFunction) => {
   const labelId: string = req.params.labelId as string;
   const query: string = req.query.query as string;
+  const page: string = req.query.page as string;
 
   try {
     const notes: Collection<Note> | undefined = await db.collection("notes");
@@ -31,7 +33,10 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         ],
         isTrashed: labelId === "Trash",
         isArchived: labelId === "Archive",
-      }).limit(50).toArray();
+      })
+      .skip(Number(page)* 40)
+      .limit(40)
+      .toArray();
 
       return res.send({pinnedNotes: [], plainNotes}).status(200);
     }
@@ -41,32 +46,25 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       labelFilter = { labels: { $in: [labelId] } };
     }
 
-    const pinnedNotes = await notes?.find({
+
+    const queriedNotes = await notes?.find({
       $or: [
         { title: { $regex: query, $options: "i" } },
         { body: { $regex: query, $options: "i" } },
       ],
-      isPinned: true,
       isTrashed: false,
       isArchived: false,
       ...labelFilter
     })
-    .limit(50)
+    .sort({ isPinned: -1 })
+    .skip(Number(page)* 40)
+    .limit(40)
     .toArray()
 
-    const plainNotes = await notes?.find({
-      $or: [
-        { title: { $regex: query, $options: "i" } },
-        { body: { $regex: query, $options: "i" } },
-      ],
-      isPinned: false,
-      isTrashed: false,
-      isArchived: false,
-      ...labelFilter
-    })
-    .limit(50)
-    .toArray()
-    if (pinnedNotes && plainNotes) {
+    let plainNotes = queriedNotes.filter(note => !note.isPinned)
+    let pinnedNotes = queriedNotes.filter(note => note.isPinned)
+
+    if (queriedNotes) {
       return res.send({pinnedNotes, plainNotes}).status(200)
     } 
     throw new AppError(500, "Could not get query")
@@ -91,6 +89,7 @@ const getNote = async (req: Request, res: Response, next: NextFunction) => {
     next(error)
   }
 }
+
 
 const getNotes = async (req: Request, res: Response, next: NextFunction) => {
   const { labelId } = req.params
