@@ -1,9 +1,9 @@
-export interface LabelType {
+export type LabelType = {
   _id: string;
   title: string;
 }
 
-export interface NoteType {
+export type NoteType = {
   _id: string;
   title?: string;
   body?: string;
@@ -13,12 +13,11 @@ export interface NoteType {
   isArchived: boolean;
 }
 
-export interface NotesData {
-  plainNotes: NoteType[]
-  pinnedNotes: NoteType[]
+export type NotesData = {
+  queriedNotes: NoteType[] 
 }
 
-export interface UserInfo {
+export type UserInfo = {
   username: string
   password: string
 }

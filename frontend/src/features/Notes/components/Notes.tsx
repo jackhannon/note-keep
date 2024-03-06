@@ -1,15 +1,23 @@
-import React from 'react'
-import CreateNote from './CreateNote.tsx'
+import React, { useEffect } from 'react'
+import {useInView} from 'react-intersection-observer';
+import CreateNote from './CreateNote.tsx';
 import Note from './NoteComponents/Note.tsx';
 import MainStyles from '../styles/MainStyles.module.css'
 import Masonry from 'react-masonry-css'
-import useNotesQuery from '../services/useNotesQuery.tsx';
 import { useGlobalContext } from '../../../context/GlobalContext.tsx';
-
+import useInfiniteNotesQuery from '../services/useInfiniteNotesQuery.tsx';
 const Notes: React.FC = () => {
-
   const {query, currentLabel} = useGlobalContext()
-  const {data, isPending, isError, error} = useNotesQuery();
+  const {data, isPending, isError, error, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteNotesQuery();
+ 
+
+  const {ref, inView} = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, fetchNextPage])
 
   const breakpoints = {
     default: 6,
@@ -33,46 +41,52 @@ const Notes: React.FC = () => {
       <div className={MainStyles.container}>
         <h1 className='error-msg'>{error?.message}</h1>
       </div>
-    )  }
-
-  if (data?.pinnedNotes || data?.plainNotes) {
-    if (!data.plainNotes.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
-      return (
-        <div className={`${MainStyles.container}`}>
-          <div className={MainStyles.noNotes}>No notes found!</div>
-        </div> 
-      )
-    } else if (!data.plainNotes.length && !data.pinnedNotes.length) {
-      return (
-        <>
-        <div className={`${MainStyles.container}`}>
-          <CreateNote />
-          <div className={MainStyles.noNotes}>No notes found!</div>
-        </div> 
-        </>
-      )
-    }
-
+    )  
+  }
+  const { pages } = data;
+  if (!pages.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
     return (
-      <div className={MainStyles.container}>
-        {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
-        <Masonry   
-        breakpointCols={breakpoints}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column">
-          {data.pinnedNotes.map((note, index) => (
-
-            // the key should remain the same between renders
-          <Note key={note._id + index} note={note} />
-          ))}
-          {data.plainNotes.map((note, index) => (
-          <Note key={note._id + index} note={note} />
-          ))}
-        </Masonry>
-      </div>
+      <div className={`${MainStyles.container}`}>
+        <div className={MainStyles.noNotes}>No notes found!</div>
+      </div> 
+    )
+  } else if (!pages.length) {
+    return (
+      <div className={`${MainStyles.container}`}>
+        <CreateNote />
+        <div className={MainStyles.noNotes}>No notes found!</div>
+      </div> 
     )
   }
- }
+
+  return (
+    <div className={MainStyles.container}>
+      {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
+      <Masonry   
+      breakpointCols={breakpoints}
+      className="my-masonry-grid"
+      columnClassName="my-masonry-grid_column">
+        {pages.map((notes) => 
+          notes.map((singleNote, index) => {
+            if (notes.length === index + 1) {
+              return <Note innerRef={ref} key={singleNote._id + index} note={singleNote} />
+            }
+            return <Note key={singleNote._id + index} note={singleNote} />
+          })
+          
+        )}
+        {
+        isFetchingNextPage
+        ? <h1 className='loading-msg'>Loading more...</h1>
+        : !hasNextPage
+        ? <h1 className='loading-msg'>Looks like you've reach the end!</h1>
+        : null
+        }
+      </Masonry>
+    </div>
+  )
+}
+
 
 
 export default Notes

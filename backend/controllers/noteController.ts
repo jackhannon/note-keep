@@ -24,7 +24,8 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const notes: Collection<Note> | undefined = await db.collection("notes");
-  
+    let zeroBasedPageNumber = Number(page) - 1;
+ 
     if (["Trash", "Archive"].includes(labelId)) {
       const plainNotes = await notes?.find({
         $or: [
@@ -34,11 +35,11 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         isTrashed: labelId === "Trash",
         isArchived: labelId === "Archive",
       })
-      .skip(Number(page)* 40)
+      .skip(zeroBasedPageNumber*40)
       .limit(40)
       .toArray();
 
-      return res.send({pinnedNotes: [], plainNotes}).status(200);
+      return res.send({}).status(200);
     }
     
     let labelFilter = {};
@@ -57,15 +58,12 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       ...labelFilter
     })
     .sort({ isPinned: -1 })
-    .skip(Number(page)* 40)
+    .skip(zeroBasedPageNumber*40)
     .limit(40)
     .toArray()
 
-    let plainNotes = queriedNotes.filter(note => !note.isPinned)
-    let pinnedNotes = queriedNotes.filter(note => note.isPinned)
-
     if (queriedNotes) {
-      return res.send({pinnedNotes, plainNotes}).status(200)
+      return res.send(queriedNotes).status(200)
     } 
     throw new AppError(500, "Could not get query")
   } catch (error) {

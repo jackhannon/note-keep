@@ -1,8 +1,8 @@
 import makeRequest from "../../../utils/makeRequests";
 
 
-export function getNotes(labelId: string, query: string) {
-  const url = `/notes/${labelId}?query=${query}`
+export function getNotes(labelId: string, query: string, page: number) {
+  const url = `/notes/${labelId}?query=${query}&page=${page}`
   return makeRequest(url);
 }
 

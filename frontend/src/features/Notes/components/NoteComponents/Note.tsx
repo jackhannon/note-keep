@@ -16,9 +16,10 @@ import useClickOutside from '../../../../hooks/useClickOutside';
 
 interface Props {
   note: NoteType;
+  innerRef?: React.Ref<HTMLDivElement>
 }
 
-const Note: React.FC<Props> = ({ note }) => {
+const Note: React.FC<Props> = ({ note, innerRef }) => {
   const [noteState, setNoteState] = useState<boolean>(false);
   const [noteHoverState, setNoteHoverState] = useState<boolean>(false);
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
@@ -30,7 +31,6 @@ const Note: React.FC<Props> = ({ note }) => {
   const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteCreate, noteLabelUpdate} = useSingleNoteMutation(note)
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const optionRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null)
 
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
@@ -130,7 +130,7 @@ const Note: React.FC<Props> = ({ note }) => {
   }
 
   return (
-    <div className={NoteStyles.container} ref={containerRef}>
+    <div className={NoteStyles.container} ref={innerRef}>
       {noteState && <NoteModal handleDelete={handleDelete} note={note} setNoteState={setNoteState} noteState={noteState} />}
 
       <div
