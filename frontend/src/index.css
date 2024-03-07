@@ -88,6 +88,15 @@ textarea {
   font-size: 2rem;
 }
 
+.scroll-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 400;
+  padding-bottom: 0.7rem;
+}
+
 .error-msg {
 
 }

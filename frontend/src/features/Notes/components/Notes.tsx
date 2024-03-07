@@ -36,13 +36,14 @@ const Notes: React.FC = () => {
     )
   }
     
-  if (isError) {
+  if (isError || !data) {
     return (
       <div className={MainStyles.container}>
-        <h1 className='error-msg'>{error?.message}</h1>
+        <h1 className='error-msg'>{error?.message || "Could not retrieve data"}</h1>
       </div>
     )  
   }
+
   const { pages } = data;
   if (!pages.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
     return (
@@ -75,14 +76,15 @@ const Notes: React.FC = () => {
           })
           
         )}
-        {
-        isFetchingNextPage
-        ? <h1 className='loading-msg'>Loading more...</h1>
-        : !hasNextPage
-        ? <h1 className='loading-msg'>Looks like you've reach the end!</h1>
-        : null
-        }
       </Masonry>
+      {
+        isFetchingNextPage
+        //fix these to only span a small hight at the bottom of the page
+        ? <h1 className='scroll-message'>Loading more...</h1>
+        : !hasNextPage
+        ? <h1 className='scroll-message'>Looks like you've reach the end!</h1>
+        : null
+      }
     </div>
   )
 }
