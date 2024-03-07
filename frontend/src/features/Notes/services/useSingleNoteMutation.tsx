@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, } from "@tanstack/react-query"
 import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, trashOnNote, updateNoteContents, updateNoteLabels,} from "./noteServices"
-import { NoteType, NotesData } from "../../../interfaces"
+import { NoteType } from "../../../interfaces"
 import { removeNote } from "./optimisticUpdates"
 import { useGlobalContext } from "../../../context/GlobalContext"
 
@@ -13,16 +13,23 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     mutationFn: () => togglePinOnNote(boundNote._id, !boundNote.isPinned),
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+        
+        let notePageLocation = 0
+        const filteredPages = prevNotes.pages.map((page, pageIndex) => {
+          return page.filter(note => {
+            if (note._id === boundNote._id) {
+              notePageLocation = pageIndex
+            }
+            return note._id !== boundNote._id
+          });
+        })
         if (boundNote.isPinned) {
-          const newPinnedNotes = prevNotes.pinnedNotes.filter(note => note._id !== boundNote._id);
-          const newPlainNotes = [...prevNotes.plainNotes, {...boundNote, isPinned: false}];
-          return {pinnedNotes: newPinnedNotes, plainNotes: newPlainNotes};
+          filteredPages[notePageLocation].push({...boundNote, isPinned: false})
         } else {
-          const newPlainNotes = prevNotes.plainNotes.filter(note => note._id !== boundNote._id);
-          const newPinnedNotes = [...prevNotes.pinnedNotes, {...boundNote, isPinned: true}];
-          return {pinnedNotes: newPinnedNotes, plainNotes: newPlainNotes};
+          filteredPages[notePageLocation].unshift({...boundNote, isPinned: true})
         }
+        return {...prevNotes, pages: filteredPages};
       })
       return { previousNotes }
     },
@@ -39,8 +46,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
-        return removeNote(boundNote._id, prevNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+        const filteredPages = removeNote(boundNote._id, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
     },
@@ -57,8 +65,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
-        return removeNote(boundNote._id, prevNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
+        const filteredPages = removeNote(boundNote._id, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
     },
@@ -75,8 +84,10 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
-        return removeNote(boundNote._id, prevNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
+        const filteredPages = removeNote(boundNote._id, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
+
       })
       return { previousNotes }
     },
@@ -93,8 +104,10 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
-        return removeNote(boundNote._id, prevNotes)
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+        const filteredPages = removeNote(boundNote._id, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
+
       })
       return { previousNotes }
     },
@@ -117,9 +130,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: (content) => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);
       
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
-        const newPlainNotes = [...prevNotes.plainNotes, {title: content.title, body: content.body, labels: content.labels}];
-        return {...prevNotes, plainNotes: newPlainNotes };
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
+        prevNotes.pages[prevNotes.pages.length - 1].push({title: content.title, body: content.body, labels: content.labels, isPinned: false, isArchived: false, isTrashed: false, _id: "1"})
+        return prevNotes;
       });
       return { previousNotes };
     },
@@ -142,26 +155,19 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       return updateNoteContents(boundNote._id, contents.title, contents.body)
     },
     onMutate: (contents) => {
+
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
-      
-      queryClient.setQueryData(['notes',currentLabel._id, query], (prevNotes: NotesData) => {
-        if (boundNote.isPinned) {
-          const pinnedNotes = prevNotes.pinnedNotes.map(note => {
+      queryClient.setQueryData(['notes',currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+
+        const newPages = prevNotes.pages.map(page => {
+          return page.map((note) => {
             if (note._id === boundNote._id) {
               return {...note, body: contents.body, title: contents.title}
             }
             return note
           })
-          return {...prevNotes, pinnedNotes: [...pinnedNotes]}
-        } else {
-          const plainNotes = prevNotes.plainNotes.map(note => {
-            if (note._id === boundNote._id) {
-              return {...note, body: contents.body, title: contents.title}
-            }
-            return note
-          })
-          return {...prevNotes, plainNotes: [...plainNotes]}
-        }  
+        })
+        return {...prevNotes, pages: newPages}
       })
       return { previousNotes }
     },
@@ -176,27 +182,20 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onMutate: (labels) => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: NotesData) => {
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
         if (!labels.some(label => label === currentLabel._id) && currentLabel._id !== "Notes") {
-          return removeNote(boundNote._id, prevNotes);
+          const filteredPages = removeNote(boundNote._id, prevNotes.pages);
+          return {...prevNotes, pages: filteredPages}
         }
-        if (boundNote.isPinned) {
-          const pinnedNotes = prevNotes.pinnedNotes.map(note => {
+        const newPages = prevNotes.pages.map(page => {
+          return page.map(note => {
             if (note._id === boundNote._id) {
               return {...note, labels: labels}
             }
             return note
           })
-          return {...prevNotes, pinnedNotes: [...pinnedNotes]}
-        } else {
-          const plainNotes = prevNotes.plainNotes.map(note => {
-            if (note._id === boundNote._id) {
-              return {...note, labels: labels}
-            }
-            return note
-          })
-          return {...prevNotes, plainNotes: [...plainNotes]}
-        }       
+        }) 
+        return {...prevNotes, pages: newPages}
       })
       return { previousNotes }
     },

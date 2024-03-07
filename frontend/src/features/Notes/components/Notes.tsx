@@ -82,7 +82,7 @@ const Notes: React.FC = () => {
         //fix these to only span a small hight at the bottom of the page
         ? <h1 className='scroll-message'>Loading more...</h1>
         : !hasNextPage
-        ? <h1 className='scroll-message'>Looks like you've reach the end!</h1>
+        ? <h1 className='scroll-message'>Looks like you've reached the end!</h1>
         : null
       }
     </div>

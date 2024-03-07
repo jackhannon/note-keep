@@ -54,7 +54,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
   const handleBlur = (e: MouseEvent) => {
     e.stopPropagation()
-
     if (!title && !body) {
       handleDelete()
     }

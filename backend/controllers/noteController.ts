@@ -27,7 +27,7 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
     let zeroBasedPageNumber = Number(page) - 1;
  
     if (["Trash", "Archive"].includes(labelId)) {
-      const plainNotes = await notes?.find({
+      const queriedNotes = await notes?.find({
         $or: [
           { title: { $regex: query, $options: "i" } },
           { body: { $regex: query, $options: "i" } },
@@ -39,7 +39,7 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       .limit(40)
       .toArray();
 
-      return res.send({}).status(200);
+      return res.send(queriedNotes).status(200);
     }
     
     let labelFilter = {};
