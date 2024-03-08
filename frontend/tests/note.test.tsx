@@ -5,6 +5,7 @@ import Notes from '../src/features/Notes/components/Notes'
 import { GlobalProvider } from '../src/context/GlobalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach} from 'node:test';
+import { MemoryRouter } from 'react-router';
 
 const mockIntersectionObserver = vi.fn();
 mockIntersectionObserver.mockReturnValue({
@@ -25,9 +26,11 @@ describe('modifying individual notes', () => {
   it("note can be pinned and unpinned", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -57,9 +60,11 @@ describe('modifying individual notes', () => {
   it("note disappears when patched", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -86,9 +91,11 @@ describe('modifying individual notes', () => {
   it("note created upon correct trigger", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -115,9 +122,11 @@ describe('modifying individual notes', () => {
   it("note content is mutable", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter> 
       </QueryClientProvider>
     )
     

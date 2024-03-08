@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useReducer, useState } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import selectedNotesReducer, { SelectedNotesActions, TOGGLED_MODE_OFF, SelectedNotesReducerState } from "../reducers/selectedNotesReducer";
 import { LabelType } from "../interfaces";
+import { useLocation, useNavigate } from "react-router";
 
 type GlobalProviderProps = {
   children: React.ReactNode;
@@ -38,13 +39,21 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [currentLabel, setCurrentLabel] = useState<LabelType>({title: "Notes", _id: "Notes"});
   
+  const navigate = useNavigate()
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname !== `/${currentLabel._id}`) {
+      navigate(`/${currentLabel._id}`);
+    }
+  }, [currentLabel._id, location.pathname, navigate]);
+
   function handleSetLabel(label: LabelType) {
     setCurrentLabel(label)
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
     setQuery("")
     window.scrollTo(0, 0)
   }
-
 
   function handleClickWhileMultiSelect(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation()

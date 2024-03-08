@@ -27,13 +27,13 @@ describe('modifying labels', () => {
   it("labels display in modal", async () => {
     render(
       <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
         <GlobalProvider>
-          <MemoryRouter>
-            <Sidebar/>
-            <Notes/>
-          </MemoryRouter>
+          <Sidebar/>
+          <Notes/>
         </GlobalProvider>
-      </QueryClientProvider>
+      </MemoryRouter>
+  </QueryClientProvider>
     )
 
     await waitFor(() => {
@@ -52,13 +52,13 @@ describe('modifying labels', () => {
   it("label dissapears when deleted", async () => {
     render(
       <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
         <GlobalProvider>
-          <MemoryRouter>
-            <Sidebar/>
-            <Notes/>
-          </MemoryRouter>
+          <Sidebar/>
+          <Notes/>
         </GlobalProvider>
-      </QueryClientProvider>
+      </MemoryRouter>
+  </QueryClientProvider>
     )
 
     await waitFor(() => {
@@ -92,13 +92,13 @@ describe('modifying labels', () => {
   it("label name mutable", async () => {
     render(
       <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
         <GlobalProvider>
-          <MemoryRouter>
-            <Sidebar/>
-            <Notes/>
-          </MemoryRouter>
+          <Sidebar/>
+          <Notes/>
         </GlobalProvider>
-      </QueryClientProvider>
+      </MemoryRouter>
+  </QueryClientProvider>
     )
 
     await waitFor(() => {
@@ -134,12 +134,12 @@ describe('modifying labels', () => {
   it("can create new label", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
           <MemoryRouter>
-            <Sidebar/>
-            <Notes/>
+            <GlobalProvider>
+              <Sidebar/>
+              <Notes/>
+            </GlobalProvider>
           </MemoryRouter>
-        </GlobalProvider>
       </QueryClientProvider>
     );
 

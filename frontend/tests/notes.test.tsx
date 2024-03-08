@@ -5,6 +5,7 @@ import Notes from '../src/features/Notes/components/Notes'
 import { GlobalProvider } from '../src/context/GlobalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach} from 'node:test';
+import { MemoryRouter } from 'react-router';
 
 const mockIntersectionObserver = vi.fn();
 mockIntersectionObserver.mockReturnValue({
@@ -28,9 +29,11 @@ describe('notes rendering behaviour', () => {
   it("notes display", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
     await waitFor(() => {

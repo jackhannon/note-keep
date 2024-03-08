@@ -37,8 +37,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
 
 
 
-  const handleClickOutsideOptionModal = (e: MouseEvent) => {
-    e.stopPropagation()
+  const handleClickOutsideOptionModal = () => {
     setOptionsModal(false)
     setLabelModal(false)
     setNoteHoverState(false)

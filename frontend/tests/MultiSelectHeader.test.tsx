@@ -6,6 +6,7 @@ import { GlobalProvider } from '../src/context/GlobalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach} from 'node:test';
 import Header from '../src/features/Header/components/Header';
+import { MemoryRouter } from 'react-router';
 
 
 
@@ -26,10 +27,12 @@ describe('modifying selected notes', () => {
   it("multi-select mode turned on when check is clicked on note", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Header/>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Header/>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -56,10 +59,12 @@ describe('modifying selected notes', () => {
   it("notes can be added to list of selected and removed", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Header/>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Header/>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -102,10 +107,12 @@ describe('modifying selected notes', () => {
   it("multi-select mode turned off when X is clicked", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Header/>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Header/>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -139,10 +146,12 @@ describe('modifying selected notes', () => {
   it("selected notes are unpinned on unpin under correct valid conditions", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Header/>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Header/>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
@@ -187,10 +196,12 @@ describe('modifying selected notes', () => {
   it("selected notes disappear when patched", async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <Header/>
-          <Notes/>
-        </GlobalProvider>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Header/>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
       </QueryClientProvider>
     )
 
