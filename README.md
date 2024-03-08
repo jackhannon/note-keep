@@ -25,9 +25,9 @@ Backend built with:
   - TypeScript
 
 System Info:
-  Node version - 18.12.1
-  Browser and version - Chrome version 122.0.6261.95
-  MongoDB version - 6.0.4
+  - Node version - 18.12.1
+  - Browser and version - Chrome version 122.0.6261.95
+  - MongoDB version - 6.0.4
 
 
 How to install and run: 
