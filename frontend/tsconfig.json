@@ -20,9 +20,6 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-
     "baseUrl": "./frontend",
     "paths": {
       "*": ["*.module.css"]
@@ -30,6 +27,6 @@
   },
   "typeRoots": ["./node_modules/@types", "./custom-types"],
  
-  "include": ["/src", "/tests", "/src/globals.d.ts"],
+  "include": ["src", "/tests", "vite-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
