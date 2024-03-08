@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, memo } from 'react';
 import NoteStyles from '../../styles/NoteStyles.module.css';
 import MainStyles from '../../styles/MainStyles.module.css'
 import optionModalStyles from '../../../../styles/optionModalStyles.module.css'
@@ -19,7 +19,8 @@ interface Props {
   innerRef?: React.Ref<HTMLDivElement>
 }
 
-const Note: React.FC<Props> = ({ note, innerRef }) => {
+const Note: React.FC<Props> = memo(({ note, innerRef }) => {
+  console.log(`rerendered ${note._id}`)
   const [noteState, setNoteState] = useState<boolean>(false);
   const [noteHoverState, setNoteHoverState] = useState<boolean>(false);
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
@@ -230,6 +231,6 @@ const Note: React.FC<Props> = ({ note, innerRef }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Note;
