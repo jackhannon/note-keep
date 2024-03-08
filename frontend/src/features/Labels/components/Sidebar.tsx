@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
     }, 200);
   };
 
-  let hoverTimeoutId: number = 0;
+  let hoverTimeoutId: number | NodeJS.Timeout = 0;
   
   const handleHover = () => {
     hoverTimeoutId = hoverTimeout()

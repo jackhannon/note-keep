@@ -33,7 +33,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     }
   })
@@ -52,7 +52,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -71,7 +71,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -91,7 +91,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -111,7 +111,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -136,7 +136,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       });
       return { previousNotes };
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes);
     },
     onSettled: () => {
@@ -171,7 +171,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -199,7 +199,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newPages, context) => {
+    onError: (_err, _newPages, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })

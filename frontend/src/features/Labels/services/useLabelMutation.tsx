@@ -26,7 +26,7 @@ export const useLabelMutation = () => {
       return { previousLabels }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['labels'], context?.previousLabels)
     },
   })
@@ -45,7 +45,7 @@ export const useLabelMutation = () => {
       return { previousLabels }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['labels'], context?.previousLabels)
     },
 
@@ -68,7 +68,7 @@ export const useLabelMutation = () => {
       return { previousLabels }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['labels'], context?.previousLabels)
     },
 

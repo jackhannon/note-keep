@@ -41,7 +41,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
     
@@ -64,7 +64,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   }) 
@@ -87,7 +87,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   
@@ -111,7 +111,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
 
@@ -136,7 +136,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })
@@ -162,7 +162,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       return { previousNotes }
     },
 
-    onError: (err, newNotes, context) => {
+    onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
 

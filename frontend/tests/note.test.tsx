@@ -138,7 +138,7 @@ describe('modifying individual notes', () => {
     fireEvent.click(note1);
 
     const newNoteTitle = "New title!"
-    const noteTitle = screen.getByLabelText("active-note-title");
+    const noteTitle: HTMLInputElement = screen.getByLabelText("active-note-title");
  
     fireEvent.focus(noteTitle)
 
@@ -149,8 +149,9 @@ describe('modifying individual notes', () => {
     })
     fireEvent.click(document.body);
 
+    const noteTitleForNoteOne: HTMLInputElement = screen.getByLabelText("note-title-for-note-1");
     await waitFor(() => {
-      expect(screen.getByLabelText("note-title-for-note-1").value).toBe(newNoteTitle)
+      expect(noteTitleForNoteOne.value).toBe(newNoteTitle)
     })
   });
 });
