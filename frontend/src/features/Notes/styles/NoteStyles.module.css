@@ -29,6 +29,7 @@
   height: auto;
 }
 
+
 .modal .bodyInput {
   max-height: 65vh;
 }
@@ -60,9 +61,10 @@
   overflow: none;
   display: flex;
   flex-direction: column;
-  max-width: 55%
-
+  max-width: 55%;
 }
+
+
 
 
 .check {
