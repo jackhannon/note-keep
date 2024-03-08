@@ -45,13 +45,13 @@ const Notes: React.FC = () => {
   }
 
   const { pages } = data;
-  if (!pages.length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
+  if (!pages[0].length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
     return (
       <div className={`${MainStyles.container}`}>
         <div className={MainStyles.noNotes}>No notes found!</div>
       </div> 
     )
-  } else if (!pages.length) {
+  } else if (!pages[0].length) {
     return (
       <div className={`${MainStyles.container}`}>
         <CreateNote />
