@@ -9,7 +9,7 @@ import useInfiniteNotesQuery from '../services/useInfiniteNotesQuery.tsx';
 const Notes: React.FC = () => {
   const {query, currentLabel} = useGlobalContext()
   const {data, isPending, isError, error, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteNotesQuery();
- 
+
 
   const {ref, inView} = useInView();
 
@@ -59,7 +59,6 @@ const Notes: React.FC = () => {
       </div> 
     )
   }
-
   return (
     <div className={MainStyles.container}>
       {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
@@ -67,19 +66,18 @@ const Notes: React.FC = () => {
       breakpointCols={breakpoints}
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column">
-        {pages.map((notes) => 
-          notes.map((singleNote, index) => {
+        {pages.map((notes) => {
+          return notes.map((singleNote, index) => {
             if (notes.length === index + 1) {
               return <Note innerRef={ref} key={singleNote._id + index} note={singleNote} />
             }
             return <Note key={singleNote._id + index} note={singleNote} />
           })
-          
+          }
         )}
       </Masonry>
       {
         isFetchingNextPage
-        //fix these to only span a small hight at the bottom of the page
         ? <h1 className='scroll-message'>Loading more...</h1>
         : !hasNextPage
         ? <h1 className='scroll-message'>Looks like you've reached the end!</h1>

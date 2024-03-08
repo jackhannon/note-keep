@@ -1,6 +1,4 @@
-export const notesData = {
-  pinnedNotes: [
-    {
+export const notesData = [{
       _id: '1',
       title: 'note 1',
       body: 'note 1 body',
@@ -18,8 +16,6 @@ export const notesData = {
       isTrashed: false,
       isArchived: false,
     },
-  ],
-  plainNotes: [
     {
       _id: '3',
       title: 'note 3',
@@ -28,6 +24,4 @@ export const notesData = {
       isPinned: false,
       isTrashed: false,
       isArchived: false,
-    },
-  ]
-}
+    }]

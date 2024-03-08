@@ -199,7 +199,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       })
       return { previousNotes }
     },
-    onError: (err, newNotes, context) => {
+    onError: (err, newPages, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
   })

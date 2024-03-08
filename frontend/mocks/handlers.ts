@@ -32,7 +32,7 @@ export const handlers = [
   }),
 
   http.post("notes/newnote", () => {
-    notes.plainNotes.push({
+    notes.push({
       _id: '4',
       title: '',
       body: 'This is a new note!',

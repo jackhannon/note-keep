@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, it} from 'vitest';
+import { describe, expect, it, vi} from 'vitest';
 import {screen, render, waitFor, fireEvent } from '@testing-library/react'
 import Notes from '../src/features/Notes/components/Notes'
 import { GlobalProvider } from '../src/context/GlobalContext';
@@ -10,6 +10,13 @@ import { MemoryRouter } from 'react-router';
 
 
 
+const mockIntersectionObserver = vi.fn();
+mockIntersectionObserver.mockReturnValue({
+  observe: () => null,
+  unobserve: () => null,
+  disconnect: () => null
+});
+window.IntersectionObserver = mockIntersectionObserver;
 
 describe('modifying labels', () => {
   const queryClient = new QueryClient()

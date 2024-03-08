@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, it} from 'vitest';
+import { describe, expect, it, vi} from 'vitest';
 import {screen, render, waitFor, fireEvent } from '@testing-library/react'
 import Notes from '../src/features/Notes/components/Notes'
 import { GlobalProvider } from '../src/context/GlobalContext';
@@ -9,6 +9,13 @@ import Header from '../src/features/Header/components/Header';
 
 
 
+const mockIntersectionObserver = vi.fn();
+mockIntersectionObserver.mockReturnValue({
+  observe: () => null,
+  unobserve: () => null,
+  disconnect: () => null
+});
+window.IntersectionObserver = mockIntersectionObserver;
 
 describe('modifying selected notes', () => {
   const queryClient = new QueryClient()
@@ -218,8 +225,9 @@ describe('modifying selected notes', () => {
     const optionsButton = screen.getByLabelText("multi-select-options");
     fireEvent.click(optionsButton);
     await waitFor(() => {
-      screen.getByRole('button', { name: 'Delete' })    
-      fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+      const deleteButton = screen.getByRole('button', { name: 'Delete' })    
+      expect(deleteButton).toBeTruthy()
+      fireEvent.click(deleteButton);
     })
   
     await waitFor(() => {

@@ -4,7 +4,7 @@ import {  NoteType } from "../../../interfaces"
 import { removeSelectedNotes } from "./optimisticUpdates"
 import { useGlobalContext } from "../../../context/GlobalContext"
 
-export const useMultiNoteMutation = (selectedNotes) => {
+export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
   const queryClient = useQueryClient()
 
   const {query, currentLabel } = useGlobalContext()
@@ -14,11 +14,12 @@ export const useMultiNoteMutation = (selectedNotes) => {
 
 
   const toggleSelectedNotesPin = useMutation({
-    
     mutationFn: () => {
-        return selectedNoteIds.forEach(noteId => {
-          togglePinOnNote(noteId, !pinStatusToToggle)
-        });
+      const promises = selectedNoteIds.map(noteId => {
+        return togglePinOnNote(noteId, !pinStatusToToggle);
+      });
+    
+      return Promise.all(promises);
     },
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
@@ -43,21 +44,23 @@ export const useMultiNoteMutation = (selectedNotes) => {
     onError: (err, newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
+    
   }) 
 
 
   const trashSelectedNotes = useMutation({
     mutationFn: () => {
-      return selectedNoteIds.forEach(noteId => {
-        trashOnNote(noteId)
+      const promises = selectedNoteIds.map(noteId => {
+        return trashOnNote(noteId)
       });
+      return Promise.all(promises);
     },
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        return removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        const filteredPages = removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
-
       return { previousNotes }
     },
 
@@ -69,15 +72,17 @@ export const useMultiNoteMutation = (selectedNotes) => {
 
   const archiveSelectedNotes = useMutation({
     mutationFn: () => {
-      return selectedNoteIds.forEach(noteId => {
-        archiveOnNote(noteId)
+      const promises = selectedNoteIds.map(noteId => {
+        return archiveOnNote(noteId)
       });
+      return Promise.all(promises);
     },
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        return removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        const filteredPages = removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
     },
@@ -85,20 +90,23 @@ export const useMultiNoteMutation = (selectedNotes) => {
     onError: (err, newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
+  
   }) 
 
 
   const deleteSelectedNotes = useMutation({
     mutationFn: () => {
-      return selectedNoteIds.forEach(noteId => {
-        deleteNote(noteId)
-      });    
+      const promises = selectedNoteIds.map(noteId => {
+        return deleteNote(noteId)
+      });
+      return Promise.all(promises);
     },
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        return removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        const filteredPages = removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
     },
@@ -106,21 +114,24 @@ export const useMultiNoteMutation = (selectedNotes) => {
     onError: (err, newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
+
   }) 
 
 
   const restoreSelectedNotes = useMutation({
     mutationFn: () => {
-      return selectedNoteIds.forEach(noteId => {
-        restoreOnNote(noteId)
-      });    
+      const promises = selectedNoteIds.map(noteId => {
+        return restoreOnNote(noteId)
+      });
+      return Promise.all(promises);
     },
 
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        return removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        const filteredPages = removeSelectedNotes(selectedNoteIds, prevNotes.pages)
+        return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
     },
@@ -132,9 +143,10 @@ export const useMultiNoteMutation = (selectedNotes) => {
   
   const copySelectedNotes = useMutation({
     mutationFn: () => {
-      return selectedNotes.forEach(note => {
+      const promises = selectedNotes.map(note => {
         return createNote(note.labels, note.title, note.body);
-      });    
+      });
+      return Promise.all(promises);
     },
 
     onMutate: () => {
