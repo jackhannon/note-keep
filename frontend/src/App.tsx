@@ -11,9 +11,6 @@ import { GlobalProvider } from './context/GlobalContext';
 
 
 const App: React.FC = () => {
-
-
-
   return (
     <>
       <GlobalProvider>
