@@ -39,7 +39,7 @@
   position: absolute;
   background-color: rgb(51, 50, 50);
   border: 1px solid rgb(116, 116, 116);
-  right: 5.5rem;
+  right: 5.7rem;
   top: -1px;
   z-index: 997;
   border-radius: 4px;
@@ -54,16 +54,22 @@
 
 .label {
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 5.5rem;
-
 }
 
+.label span  {
+ 
+  vertical-align: middle;
+
+}
 .inputLabel {
   vertical-align: middle;
-  margin-right: 2px;
+  margin-right: 5px;
 }
 
 span {
