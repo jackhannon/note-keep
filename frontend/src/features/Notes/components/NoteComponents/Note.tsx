@@ -20,7 +20,6 @@ interface Props {
 }
 
 const Note: React.FC<Props> = memo(({ note, innerRef }) => {
-  console.log(`rerendered ${note._id}`)
   const [noteState, setNoteState] = useState<boolean>(false);
   const [noteHoverState, setNoteHoverState] = useState<boolean>(false);
   const [optionsModalState, setOptionsModal] = useState<boolean>(false);
