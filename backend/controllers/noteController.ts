@@ -69,51 +69,7 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
-
-
-const getNote = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params
-  let results;
-  try {
-    const notes: Collection<Note> | undefined = await db.collection("notes")
-    results = await notes?.find({_id: new ObjectId(id)})
-    results = results?.limit(50).toArray()
-    if (results) {
-      return res.send(results).status(200)
-    } 
-    throw new AppError(500, "Could not get note")
-  } catch (error) {
-    next(error)
-  }
-}
-
-
-const getNotes = async (req: Request, res: Response, next: NextFunction) => {
-  const { labelId } = req.params
-  let plainNotes: Note[];
-  let pinnedNotes: Note[];
-  try {
-    const notes: Collection<Note> | undefined = await db.collection("notes")
-
-    if (labelId === "Archive") {
-      plainNotes = await notes?.find({ isArchived: true }).limit(50).toArray();
-      pinnedNotes = []
-    } else if (labelId === "Trash") {
-      plainNotes = await notes?.find({ isTrashed: true }).limit(50).toArray();
-      pinnedNotes = []
-    } else if (labelId === "Notes") {
-      pinnedNotes = await notes?.find({isPinned: true }).limit(50).toArray();
-      plainNotes = await notes?.find({ isArchived: false, isTrashed: false, isPinned: false}).limit(50).toArray();
-    } else {
-      pinnedNotes = await notes?.find({ labels: { $elemMatch: { _id: labelId} }, isArchived: false, isTrashed: false, isPinned: true }).limit(50).toArray();
-      plainNotes = await notes?.find({ labels: { $elemMatch: { _id: labelId} }, isArchived: false, isTrashed: false, isPinned: false }).limit(50).toArray();
-    }
-    return res.send({plainNotes, pinnedNotes}).status(200)
-  } catch (error) {
-    next(error)
-  }
-}
+};
 
 
 const postNote = async (req: Request, res: Response, next: NextFunction) => {
@@ -141,6 +97,7 @@ const postNote = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+
 const patchNote = async (req: Request, res: Response, next: NextFunction) => {
   const noteId = req.params.id;
   const updatedFields = req.body
@@ -160,7 +117,8 @@ const patchNote = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
+
 
 const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
   const noteId = req.params.id;
@@ -177,7 +135,7 @@ const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
 
 
 const getLabels = async (req: Request, res: Response, next: NextFunction) => {
@@ -192,7 +150,8 @@ const getLabels = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
+
 
 const postLabel = async (req: Request, res: Response, next: NextFunction) => {
     const newDoc = req.body
@@ -212,7 +171,7 @@ const postLabel = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
 
 
 const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
@@ -234,7 +193,8 @@ const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
+
 
 const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   const labelId = req.params.id
@@ -261,11 +221,11 @@ const deleteLabel = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(error)
   }
-}
+};
 
 
 
 
 
 
-export { getNotes, getNote, getQuery, postNote, patchNote, deleteNote, getLabels, postLabel, patchLabel, deleteLabel };
+export { getQuery, postNote, patchNote, deleteNote, getLabels, postLabel, patchLabel, deleteLabel };

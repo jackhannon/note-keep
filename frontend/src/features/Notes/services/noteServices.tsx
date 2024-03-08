@@ -85,7 +85,7 @@ export function updateNoteContents(noteId: string, title: string, body: string):
   })
 }
 
-export function updateNoteLabels(noteId: string, labels): Promise<unknown> {
+export function updateNoteLabels(noteId: string, labels: lab): Promise<unknown> {
   const requestData = {
    labels
   };

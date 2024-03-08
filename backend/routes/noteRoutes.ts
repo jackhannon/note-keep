@@ -1,5 +1,5 @@
 import express, { IRouter } from "express";
-import { getNotes, getNote, getQuery, postNote, patchNote, deleteNote, getLabels, postLabel, patchLabel, deleteLabel} from "../controllers/noteController.js";
+import {getQuery, postNote, patchNote, deleteNote, getLabels, postLabel, patchLabel, deleteLabel} from "../controllers/noteController.js";
 const router: IRouter = express.Router()
 
 
