@@ -2,7 +2,9 @@ import makeRequest from "../../../utils/makeRequests";
 
 
 export function getNotes(labelId: string, query: string, page: number) {
-  const url = `/notes/${labelId}?query=${query}&page=${page}`
+  const encodedQuery = encodeURIComponent(query);
+
+  const url = `/notes/${labelId}?query=${encodedQuery}&page=${page}`
   return makeRequest(url);
 }
 
@@ -23,7 +25,6 @@ export function createNote(labels: string[], title?: string, body?: string) {
 }
 
 export function togglePinOnNote(noteId: string, newPinStatus: boolean): Promise<unknown> {
-
   const requestData = {
     isPinned: newPinStatus
   };

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Collection, InsertOneResult, ObjectId } from 'mongodb';
 import { db } from "../config/conn.js"
-
 import { AppError } from "../middleware/appErr.js";
 
 interface Note {
@@ -16,21 +15,25 @@ interface Label {
   title: string;
 }
 
+const escapeRegExp = (str: string) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
 const getQuery = async (req: Request, res: Response, next: NextFunction) => {
   const labelId: string = req.params.labelId as string;
-  const query: string = req.query.query as string;
+  const query: string = decodeURIComponent(req.query.query as string);
   const page: string = req.query.page as string;
+
 
   try {
     const notes: Collection<Note> | undefined = await db.collection("notes");
     let zeroBasedPageNumber = Number(page) - 1;
- 
+    const escapedQuery = escapeRegExp(query);
     if (["Trash", "Archive"].includes(labelId)) {
       const queriedNotes = await notes?.find({
         $or: [
-          { title: { $regex: query, $options: "i" } },
-          { body: { $regex: query, $options: "i" } },
+          { title: { $regex: escapedQuery, $options: "i" } },
+          { body: { $regex: escapedQuery, $options: "i" } },
         ],
         isTrashed: labelId === "Trash",
         isArchived: labelId === "Archive",
@@ -38,7 +41,6 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       .skip(zeroBasedPageNumber*40)
       .limit(40)
       .toArray();
-
       return res.send(queriedNotes).status(200);
     }
     
@@ -47,11 +49,10 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       labelFilter = { labels: { $in: [labelId] } };
     }
 
-
     const queriedNotes = await notes?.find({
       $or: [
-        { title: { $regex: query, $options: "i" } },
-        { body: { $regex: query, $options: "i" } },
+        { title: { $regex: escapedQuery, $options: "i" } },
+        { body: { $regex: escapedQuery, $options: "i" } },
       ],
       isTrashed: false,
       isArchived: false,
