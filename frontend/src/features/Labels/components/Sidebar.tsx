@@ -11,7 +11,7 @@ import { useGlobalContext } from '../../../context/GlobalContext';
 import useClickOutside from '../../../hooks/useClickOutside';
 
 const Sidebar: React.FC = () => {
-  const {isSidebarOpen, handleSetLabel, currentLabel, setIsSidebarOpen} = useGlobalContext()
+  const {isSidebarOpen, handleSetLabel, currentLabel, setIsSidebarOpen, sidebarButtonRef} = useGlobalContext()
   const {_id: labelId} = currentLabel
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
@@ -34,14 +34,15 @@ const Sidebar: React.FC = () => {
     setIsHovering(false);
   }
 
-
   const handleClickOutsideSidebar = () => {
     clearTimeout(hoverTimeoutId);
     setIsHovering(false);
     setIsSidebarOpen(false)
   }
+
   const sidebarRef = useRef<HTMLDivElement>(null)
-  useClickOutside(sidebarRef, handleClickOutsideSidebar)
+
+  useClickOutside([sidebarRef, sidebarButtonRef], handleClickOutsideSidebar)
   
   return (
     <div className={sidebarStyles.container}>

@@ -9,17 +9,16 @@ import { useGlobalContext } from '../../../context/GlobalContext';
 
 const DefaultHeader: React.FC = () => {
 
-  const {setIsSidebarOpen} = useGlobalContext()
+  const {setIsSidebarOpen, sidebarButtonRef} = useGlobalContext()
 
-  const handleToggleSidebar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const handleToggleSidebar = () => {
     setIsSidebarOpen(isSidebarOpen => !isSidebarOpen)
   }
 
   return (
     <>
       <div className={headerStyles.left}>
-        <button onClick={(e) => handleToggleSidebar(e)} className={headerStyles.icon}>
+        <button ref={sidebarButtonRef} onClick={() => handleToggleSidebar()} className={headerStyles.icon}>
           <FontAwesomeIcon icon={faBars} />
         </button>
         <div className={headerStyles.title}>Keeper++</div>
