@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import sidebarStyles from '../styles/sidebarStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faArchive, faLightbulb} from '@fortawesome/free-solid-svg-icons'
@@ -8,9 +8,10 @@ import Label from './Label'
 import { Link } from 'react-router-dom';
 import useLabelsQuery from '../services/useLabelsQuery';
 import { useGlobalContext } from '../../../context/GlobalContext';
+import useClickOutside from '../../../hooks/useClickOutside';
 
 const Sidebar: React.FC = () => {
-  const {isSidebarOpen, handleSetLabel, currentLabel} = useGlobalContext()
+  const {isSidebarOpen, handleSetLabel, currentLabel, setIsSidebarOpen} = useGlobalContext()
   const {_id: labelId} = currentLabel
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
@@ -33,6 +34,15 @@ const Sidebar: React.FC = () => {
     setIsHovering(false);
   }
 
+
+  const handleClickOutsideSidebar = () => {
+    clearTimeout(hoverTimeoutId);
+    setIsHovering(false);
+    setIsSidebarOpen(false)
+  }
+  const sidebarRef = useRef<HTMLDivElement>(null)
+  useClickOutside(sidebarRef, handleClickOutsideSidebar)
+  
   return (
     <div className={sidebarStyles.container}>
       {modalState ? <Modal setModalState={setModalState}/> : null}
@@ -40,6 +50,7 @@ const Sidebar: React.FC = () => {
         className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
         onMouseEnter={()=>handleHover()} 
         onMouseLeave={()=>handleUnhover()}
+        ref={sidebarRef}
       >
         <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 
           className={`${sidebarStyles.child} ${labelId === "Notes" ? sidebarStyles.activeLabel : ""}`}

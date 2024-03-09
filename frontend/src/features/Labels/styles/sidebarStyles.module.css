@@ -3,7 +3,7 @@
   padding: .7rem 0.3rem 0 .3rem;
   background-color: rgb(51, 50, 50);
   min-width: 3.2em;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: .5rem;
