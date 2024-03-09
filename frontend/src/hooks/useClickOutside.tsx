@@ -3,15 +3,21 @@ import { RefObject, useEffect } from 'react'
 
 
 const useClickOutside = (
-  ref: RefObject<HTMLElement>,
+  refs: RefObject<HTMLElement> | RefObject<HTMLElement>[],
   handler: (event: MouseEvent) => void,
   trigger: boolean = true
 ): void => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        handler(event)
+      if (Array.isArray(refs)) {
+        if (!refs.some(ref => ref.current && ref.current.contains(event.target as Node))) {
+          handler(event)
+        }
+      } else {
+        if (refs.current && !refs.current.contains(event.target as Node)) {
+          handler(event)
+        }
       }
     }
     if (trigger) {
@@ -19,6 +25,6 @@ const useClickOutside = (
     }
 
     return () => document.removeEventListener("click", handleClickOutside, true)
-  }, [ref, handler, trigger])
+  }, [refs, handler, trigger])
 }
 export default useClickOutside

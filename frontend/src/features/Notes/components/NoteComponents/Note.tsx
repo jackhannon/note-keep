@@ -44,8 +44,8 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   }
 
   const optionsModalRef = useRef<HTMLDivElement>(null)
-
-  useClickOutside(optionsModalRef, handleClickOutsideOptionModal)
+  const optionsModalButtonRef = useRef<HTMLButtonElement>(null)
+  useClickOutside([optionsModalRef, optionsModalButtonRef], handleClickOutsideOptionModal)
 
 
 
@@ -66,9 +66,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
 
   const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    if (!optionsModalState) {
-      setOptionsModal(true);
-    } 
+    setOptionsModal(optionsModalState => !optionsModalState);
   }
 
   const handleNotePinToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -198,7 +196,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
               <button aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
                 <FontAwesomeIcon icon={faArchive} />
               </button>
-              <button aria-label={`options-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
+              <button ref={optionsModalButtonRef} aria-label={`options-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
             </div>
