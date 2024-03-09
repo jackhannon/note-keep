@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import headerStyles from '../styles/headerStyles.module.css'
 import { useGlobalContext } from '../../../context/GlobalContext'
-
+import NoteStyles from '../../Notes/styles/NoteStyles.module.css'
 
 const SearchBar:React.FC = () => {
   const { query, setQuery, currentLabel } = useGlobalContext();
@@ -27,14 +27,21 @@ const SearchBar:React.FC = () => {
   return (
     <>
       <button onClick={() => handleFocusInput()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-        <input 
-          ref={inputRef}
-          placeholder={`Search ${currentLabel.title}`}
-          type="text" 
-          value={query}
-          onChange={(e) => handleQuery(e)}
-        />
-      <button className={headerStyles.X} onClick={handleClearQuery}>X</button>
+      <input 
+        ref={inputRef}
+        placeholder={`Search ${currentLabel.title}`}
+        type="text" 
+        value={query}
+        onChange={(e) => handleQuery(e)}
+      />
+      <div className={`${headerStyles.clearInputButton} ${query ? NoteStyles.fadeIn: null}`}>
+        <button 
+          aria-label={`clear-search-input`} 
+          onClick={handleClearQuery}
+        >
+          <FontAwesomeIcon icon={faX} />
+        </button>
+      </div>
     </>
   )
 }
