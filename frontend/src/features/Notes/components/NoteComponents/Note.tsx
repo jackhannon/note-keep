@@ -144,7 +144,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
           ${NoteStyles.check} 
           ${noteHoverState || selectedNoteIds.includes(note._id) ? NoteStyles.fadeIn : ""
         }`}>
-          <button aria-label={`check-for-note-${note._id}`} role="button" className={NoteStyles.options} id={NoteStyles.check} onClick={(e) => handleSelectNoteToggle(e)}>
+          <button aria-label={`check-for-note-${note._id}`} className={NoteStyles.options} id={NoteStyles.check} onClick={(e) => handleSelectNoteToggle(e)}>
             <FontAwesomeIcon icon={shouldNoteShowCheckMark() ? faCheck : faX} />
           </button>
         </div>

@@ -3,6 +3,9 @@ import MainStyles from '../styles/MainStyles.module.css'
 import useSingleNoteMutation from '../services/useSingleNoteMutation'
 import useClickOutside from '../../../hooks/useClickOutside'
 import { useGlobalContext } from '../../../context/GlobalContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import NoteStyles from '../styles/NoteStyles.module.css'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const EditNote: React.FC = () => {
   const [title, setTitle] = useState<string>("")
@@ -56,14 +59,22 @@ const EditNote: React.FC = () => {
   return (
     <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
       {createNoteIsFocused ? (
-        <input 
-          aria-label={"new-note-title"}
-          className={MainStyles.titleInput}
-          placeholder='Title'
-          type="text" 
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <>
+          <div className={NoteStyles.createNote}>
+            <button aria-label={`create-note`} className={NoteStyles.options} id={NoteStyles.createNoteButton} onClick={() => handleBlur()}>
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
+          </div>
+      
+          <input 
+            aria-label={"new-note-title"}
+            className={MainStyles.titleInput}
+            placeholder='Title'
+            type="text" 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </>
       ) : null}
         <textarea
           aria-label={"new-note-body"}

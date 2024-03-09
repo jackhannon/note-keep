@@ -20,12 +20,12 @@
   width: 100%;
   display: flex;
   transition: all 0.4s ease;
+  position: relative;
 }
 
 .newNoteActive {
   display: flex;
   flex-direction: column;
-  top: 50%;
   
 }
 

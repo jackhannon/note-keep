@@ -1,5 +1,3 @@
-
-
 .container {
   border-radius: 5px;
 }
@@ -127,3 +125,11 @@
 #removePin:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+.createNote {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.5rem;
+  width: min-content;
+}
+
