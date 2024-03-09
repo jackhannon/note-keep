@@ -103,9 +103,8 @@ textarea {
 
 .my-masonry-grid {
   display: flex;
-  margin-top: .7em;
   width: 100%;
-  gap: .7em;
+  padding: .25rem;
 }
 
 .my-masonry-grid_column {
@@ -114,7 +113,6 @@ textarea {
 
 .my-masonry-grid_column > div {
   background: rgb(255, 255, 255);
-  margin-bottom: .7em;
   height: auto;
   max-height: 20em;
 }
