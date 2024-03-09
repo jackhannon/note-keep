@@ -17,25 +17,24 @@ const Sidebar: React.FC = () => {
   const [modalState, setModalState] = useState<boolean>(false)
   const {data: labels} = useLabelsQuery()
 
- const hoverTimeout = () => {
-    return setTimeout(() => {
+  const hoverTimeoutId = useRef<number | NodeJS.Timeout>(0);
+  
+  const hoverTimeout = () => {
+    hoverTimeoutId.current = setTimeout(() => {
       setIsHovering(true);
     }, 600);
   };
 
-  let hoverTimeoutId: number | NodeJS.Timeout = 0;
-  
   const handleHover = () => {
-    hoverTimeoutId = hoverTimeout()
+    hoverTimeout()
   }
 
   const handleUnhover = () => {
-    clearTimeout(hoverTimeoutId);
+    clearTimeout(hoverTimeoutId.current as number);
     setIsHovering(false);
   }
 
   const handleClickOutsideSidebar = () => {
-    clearTimeout(hoverTimeoutId);
     setIsHovering(false);
     setIsSidebarOpen(false)
   }
@@ -49,8 +48,8 @@ const Sidebar: React.FC = () => {
       {modalState ? <Modal setModalState={setModalState}/> : null}
       <div 
         className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
-        onMouseEnter={()=>handleHover()} 
-        onMouseLeave={()=>handleUnhover()}
+        onMouseEnter={() => handleHover()} 
+        onMouseLeave={() => handleUnhover()}
         ref={sidebarRef}
       >
         <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 

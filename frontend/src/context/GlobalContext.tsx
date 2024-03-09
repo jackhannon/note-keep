@@ -58,7 +58,6 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     window.scrollTo(0, 0);
   }
 
-
   function handleClickWhileMultiSelect(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation()
   }
