@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import Header from './features/Header/components/Header';
 import Sidebar from './features/Labels/components/Sidebar'
 import Notes from './features/Notes/components/Notes'
@@ -9,8 +9,8 @@ import { GlobalProvider } from './context/GlobalContext';
 
 
 
-
 const App: React.FC = () => {
+  
   return (
     <>
       <GlobalProvider>

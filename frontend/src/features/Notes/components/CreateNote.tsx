@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useLayoutEffect} from 'react'
 import MainStyles from '../styles/MainStyles.module.css'
 import useSingleNoteMutation from '../services/useSingleNoteMutation'
 import useClickOutside from '../../../hooks/useClickOutside'
@@ -12,6 +12,7 @@ const EditNote: React.FC = () => {
   const {currentLabel} = useGlobalContext()
 
   const divRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleBlur = async () => {
     if (title || body) {
@@ -20,17 +21,36 @@ const EditNote: React.FC = () => {
     setTitle("")
     setBody("")
     setCreateNoteIsFocused(false)
+    if (textareaRef.current) {
+      textareaRef.current.style.height = `55px`
+    }  
   }
 
   useClickOutside(divRef, handleBlur, createNoteIsFocused)
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.target.value)
-    e.target.style.height = "auto"; // Reset the height to auto
-    e.target.style.height = `${e.target.scrollHeight}px`; // Set the new height
   }
 
+  useLayoutEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      const scrollHeight = textareaRef.current.scrollHeight;
 
+      const viewportHeight = window.innerHeight;
+
+      const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
+      if (scrollHeightInVh >= 65) {
+        textareaRef.current.style.overflowY = "auto"
+      } else {
+        textareaRef.current.style.overflowY = "hidden"
+      }
+      textareaRef.current.style.height = `${Math.min(
+        scrollHeightInVh,
+        65
+      )}vh`;
+    }
+  }, [body]);
 
 
   return (
@@ -51,6 +71,7 @@ const EditNote: React.FC = () => {
           className={MainStyles.bodyInput}
           onFocus={() => setCreateNoteIsFocused(true)}
           value={body}
+          ref={textareaRef}
           onChange={(e)=>handleBodyChange(e)}
         />
     </div>

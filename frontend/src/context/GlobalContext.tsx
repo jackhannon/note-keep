@@ -52,8 +52,9 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setCurrentLabel(label)
     dispatchSelectedNotes({type: TOGGLED_MODE_OFF})
     setQuery("")
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }
+
 
   function handleClickWhileMultiSelect(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation()
