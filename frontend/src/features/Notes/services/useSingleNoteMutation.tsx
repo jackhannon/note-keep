@@ -3,8 +3,9 @@ import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, 
 import { NoteType } from "../../../interfaces"
 import { removeNote } from "./optimisticUpdates"
 import { useGlobalContext } from "../../../context/GlobalContext"
+import { findIndexWhereDateIsClosest } from "../../../utils/getIndexWhereDateIsClosest"
 
-const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPinned: false, isTrashed:  false, isArchived:  false}) => {
+const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPinned: false, isTrashed:  false, isArchived:  false, date: 0}) => {
   const queryClient = useQueryClient()
   const {query, currentLabel} = useGlobalContext()
 
@@ -14,22 +15,59 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+        let firstPageWithUnpinnedNote = -1
+        let firstPositionWithUnpinnedNote = -1
         
-        let notePageLocation = 0
-        const filteredPages = prevNotes.pages.map((page, pageIndex) => {
-          return page.filter(note => {
-            if (note._id === boundNote._id) {
-              notePageLocation = pageIndex
+        const normalizedPages = prevNotes.pages.filter(page => page.length > 0)
+
+        const pagesWithoutBoundNote = normalizedPages.map((page, pageIndex) => {
+          return page.filter((note, noteIndex) => {
+            if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
+              firstPageWithUnpinnedNote = pageIndex
+              //something weird here...
+              firstPositionWithUnpinnedNote = noteIndex -1
             }
             return note._id !== boundNote._id
           });
         })
-        if (boundNote.isPinned) {
-          filteredPages[notePageLocation].push({...boundNote, isPinned: false})
-        } else {
-          filteredPages[notePageLocation].unshift({...boundNote, isPinned: true})
+
+        const flattenedPagesWithoutBoundNote = pagesWithoutBoundNote.flat();
+
+        if (firstPageWithUnpinnedNote < 0 && firstPositionWithUnpinnedNote < 0) {
+          const lastPageIndex = pagesWithoutBoundNote.length - 1;
+          firstPageWithUnpinnedNote = lastPageIndex;
+        
+          const lastPage = pagesWithoutBoundNote[lastPageIndex];
+          firstPositionWithUnpinnedNote = lastPage.length;
         }
-        return {...prevNotes, pages: filteredPages};
+
+        const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
+        const pinnedNotes = flattenedPagesWithoutBoundNote
+        .slice(0, normalizedUnpinnedNotePosition);
+
+        const unpinnedNotes = flattenedPagesWithoutBoundNote
+        .slice(normalizedUnpinnedNotePosition);
+
+        const indexToInsertAt = 
+        boundNote.isPinned 
+        ? findIndexWhereDateIsClosest(unpinnedNotes, boundNote.date) 
+        : 0;
+
+        if (boundNote.isPinned) {
+          unpinnedNotes.splice(indexToInsertAt, 0, {...boundNote, isPinned: false})
+        } else {
+          pinnedNotes.splice(indexToInsertAt, 0, {...boundNote, isPinned: true})
+        }
+
+        const allNotes = pinnedNotes.concat(unpinnedNotes)
+        const newPages: NoteType[][] = []
+        for (let i = 0; i < allNotes.length; i++) {
+          if (i % 40 === 0) {
+            newPages.push([])
+          }
+          newPages[newPages.length-1].push(allNotes[i])
+        }
+        return {...prevNotes, pages: [...newPages, []]}
       })
       return { previousNotes }
     },
@@ -120,19 +158,51 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
   type NotesDetails = {
     title?: string;
     body?: string;
-    labels: string[]
+    labels: string[];
+    date: number
   }
 
   const noteCreate = useMutation({
     mutationFn: (content: NotesDetails) => {
-      return createNote(content.labels, content.title, content.body);
+      return createNote(content.date, content.labels, content.title, content.body);
     },
     onMutate: (content) => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);
       
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
-        prevNotes.pages[prevNotes.pages.length - 1].push({title: content.title, body: content.body, labels: content.labels, isPinned: false, isArchived: false, isTrashed: false, _id: "1"})
-        return prevNotes;
+        let firstPositionWithUnpinnedNote = -1;
+        let firstPageWithUnpinnedNote = -1
+        
+        prevNotes.pages.forEach((page, pageIndex)=> {
+          const doesPositionWithNoPinExist = page.some((note, noteIndex) => {
+            if (!note.isPinned) {
+              firstPositionWithUnpinnedNote = noteIndex
+              return true
+            }
+            return false
+          })
+          if (doesPositionWithNoPinExist) {
+            firstPageWithUnpinnedNote = pageIndex
+          }
+        })
+
+        if (firstPageWithUnpinnedNote <= -1) {
+          firstPageWithUnpinnedNote = prevNotes.pages.length - 1
+        }
+
+        if (firstPositionWithUnpinnedNote <= -1) {
+          firstPositionWithUnpinnedNote = prevNotes.pages[firstPageWithUnpinnedNote].length
+        }
+
+        const pagesCopy = prevNotes.pages.map(page => {
+          return page.map(note => {
+            return {...note};
+          })
+        })
+
+        pagesCopy[firstPageWithUnpinnedNote].splice(firstPositionWithUnpinnedNote, 0, {title: content.title, body: content.body, labels: content.labels, isPinned: false, isArchived: false, isTrashed: false, _id: "1", date: Date.now()})
+      
+        return {...prevNotes, pages: pagesCopy}
       });
       return { previousNotes };
     },

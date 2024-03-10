@@ -8,14 +8,15 @@ export function getNotes(labelId: string, query: string, page: number) {
   return makeRequest(url);
 }
 
-export function createNote(labels: string[], title?: string, body?: string) {
+export function createNote(date: number, labels: string[], title?: string, body?: string,) {
   if (!Array.isArray(labels)) {
     labels = [labels]
   }
   const requestData = {
     title,
     body,
-    labels: [...labels]
+    labels: [...labels],
+    date
   };
   
   return makeRequest(`/notes/newnote`, {

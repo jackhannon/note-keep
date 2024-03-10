@@ -96,7 +96,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
 
   const handleCopy = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
-    noteCreate.mutate({title: note.title, body: note.body, labels: note.labels});
+    noteCreate.mutate({title: note.title, body: note.body, labels: note.labels, date: Date.now()});
   };
   
   const handleMouseLeave = () => {

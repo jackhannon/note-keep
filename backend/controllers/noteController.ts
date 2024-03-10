@@ -58,7 +58,7 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
       isArchived: false,
       ...labelFilter
     })
-    .sort({ isPinned: -1 })
+    .sort({ isPinned: -1, date: -1 })
     .skip(zeroBasedPageNumber*40)
     .limit(40)
     .toArray()
@@ -75,7 +75,6 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
 
 const postNote = async (req: Request, res: Response, next: NextFunction) => {
   const newDoc = req.body;
-  newDoc.date = new Date();
   newDoc.isTrashed = false
   newDoc.isArchived = false
   newDoc.isPinned = false

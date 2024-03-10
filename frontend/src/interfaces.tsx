@@ -5,6 +5,7 @@ export type LabelType = {
 
 export type NoteType = {
   _id: string;
+  date: number
   title?: string;
   body?: string;
   labels: string[];
