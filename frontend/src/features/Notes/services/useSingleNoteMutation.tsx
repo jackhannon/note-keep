@@ -42,6 +42,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
         }
 
         const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
+        
         const pinnedNotes = flattenedPagesWithoutBoundNote
         .slice(0, normalizedUnpinnedNotePosition);
 

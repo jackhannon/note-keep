@@ -3,6 +3,7 @@ import { archiveOnNote, createNote, deleteNote, restoreOnNote, togglePinOnNote, 
 import {  NoteType } from "../../../interfaces"
 import { removeSelectedNotes } from "./optimisticUpdates"
 import { useGlobalContext } from "../../../context/GlobalContext"
+import { findIndexWhereDateIsClosest } from "../../../utils/getIndexWhereDateIsClosest"
 
 export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
   const queryClient = useQueryClient()
@@ -24,19 +25,60 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        const filteredPages = prevNotes.pages.map(page => {
-          return page.filter(note => !selectedNoteIds.includes(note._id))
+        let firstPageWithUnpinnedNote = -1
+        let firstPositionWithUnpinnedNote = -1
+
+        const normalizedPages = prevNotes.pages.filter(page => page.length > 0)
+
+        const pagesWithoutSelectedNotes = normalizedPages.map((page, pageIndex) => {
+          return page.filter((note, noteIndex) => {
+            if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
+              firstPageWithUnpinnedNote = pageIndex
+              firstPositionWithUnpinnedNote = noteIndex - selectedNoteIds.length
+            }
+            return !selectedNoteIds.includes(note._id)
+          });
         })
+
+        const flattenedPagesWithoutSelectedNotes = pagesWithoutSelectedNotes.flat();
+
+        if (firstPageWithUnpinnedNote < 0 && firstPositionWithUnpinnedNote < 0) {
+          const lastPageIndex = pagesWithoutSelectedNotes.length - 1;
+          firstPageWithUnpinnedNote = lastPageIndex;
+        
+          const lastPage = pagesWithoutSelectedNotes[lastPageIndex];
+          firstPositionWithUnpinnedNote = lastPage.length;
+        }
+
+        const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
+        
+        let pinnedNotes = flattenedPagesWithoutSelectedNotes
+        .slice(0, normalizedUnpinnedNotePosition);
+
+        const unpinnedNotes = flattenedPagesWithoutSelectedNotes
+        .slice(normalizedUnpinnedNotePosition);
+
         const notesToAdd = selectedNotes.map(note =>  {
           return {...note, isPinned: !pinStatusToToggle}
         })
 
         if (pinStatusToToggle) {
-          filteredPages[filteredPages.length-1] = [...filteredPages[filteredPages.length-1], ...notesToAdd]
+          notesToAdd.forEach(note => {
+            const indexToInsertAt = findIndexWhereDateIsClosest(unpinnedNotes, note.date)
+            unpinnedNotes.splice(indexToInsertAt, 0, {...note})
+          })
         } else {
-          filteredPages[0] = [...notesToAdd, ...filteredPages[0]]
+          pinnedNotes = notesToAdd.concat(pinnedNotes)
         }
-        return {...prevNotes, pages: filteredPages}
+        const allNotes = pinnedNotes.concat(unpinnedNotes)
+        const newPages: NoteType[][] = []
+        for (let i = 0; i < allNotes.length; i++) {
+          if (i % 40 === 0) {
+            newPages.push([])
+          }
+          newPages[newPages.length-1].push(allNotes[i])
+        }
+        return {...prevNotes, pages: [...newPages, []]}
       })
       return { previousNotes }
     },
@@ -148,7 +190,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       });
       return Promise.all(promises);
     },
-
+    //to change
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
