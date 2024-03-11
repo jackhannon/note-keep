@@ -110,8 +110,8 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
         const filteredPages = removeNote(boundNote._id, prevNotes.pages)
-        
         return {...prevNotes, pages: filteredPages}
+        
       })
       return { previousNotes }
     },

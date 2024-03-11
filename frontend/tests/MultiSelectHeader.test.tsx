@@ -192,7 +192,6 @@ describe('modifying selected notes', () => {
     })
   });
 
-  
   it("selected notes disappear when patched", async () => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -217,12 +216,9 @@ describe('modifying selected notes', () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("multi-select-off")).toBeTruthy()
-    })
-    
-    await waitFor(() => {
       expect(screen.getByText(/\d+ selected/).textContent).toBe("1 selected")
     })
-
+    
     const note2 = screen.getByLabelText("note-item-2");
     fireEvent.mouseOver(note2);
  

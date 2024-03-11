@@ -56,38 +56,6 @@ describe('modifying individual notes', () => {
     })
   });
 
-
-  it("note disappears when patched", async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <GlobalProvider>
-            <Notes/>
-          </GlobalProvider>
-        </MemoryRouter>
-      </QueryClientProvider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getAllByLabelText(/note-item-[a-zA-Z | \d]+/).length).toBe(3)
-    })
-
-    const note = screen.getByLabelText("note-item-1")
-    fireEvent.mouseOver(note)
- 
-    const optionsButton = screen.getByLabelText("options-button-for-1")
-    fireEvent.click(optionsButton)
-    
-    const deleteButton = screen.getByLabelText("trash-button-for-1")
-    fireEvent.click(deleteButton)
-
-    await waitFor(() => {
-      expect(screen.getAllByLabelText(/note-item-[a-zA-Z | \d]+/).length).toBe(2)
-    })
-    // screen.debug()
-  });
-
-
   it("note created upon correct trigger", async () => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -153,5 +121,35 @@ describe('modifying individual notes', () => {
     await waitFor(() => {
       expect(noteTitleForNoteOne.value).toBe(newNoteTitle)
     })
+  });
+
+  it("note disappears when patched", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <GlobalProvider>
+            <Notes/>
+          </GlobalProvider>
+        </MemoryRouter>
+      </QueryClientProvider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getAllByLabelText(/note-item-[a-zA-Z | \d]+/).length).toBe(4)
+    })
+
+    const note = screen.getByLabelText("note-item-1")
+    fireEvent.mouseOver(note)
+ 
+    const optionsButton = screen.getByLabelText("options-button-for-1")
+    fireEvent.click(optionsButton)
+    
+    const deleteButton = screen.getByLabelText("trash-button-for-1")
+    fireEvent.click(deleteButton)
+
+    await waitFor(() => {
+      expect(screen.getAllByLabelText(/note-item-[a-zA-Z | \d]+/).length).toBe(3)
+    })
+    // screen.debug()
   });
 });

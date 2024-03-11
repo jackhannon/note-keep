@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw'
 import { notesData } from './data/notesData'
 import { labelsData } from './data/labelsData'
  
-const notes = notesData;
+let notes = notesData;
 const labels = labelsData
 
 export const handlers = [
@@ -19,15 +19,26 @@ export const handlers = [
     return new HttpResponse("success", {status: 200})
   }),
 
-  http.delete("notes/label/*", () => {
-    return HttpResponse.json(notes)
-  }),
+  // http.delete("notes/label/*", ({ request }) => {
+  //   const url = new URL(request.url)
+  //   const noteId = url.searchParams.get('id')
+  //   notes = notes.filter(note => note._id !== noteId)
+  //   return HttpResponse.json(notes)
+  // }),
 
   http.get("notes/Notes", () => {
-    return HttpResponse.json(notes)
+    const filteredNotes = notes.filter(note => !note.isTrashed)    
+    return HttpResponse.json(filteredNotes)
   }),
 
-  http.patch("notes/*", () => {
+  http.patch("notes/:id", async ({request, params}) => {
+    const options = await request.json()
+    notes = notes.map(note => {
+      if (note._id === params.id) {
+        return {...note, ...options}
+      }
+      return note
+    })
     return new HttpResponse("success", {status: 200})
   }),
 
@@ -37,6 +48,7 @@ export const handlers = [
       title: '',
       body: 'This is a new note!',
       labels: [],
+      date: Date.now(),
       isPinned: false,
       isTrashed: false,
       isArchived: false,
