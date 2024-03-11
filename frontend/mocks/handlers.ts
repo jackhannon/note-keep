@@ -1,9 +1,15 @@
 import { HttpResponse, http } from 'msw'
 import { notesData } from './data/notesData'
 import { labelsData } from './data/labelsData'
- 
+
 let notes = notesData;
 const labels = labelsData
+
+type OptionsType = {
+ isTrashed?: boolean
+ isArchived?: boolean,
+ isPinned?: boolean
+}
 
 export const handlers = [
   http.get("notes/label", () => {
@@ -31,14 +37,20 @@ export const handlers = [
     return HttpResponse.json(filteredNotes)
   }),
 
+ 
   http.patch("notes/:id", async ({request, params}) => {
-    const options = await request.json()
+    const options = await request.json();
+
+    const objectOptions = options?.valueOf();
     notes = notes.map(note => {
       if (note._id === params.id) {
-        return {...note, ...options}
+        if (typeof objectOptions === "object") {
+          return {...note, ...objectOptions}
+        }
       }
       return note
     })
+  
     return new HttpResponse("success", {status: 200})
   }),
 
