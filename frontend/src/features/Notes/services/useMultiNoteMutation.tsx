@@ -144,7 +144,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
   const copySelectedNotes = useMutation({
     mutationFn: () => {
       const promises = selectedNotes.map(note => {
-        return createNote(note.labels, note.title, note.body);
+        return createNote(Date.now(), note.labels, note.title, note.body);
       });
       return Promise.all(promises);
     },
