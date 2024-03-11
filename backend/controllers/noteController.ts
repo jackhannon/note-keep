@@ -38,6 +38,7 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
         isTrashed: labelId === "Trash",
         isArchived: labelId === "Archive",
       })
+      .sort({ date: -1 })
       .skip(zeroBasedPageNumber*40)
       .limit(40)
       .toArray();

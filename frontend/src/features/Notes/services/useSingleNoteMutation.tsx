@@ -63,7 +63,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
         const allNotes = pinnedNotes.concat(unpinnedNotes)
         const newPages: NoteType[][] = []
         for (let i = 0; i < allNotes.length; i++) {
-          if (i % 40 === 0) {
+          if (i % 39 === 0) {
             newPages.push([])
           }
           newPages[newPages.length-1].push(allNotes[i])
@@ -74,7 +74,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
-    }
+    },
   })
 
   
@@ -86,6 +86,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+
         const filteredPages = removeNote(boundNote._id, prevNotes.pages)
         return {...prevNotes, pages: filteredPages}
       })
@@ -93,6 +94,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
     },
   })
 
@@ -105,7 +109,6 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
-        console.log(prevNotes)
         const filteredPages = removeNote(boundNote._id, prevNotes.pages)
         
         return {...prevNotes, pages: filteredPages}
@@ -114,6 +117,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
     },
   })
 
@@ -124,8 +130,8 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
-      
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
+
         const filteredPages = removeNote(boundNote._id, prevNotes.pages)
         return {...prevNotes, pages: filteredPages}
 
@@ -134,6 +140,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
     },
   })
 
@@ -154,6 +163,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     },
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
     },
   })
 

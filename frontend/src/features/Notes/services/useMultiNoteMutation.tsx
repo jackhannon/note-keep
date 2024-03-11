@@ -73,7 +73,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
         const allNotes = pinnedNotes.concat(unpinnedNotes)
         const newPages: NoteType[][] = []
         for (let i = 0; i < allNotes.length; i++) {
-          if (i % 40 === 0) {
+          if (i % 39 === 0) {
             newPages.push([])
           }
           newPages[newPages.length-1].push(allNotes[i])
@@ -109,6 +109,9 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
+    },
   }) 
 
 
@@ -132,7 +135,9 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
-  
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
+    }
   }) 
 
 
@@ -156,7 +161,9 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
-
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
+    },
   }) 
 
 
@@ -181,6 +188,9 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onError: (_err, _newNotes, context) => {
       queryClient.setQueryData(['notes', currentLabel._id, query], context?.previousNotes)
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
+    }
   })
   
   
@@ -251,7 +261,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['notes', currentLabel._id, query] })
-    },
+    }
   })
 
   return {toggleSelectedNotesPin, trashSelectedNotes, archiveSelectedNotes, deleteSelectedNotes, restoreSelectedNotes, copySelectedNotes}
