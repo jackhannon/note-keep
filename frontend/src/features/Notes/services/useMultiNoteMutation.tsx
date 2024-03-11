@@ -78,7 +78,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
           }
           newPages[newPages.length-1].push(allNotes[i])
         }
-        return {...prevNotes, pages: [...newPages, []]}
+        return {...prevNotes, pages: [...newPages]}
       })
       return { previousNotes }
     },
@@ -183,6 +183,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     },
   })
   
+  
   const copySelectedNotes = useMutation({
     mutationFn: () => {
       const promises = selectedNotes.map(note => {
@@ -190,16 +191,56 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
       });
       return Promise.all(promises);
     },
-    //to change
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
+        let firstPageWithUnpinnedNote = -1
+        let firstPositionWithUnpinnedNote = -1
+        
+        const normalizedPages = prevNotes.pages.filter(page => page.length > 0)
+
+        const pages = normalizedPages.map((page, pageIndex) => {
+          return page.map((note, noteIndex) => {
+            if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
+              firstPageWithUnpinnedNote = pageIndex
+              firstPositionWithUnpinnedNote = noteIndex
+            }
+            return note
+          });
+        })
+        
+        const flattenedPages = pages.flat();
+
+        if (firstPageWithUnpinnedNote < 0 && firstPositionWithUnpinnedNote < 0) {
+          const lastPageIndex = pages.length - 1;
+          firstPageWithUnpinnedNote = lastPageIndex;
+        
+          const lastPage = pages[lastPageIndex];
+          firstPositionWithUnpinnedNote = lastPage.length;
+        }
+        const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
+
+        const pinnedNotes = flattenedPages
+        .slice(0, normalizedUnpinnedNotePosition);
+
+        let unpinnedNotes = flattenedPages
+        .slice(normalizedUnpinnedNotePosition);
+
         const notesToAdd = selectedNotes.map(note => {
           return {...note, isPinned: false}
         })
-        prevNotes.pages[prevNotes.pages.length - 1] = [...prevNotes.pages[prevNotes.pages.length - 1], ...notesToAdd]
-        return prevNotes
+        unpinnedNotes = notesToAdd.concat(unpinnedNotes)
+        
+        const allNotes = pinnedNotes.concat(unpinnedNotes)
+        const newPages: NoteType[][] = []
+        for (let i = 0; i < allNotes.length; i++) {
+          if (i % 40 === 0) {
+            newPages.push([])
+          }
+          newPages[newPages.length-1].push(allNotes[i])
+        }
+        return {...prevNotes, pages: [...newPages]}
       })
       return { previousNotes }
     },

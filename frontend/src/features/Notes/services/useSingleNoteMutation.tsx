@@ -25,7 +25,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
             if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
               firstPageWithUnpinnedNote = pageIndex
               //something weird here...
-              firstPositionWithUnpinnedNote = noteIndex -1
+              firstPositionWithUnpinnedNote = noteIndex - 1
             }
             return note._id !== boundNote._id
           });
@@ -68,7 +68,7 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
           }
           newPages[newPages.length-1].push(allNotes[i])
         }
-        return {...prevNotes, pages: [...newPages, []]}
+        return {...prevNotes, pages: [...newPages]}
       })
       return { previousNotes }
     },
@@ -105,7 +105,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
 
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes:  {pages: NoteType[][]}) => {
+        console.log(prevNotes)
         const filteredPages = removeNote(boundNote._id, prevNotes.pages)
+        
         return {...prevNotes, pages: filteredPages}
       })
       return { previousNotes }
@@ -202,7 +204,6 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
         })
 
         pagesCopy[firstPageWithUnpinnedNote].splice(firstPositionWithUnpinnedNote, 0, {title: content.title, body: content.body, labels: content.labels, isPinned: false, isArchived: false, isTrashed: false, _id: "1", date: Date.now()})
-      
         return {...prevNotes, pages: pagesCopy}
       });
       return { previousNotes };

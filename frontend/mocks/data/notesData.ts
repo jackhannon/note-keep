@@ -6,6 +6,7 @@ export const notesData = [{
       isPinned: true,
       isTrashed: false,
       isArchived: false,
+      date: Date.now()
     },
     {
       _id: '2',
@@ -15,6 +16,7 @@ export const notesData = [{
       isPinned: true,
       isTrashed: false,
       isArchived: false,
+      date: Date.now() - 1
     },
     {
       _id: '3',
@@ -24,4 +26,5 @@ export const notesData = [{
       isPinned: false,
       isTrashed: false,
       isArchived: false,
+      date: Date.now() - 2
     }]
