@@ -14,40 +14,22 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     mutationFn: () => togglePinOnNote(boundNote._id, !boundNote.isPinned),
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);
-      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        let firstPageWithUnpinnedNote = -1
-        let firstPositionWithUnpinnedNote = -1
-        
+      queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => { 
         const normalizedPages = prevNotes.pages.filter(page => page.length > 0)
 
-        const pagesWithoutBoundNote = normalizedPages.map((page, pageIndex) => {
-          return page.filter((note, noteIndex) => {
-            if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
-              firstPageWithUnpinnedNote = pageIndex
-              //something weird here...
-              firstPositionWithUnpinnedNote = noteIndex - 1
-            }
+        const pagesWithoutBoundNote = normalizedPages.map((page) => {
+          return page.filter((note) => {
             return note._id !== boundNote._id
           });
         })
 
         const flattenedPagesWithoutBoundNote = pagesWithoutBoundNote.flat();
-
-        if (firstPageWithUnpinnedNote < 0 && firstPositionWithUnpinnedNote < 0) {
-          const lastPageIndex = pagesWithoutBoundNote.length - 1;
-          firstPageWithUnpinnedNote = lastPageIndex;
-        
-          const lastPage = pagesWithoutBoundNote[lastPageIndex];
-          firstPositionWithUnpinnedNote = lastPage.length;
-        }
-
-        const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
         
         const pinnedNotes = flattenedPagesWithoutBoundNote
-        .slice(0, normalizedUnpinnedNotePosition);
+        .filter(note => note.isPinned);
 
         const unpinnedNotes = flattenedPagesWithoutBoundNote
-        .slice(normalizedUnpinnedNotePosition);
+        .filter(note => !note.isPinned);
 
         const indexToInsertAt = 
         boundNote.isPinned 

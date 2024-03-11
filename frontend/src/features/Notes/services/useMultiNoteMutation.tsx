@@ -25,39 +25,23 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
     onMutate: () => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        let firstPageWithUnpinnedNote = -1
-        let firstPositionWithUnpinnedNote = -1
 
         const normalizedPages = prevNotes.pages.filter(page => page.length > 0)
 
-        const pagesWithoutSelectedNotes = normalizedPages.map((page, pageIndex) => {
-          return page.filter((note, noteIndex) => {
-            if (!note.isPinned && firstPageWithUnpinnedNote === -1) {
-              firstPageWithUnpinnedNote = pageIndex
-              firstPositionWithUnpinnedNote = noteIndex - selectedNoteIds.length
-            }
+        const pagesWithoutSelectedNotes = normalizedPages.map((page: NoteType[]) => {
+          return page.filter((note: NoteType) => {
             return !selectedNoteIds.includes(note._id)
           });
         })
 
         const flattenedPagesWithoutSelectedNotes = pagesWithoutSelectedNotes.flat();
 
-        if (firstPageWithUnpinnedNote < 0 && firstPositionWithUnpinnedNote < 0) {
-          const lastPageIndex = pagesWithoutSelectedNotes.length - 1;
-          firstPageWithUnpinnedNote = lastPageIndex;
-        
-          const lastPage = pagesWithoutSelectedNotes[lastPageIndex];
-          firstPositionWithUnpinnedNote = lastPage.length;
-        }
-
-        const normalizedUnpinnedNotePosition = ((firstPositionWithUnpinnedNote + 1) * (firstPageWithUnpinnedNote + 1)) - 1
-        
         let pinnedNotes = flattenedPagesWithoutSelectedNotes
-        .slice(0, normalizedUnpinnedNotePosition);
+        .filter(note => note.isPinned);
 
         const unpinnedNotes = flattenedPagesWithoutSelectedNotes
-        .slice(normalizedUnpinnedNotePosition);
-
+        .filter(note => !note.isPinned);
+        
         const notesToAdd = selectedNotes.map(note =>  {
           return {...note, isPinned: !pinStatusToToggle}
         })
@@ -70,6 +54,7 @@ export const useMultiNoteMutation = (selectedNotes: NoteType[]) => {
         } else {
           pinnedNotes = notesToAdd.concat(pinnedNotes)
         }
+        
         const allNotes = pinnedNotes.concat(unpinnedNotes)
         const newPages: NoteType[][] = []
         for (let i = 0; i < allNotes.length; i++) {

@@ -62,11 +62,12 @@ const Notes: React.FC = () => {
   return (
     <div className={MainStyles.container}>
       {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
+      
       <Masonry   
       breakpointCols={breakpoints}
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column">
-        {pages.map((notes) => {
+        {pages.map(notes => {
           return notes.map((singleNote, index) => {
             if (notes.length === index + 1) {
               return <Note innerRef={ref} key={singleNote._id + index} note={singleNote} />
