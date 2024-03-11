@@ -5,12 +5,6 @@ import { labelsData } from './data/labelsData'
 let notes = notesData;
 const labels = labelsData
 
-type OptionsType = {
- isTrashed?: boolean
- isArchived?: boolean,
- isPinned?: boolean
-}
-
 export const handlers = [
   http.get("notes/label", () => {
     return HttpResponse.json(labels)
