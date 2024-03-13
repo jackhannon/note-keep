@@ -17,7 +17,6 @@ type ContextType = {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   currentLabel: LabelType;
   handleSetLabel: (label: LabelType) => void
-  sidebarButtonRef: React.RefObject<HTMLButtonElement>
 }
 
 
@@ -29,7 +28,6 @@ const useGlobalContext = () => {
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
-  const sidebarButtonRef = React.createRef<HTMLButtonElement>()
 
   const initialState: SelectedNotesReducerState = {
     notes: [],
@@ -72,7 +70,6 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setIsSidebarOpen,
     currentLabel,
     handleSetLabel,
-    sidebarButtonRef
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import sidebarStyles from '../styles/sidebarStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faArchive, faLightbulb} from '@fortawesome/free-solid-svg-icons'
@@ -8,17 +8,15 @@ import Label from './Label'
 import { Link } from 'react-router-dom';
 import useLabelsQuery from '../services/useLabelsQuery';
 import { useGlobalContext } from '../../../context/GlobalContext';
-import useClickOutside from '../../../hooks/useClickOutside';
 
 const Sidebar: React.FC = () => {
-  const {isSidebarOpen, handleSetLabel, currentLabel, setIsSidebarOpen, sidebarButtonRef} = useGlobalContext()
+  const {isSidebarOpen, handleSetLabel, currentLabel} = useGlobalContext()
   const {_id: labelId} = currentLabel
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
   const {data: labels} = useLabelsQuery()
 
   const hoverTimeoutId = useRef<number | NodeJS.Timeout>(0);
-  
   const hoverTimeout = () => {
     hoverTimeoutId.current = setTimeout(() => {
       setIsHovering(true);
@@ -34,6 +32,11 @@ const Sidebar: React.FC = () => {
     setIsHovering(false);
   }
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(hoverTimeoutId.current as number);
+    };
+  }, [modalState]);
  
 
   const sidebarRef = useRef<HTMLDivElement>(null)

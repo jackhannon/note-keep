@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {useInView} from 'react-intersection-observer';
 import CreateNote from './CreateNote.tsx';
 import Note from './NoteComponents/Note.tsx';
@@ -6,44 +6,49 @@ import MainStyles from '../styles/MainStyles.module.css'
 import Masonry from 'react-masonry-css'
 import { useGlobalContext } from '../../../context/GlobalContext.tsx';
 import useInfiniteNotesQuery from '../services/useInfiniteNotesQuery.tsx';
+
+function useResizeRefCallback(): [React.RefCallback<HTMLDivElement>, number] {
+  const [numColumns, setNumColumns] = useState<number>(0);
+  const notesContainerRef = useRef<HTMLDivElement | null>(null)
+
+  function calculateColumns() {
+    if (!notesContainerRef.current) return 1;
+    const width = notesContainerRef.current.clientWidth;
+    if (width >= 1200) return 5;
+    if (width >= 992) return 4;
+    if (width >= 768) return 3;
+    if (width >= 576) return 2;
+    return 1;
+  }
+  const setRef = useCallback((node: HTMLDivElement) => {
+    const resizeObserver = new ResizeObserver(() => {
+      setNumColumns(calculateColumns());
+    })
+
+    if (notesContainerRef.current) {
+      resizeObserver.unobserve(notesContainerRef.current)
+    }
+    
+    notesContainerRef.current = node
+
+    if (node) {
+      if (notesContainerRef.current) {
+        resizeObserver.observe(notesContainerRef.current)
+      } 
+    }
+  }, [])
+
+  return [setRef, numColumns]
+}
+
+
 const Notes: React.FC = () => {
   const {query, currentLabel} = useGlobalContext()
   const {data, isPending, isError, error, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteNotesQuery();
 
-
   const {ref, inView} = useInView();
-  const [numColumns, setNumColumns] = useState<number>();
-  const notesContainerRef = useRef(null);
 
-  useEffect(() => {
-    function calculateColumns() {
-      if (!notesContainerRef.current) return 1;
-      const width = notesContainerRef.current.clientWidth;
-      
-      if (width >= 1200) return 5;
-      if (width >= 992) return 4;
-      if (width >= 768) return 3;
-      if (width >= 576) return 2;
-      return 1;
-    }
-
-    const resizeObserver = new ResizeObserver(() => {
-      setNumColumns(calculateColumns());
-    })      
-    
-    if (notesContainerRef.current) {
-      resizeObserver.observe(notesContainerRef.current)
-    }
-    const notesContainer = notesContainerRef.current
-    return () => {
-    if (notesContainer) {
-      resizeObserver.unobserve(notesContainer)
-    }
-    };
-  }, []);
-
-
-
+  const [notesContainerRef, numColumns] = useResizeRefCallback()
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -89,7 +94,7 @@ const Notes: React.FC = () => {
       <Masonry   
       breakpointCols={numColumns}
       className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column">
+      columnClassName="my-masonry-grid-column">
         {pages.map(notes => {
           return notes.map((singleNote, index) => {
             if (notes.length === index + 1) {
