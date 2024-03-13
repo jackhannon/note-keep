@@ -11,7 +11,7 @@ const DeleteModal: React.FC<Props> = ({labelTitle, handleDelete, handleToggleDel
   return (
     <div className={sidebarStyles.confirmModal}>
       <div className={sidebarStyles.message}>
-        Are you sure you want to delete the "{labelTitle}" label and it's associated notes?
+        Are you sure you want to delete the "{labelTitle}" label and its associated notes?
       </div>
         <div className={sidebarStyles.deleteModalBtns}> 
           <button aria-label={`confirm-delete-label`} className={sidebarStyles.confirm} onClick={() => handleDelete()}>Yes</button>

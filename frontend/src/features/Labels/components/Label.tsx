@@ -8,7 +8,6 @@ import {useGlobalContext} from '../../../context/GlobalContext'
 interface Props {
   label: LabelType
 }
-
 const Label: React.FC<Props> = ({label}) => {
   const { currentLabel, handleSetLabel } = useGlobalContext()
   return (

@@ -5,7 +5,7 @@ import Notes from './features/Notes/components/Notes'
 import './App.css'
 import { Routes, Route, Navigate} from 'react-router-dom'
 import { GlobalProvider } from './context/GlobalContext';
-
+import MainStyles from './features/Notes/styles/MainStyles.module.css'
 
 
 
@@ -19,7 +19,7 @@ const App: React.FC = () => {
           <Route path='/:labelId' element={
             <>
               <Header/>
-              <div className="container">
+              <div className={MainStyles.container}>
                 <Sidebar />
                 <Notes/>
               </div>

@@ -57,34 +57,36 @@ const EditNote: React.FC = () => {
 
 
   return (
-    <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
-      {createNoteIsFocused ? (
-        <>
-          <div className={NoteStyles.createNote}>
-            <button aria-label={`create-note`} className={NoteStyles.options} id={NoteStyles.createNoteButton} onClick={() => handleBlur()}>
-              <FontAwesomeIcon icon={faCheck} />
-            </button>
-          </div>
-      
-          <input 
-            aria-label={"new-note-title"}
-            className={MainStyles.titleInput}
-            placeholder='Title'
-            type="text" 
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+    <div className={MainStyles.newNoteContainer}>
+      <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
+        {createNoteIsFocused ? (
+          <>
+            <div className={NoteStyles.createNote}>
+              <button aria-label={`create-note`} className={NoteStyles.options} id={NoteStyles.createNoteButton} onClick={() => handleBlur()}>
+                <FontAwesomeIcon icon={faCheck} />
+              </button>
+            </div>
+        
+            <input 
+              aria-label={"new-note-title"}
+              className={MainStyles.titleInput}
+              placeholder='Title'
+              type="text" 
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </>
+        ) : null}
+          <textarea
+            aria-label={"new-note-body"}
+            placeholder='Take a note...'
+            className={MainStyles.bodyInput}
+            onFocus={() => setCreateNoteIsFocused(true)}
+            value={body}
+            ref={textareaRef}
+            onChange={(e)=>handleBodyChange(e)}
           />
-        </>
-      ) : null}
-        <textarea
-          aria-label={"new-note-body"}
-          placeholder='Take a note...'
-          className={MainStyles.bodyInput}
-          onFocus={() => setCreateNoteIsFocused(true)}
-          value={body}
-          ref={textareaRef}
-          onChange={(e)=>handleBodyChange(e)}
-        />
+      </div>
     </div>
   )
 }

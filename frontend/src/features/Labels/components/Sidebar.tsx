@@ -34,77 +34,72 @@ const Sidebar: React.FC = () => {
     setIsHovering(false);
   }
 
-  const handleClickOutsideSidebar = () => {
-    setIsHovering(false);
-    setIsSidebarOpen(false)
-  }
+ 
 
   const sidebarRef = useRef<HTMLDivElement>(null)
 
-  useClickOutside([sidebarRef, sidebarButtonRef], handleClickOutsideSidebar)
   
   return (
-    <div className={sidebarStyles.container}>
-      {modalState ? <Modal setModalState={setModalState}/> : null}
-      <div 
-        className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
-        onMouseEnter={() => handleHover()} 
-        onMouseLeave={() => handleUnhover()}
-        ref={sidebarRef}
+    <div 
+      className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
+      onMouseEnter={() => handleHover()} 
+      onMouseLeave={() => handleUnhover()}
+      ref={sidebarRef}
+    >
+    {modalState ? <Modal setModalState={setModalState}/> : null}
+
+      <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 
+        className={`${sidebarStyles.child} ${labelId === "Notes" ? sidebarStyles.activeLabel : ""}`}
       >
-        <Link to={`/Notes`} onClick={() => handleSetLabel({title: "Notes", _id: "Notes"})} 
-          className={`${sidebarStyles.child} ${labelId === "Notes" ? sidebarStyles.activeLabel : ""}`}
-        >
-          <div className={sidebarStyles.catagory}>
-            <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faLightbulb} /></div>
-            <span>
-              All Notes
-            </span>
-          </div>
-        </Link>
-        
-        {labels &&
-          labels.map((label: LabelType) => (
-            <Label label={label} key={label._id}/>
-          ))
-        }
-      
-        <button 
-          aria-label={"edit-labels"} 
-          className={sidebarStyles.child} 
-          onClick={() => setModalState(prevState => !prevState)}
-        >
-          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
-          <span className={sidebarStyles.catagory}>
-            Edit Labels
+        <div className={sidebarStyles.catagory}>
+          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faLightbulb} /></div>
+          <span>
+            All Notes
           </span>
-        </button>
-        <Link 
-          to={`/Archive`} 
-          onClick={() => handleSetLabel({title: "Archive", _id: "Archive"})} 
-          className={`${sidebarStyles.child} ${labelId === "Archive" ? sidebarStyles.activeLabel : ""}`}
-        >
-          <div className={sidebarStyles.catagory}>
-            <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faArchive} /></div>
-            <span>
-              Archive
-            </span>
-          </div>
-        </Link>
-        <Link 
-          aria-label='' 
-          to={`/Trash`} 
-          onClick={() => handleSetLabel({title: "Trash", _id: "Trash"})} 
-          className={`${sidebarStyles.child} ${labelId === "Trash" ? sidebarStyles.activeLabel : ""}`}
-        >
-          <div className={sidebarStyles.catagory}>
-            <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faTrash} /></div>
-            <span>
-              Trash
-            </span>
-          </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
+      
+      {labels &&
+        labels.map((label: LabelType) => (
+          <Label label={label} key={label._id}/>
+        ))
+      }
+    
+      <button 
+        aria-label={"edit-labels"} 
+        className={sidebarStyles.child} 
+        onClick={() => setModalState(prevState => !prevState)}
+      >
+        <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
+        <span className={sidebarStyles.catagory}>
+          Edit Labels
+        </span>
+      </button>
+      <Link 
+        to={`/Archive`} 
+        onClick={() => handleSetLabel({title: "Archive", _id: "Archive"})} 
+        className={`${sidebarStyles.child} ${labelId === "Archive" ? sidebarStyles.activeLabel : ""}`}
+      >
+        <div className={sidebarStyles.catagory}>
+          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faArchive} /></div>
+          <span>
+            Archive
+          </span>
+        </div>
+      </Link>
+      <Link 
+        aria-label='' 
+        to={`/Trash`} 
+        onClick={() => handleSetLabel({title: "Trash", _id: "Trash"})} 
+        className={`${sidebarStyles.child} ${labelId === "Trash" ? sidebarStyles.activeLabel : ""}`}
+      >
+        <div className={sidebarStyles.catagory}>
+          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faTrash} /></div>
+          <span>
+            Trash
+          </span>
+        </div>
+      </Link>
     </div>
   )
 }

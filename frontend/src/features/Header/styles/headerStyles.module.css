@@ -9,6 +9,7 @@ header {
   grid-template-columns: 1fr 3fr 1fr;
   width: 100%;
   border-bottom: 1px solid rgb(116, 116, 116);
+  background-color: inherit;
 }
 
 
@@ -16,23 +17,19 @@ header {
   display: flex;
   justify-content: left;
   align-items: center;
-  color: inherit;
 }
 .icon {
   color: inherit;
-
 }
 
 
 .left button {
   background: none;
   min-width: 2.5em;
-  
   height: 2.5em;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding: 0.6em 1em; */
   font-size: 1em;
   margin-left: .4rem;
   margin-right: .4rem;
@@ -49,9 +46,11 @@ header {
 
 
 .center input {
- min-width: 1rem;
- color: inherit;
+  min-width: 1rem;
+}
 
+.center input::placeholder {
+  color: #e8eaed;
 }
 
 .center button {
@@ -127,7 +126,6 @@ header {
   .center {
     display: flex;
     justify-content: center;
-    background-color: rgb(105, 102, 102);
     border-radius: 10px;
     min-width: 2rem;
     width: auto;

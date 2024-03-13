@@ -1,11 +1,11 @@
 .container {
   border-radius: 5px;
-  padding: .25rem;
   background-color: transparent !important;
+  padding: 0.25rem;
 }
 
 .note {
-  background-color: rgb(51, 50, 50);
+  background-color: inherit;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -51,7 +51,7 @@
 
 .modal {
   border-radius: 5px;
-  background-color: rgb(51, 50, 50);
+  background-color: #202124;
   border: 1px solid rgb(116, 116, 116);
   z-index: 999;
   position: absolute;
@@ -117,11 +117,11 @@
 }
 
 .options:hover {
-  background-color: rgba(36, 36, 36, 0.5);
+  background-color: rgba(103, 103, 103, 0.345);
 }
 
 #removePin {
-  background-color: rgb(104, 102, 102);
+  background-color: rgba(103, 103, 103, 0.345);
 }
 
 #removePin:hover {

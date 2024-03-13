@@ -1,23 +1,32 @@
 .container {
   display: flex;
+  flex-direction: row;
+  min-width: 0;
+  width: 100%;
+}
+
+.notesContentContainer {
+  display: flex;
   align-items: center;
   flex-direction: column;
+  min-width: 0;
   width: 100%;
-  background-color: rgb(51, 50, 50);
-  padding: 0 0 0 3.2rem;
 }
 
 .noNotes {
   margin-top: 1rem;
 }
 
+.newNoteContainer {
+  padding: .7rem 1rem .7rem 1rem;
+  max-width: 27em;
+  min-width: 15rem;
+  width: 100%;
+}
+
 .newNote {
   border: 1px solid rgb(116, 116, 116);
-  margin-top: .7em;
   border-radius: 5px;
-  max-width: 27em;
-  min-width: 15em;
-  width: 100%;
   display: flex;
   transition: all 0.4s ease;
   position: relative;

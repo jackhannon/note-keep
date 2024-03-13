@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {useInView} from 'react-intersection-observer';
 import CreateNote from './CreateNote.tsx';
 import Note from './NoteComponents/Note.tsx';
@@ -12,6 +12,38 @@ const Notes: React.FC = () => {
 
 
   const {ref, inView} = useInView();
+  const [numColumns, setNumColumns] = useState<number>();
+  const notesContainerRef = useRef(null);
+
+  useEffect(() => {
+    function calculateColumns() {
+      if (!notesContainerRef.current) return 1;
+      const width = notesContainerRef.current.clientWidth;
+      
+      if (width >= 1200) return 5;
+      if (width >= 992) return 4;
+      if (width >= 768) return 3;
+      if (width >= 576) return 2;
+      return 1;
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      setNumColumns(calculateColumns());
+    })      
+    
+    if (notesContainerRef.current) {
+      resizeObserver.observe(notesContainerRef.current)
+    }
+    const notesContainer = notesContainerRef.current
+    return () => {
+    if (notesContainer) {
+      resizeObserver.unobserve(notesContainer)
+    }
+    };
+  }, []);
+
+
+
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -19,18 +51,9 @@ const Notes: React.FC = () => {
     }
   }, [inView, hasNextPage, fetchNextPage])
 
-  const breakpoints = {
-    default: 6,
-    1200: 5,
-    992: 4,
-    768: 3,
-    576: 2,
-    460: 1,
-  };
-
   if (isPending) {
     return (
-      <div className={MainStyles.container}>
+      <div className={MainStyles.notesContentContainer}>
         <h1 className='loading-msg'>Loading...</h1>
       </div>
     )
@@ -38,7 +61,7 @@ const Notes: React.FC = () => {
     
   if (isError || !data) {
     return (
-      <div className={MainStyles.container}>
+      <div className={MainStyles.notesContentContainer}>
         <h1 className='error-msg'>{error?.message || "Could not retrieve data"}</h1>
       </div>
     )  
@@ -47,24 +70,24 @@ const Notes: React.FC = () => {
   const { pages } = data;
   if (!pages[0].length && ["Trash", "Archive"].includes(currentLabel._id || "")) {
     return (
-      <div className={`${MainStyles.container}`}>
+      <div className={`${MainStyles.notesContentContainer}`}>
         <div className={MainStyles.noNotes}>No notes found!</div>
       </div> 
     )
   } else if (!pages[0].length) {
     return (
-      <div className={`${MainStyles.container}`}>
+      <div className={`${MainStyles.notesContentContainer}`}>
         <CreateNote />
         <div className={MainStyles.noNotes}>No notes found!</div>
       </div> 
     )
   }
   return (
-    <div className={MainStyles.container}>
+    <div className={MainStyles.notesContentContainer} ref={notesContainerRef}>
       {!query && !["Trash", "Archive"].includes(currentLabel._id || "") ? (<CreateNote />) : null}
       
       <Masonry   
-      breakpointCols={breakpoints}
+      breakpointCols={numColumns}
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column">
         {pages.map(notes => {

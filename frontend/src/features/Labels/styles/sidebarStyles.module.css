@@ -1,23 +1,21 @@
 .sidebar {
-  position: fixed;
   padding: .7rem 0.3rem 0 .3rem;
-  background-color: rgb(51, 50, 50);
+  background-color: #202124;
   min-width: 3.2em;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: .5rem;
   overflow: hidden;
-  overflow-x: hidden;
   transition: min-width 0.2s;
   z-index: 998;
   border: 1px solid rgb(116, 116, 116);
+
 }
 
 .open {
   min-width: 12em;
 }
-
 
 .open .child {
   min-width: 100%;
@@ -39,12 +37,12 @@
   padding: 0.6em 1em;
   font-size: 1em;
   color: white;
-  background-color: rgb(105, 102, 102);
-  transition: all 3s;
+  background-color: rgb(70, 70, 70);
+  transition: all .7s;
 }
 
 .child:hover {
-  background-color: gray;
+  background-color: rgb(139, 132, 132)
 }
 
 
@@ -75,7 +73,7 @@
 }
 
 .child.activeLabel {
-  background-color: rgb(169, 169, 169)
+  background-color: rgb(139, 132, 132)
 }
 
 

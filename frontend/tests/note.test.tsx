@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, it, vi} from 'vitest';
+import { describe, expect, it} from 'vitest';
 import {screen, render, waitFor, fireEvent } from '@testing-library/react'
 import Notes from '../src/features/Notes/components/Notes'
 import { GlobalProvider } from '../src/context/GlobalContext';
@@ -7,13 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach} from 'node:test';
 import { MemoryRouter } from 'react-router';
 
-const mockIntersectionObserver = vi.fn();
-mockIntersectionObserver.mockReturnValue({
-  observe: () => null,
-  unobserve: () => null,
-  disconnect: () => null
-});
-window.IntersectionObserver = mockIntersectionObserver;
 
 
 describe('modifying individual notes', () => {
