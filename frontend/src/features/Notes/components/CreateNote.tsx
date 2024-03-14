@@ -5,18 +5,20 @@ import useClickOutside from '../../../hooks/useClickOutside'
 import { useGlobalContext } from '../../../context/GlobalContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import NoteStyles from '../styles/NoteStyles.module.css'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import useIsValidInput from '../../../hooks/useIsValidInput'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
-const EditNote: React.FC = () => {
-  const [title, setTitle] = useState<string>("")
-  const [body, setBody] = useState<string>("")
+const CreateNote: React.FC = () => {
   const [createNoteIsFocused, setCreateNoteIsFocused] = useState<boolean>(false)
   const {noteCreate} = useSingleNoteMutation()
   const {currentLabel} = useGlobalContext()
 
   const divRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
 
+  const [isTitleValid, title, setTitle] = useIsValidInput(0, 100)
+  const [isBodyValid, body, setBody] = useIsValidInput(0, 100000)
   const handleBlur = async () => {
     if (title || body) {
       noteCreate.mutate({title: title, body: body, labels: [currentLabel._id], date: Date.now()})
@@ -24,36 +26,64 @@ const EditNote: React.FC = () => {
     setTitle("")
     setBody("")
     setCreateNoteIsFocused(false)
-    if (textareaRef.current) {
-      textareaRef.current.style.height = `55px`
+    if (bodyRef.current) {
+      bodyRef.current.style.height = `55px`
     }  
   }
 
   useClickOutside(divRef, handleBlur, createNoteIsFocused)
 
-  const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBody(e.target.value)
-  }
 
+
+  //make custom hook that handles this 
   useLayoutEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      const scrollHeight = textareaRef.current.scrollHeight;
+    if (bodyRef.current) {
+      bodyRef.current.style.height = 'auto';
+      const scrollHeight = bodyRef.current.scrollHeight;
 
       const viewportHeight = window.innerHeight;
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-      if (scrollHeightInVh >= 65) {
-        textareaRef.current.style.overflowY = "auto"
-      } else {
-        textareaRef.current.style.overflowY = "hidden"
+      
+      if (scrollHeightInVh >= 10) {
+        bodyRef.current.style.maxHeight= "50vh"
       }
-      textareaRef.current.style.height = `${Math.min(
+      if (scrollHeightInVh < 10) {
+        bodyRef.current.style.maxHeight= "1em"
+      }
+
+      if (scrollHeightInVh >= 50) {
+        bodyRef.current.style.overflowY = "auto"
+      } else {
+        bodyRef.current.style.overflowY = "hidden"
+      }
+      bodyRef.current.style.height = `${Math.min(
         scrollHeightInVh,
-        65
+        50
       )}vh`;
     }
   }, [body]);
+
+  useLayoutEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.style.height = 'auto';
+      const scrollHeight = titleRef.current.scrollHeight;
+
+      const viewportHeight = window.innerHeight;
+
+      const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
+      if (scrollHeightInVh >= 10) {
+        titleRef.current.style.overflowY = "auto"
+      } else {
+        titleRef.current.style.overflowY = "hidden"
+      }
+      titleRef.current.style.height = `${Math.min(
+        scrollHeightInVh,
+        10
+      )}vh`;
+    }
+  }, [title]);
+
 
 
   return (
@@ -61,34 +91,45 @@ const EditNote: React.FC = () => {
       <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
         {createNoteIsFocused ? (
           <>
-            <div className={NoteStyles.createNote}>
-              <button aria-label={`create-note`} className={NoteStyles.options} id={NoteStyles.createNoteButton} onClick={() => handleBlur()}>
-                <FontAwesomeIcon icon={faCheck} />
-              </button>
-            </div>
-        
-            <input 
+            <textarea 
+              ref={titleRef}
               aria-label={"new-note-title"}
-              className={MainStyles.titleInput}
+              className={NoteStyles.titleInput}
               placeholder='Title'
-              type="text" 
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) =>setTitle(e.target.value)}
             />
+            <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+              <FontAwesomeIcon icon={faInfoCircle} />
+              title must be 0-100 characters<br />
+            </p>
           </>
+      
         ) : null}
+
           <textarea
             aria-label={"new-note-body"}
             placeholder='Take a note...'
-            className={MainStyles.bodyInput}
+            className={NoteStyles.bodyInput}
             onFocus={() => setCreateNoteIsFocused(true)}
             value={body}
-            ref={textareaRef}
-            onChange={(e)=>handleBodyChange(e)}
+            ref={bodyRef}
+            onChange={(e)=>setBody(e.target.value)}
           />
+          <p id="body-validation-info" className={`${!isBodyValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            body must be 0-100000 characters<br />
+          </p>
+          {createNoteIsFocused ? (
+            <div className={NoteStyles.noteTools}>
+              <button aria-label={`close new note`} className={NoteStyles.closeButton} id={NoteStyles.createNoteButton} onClick={handleBlur}>
+              Close
+              </button>
+            </div>
+          ): null}
       </div>
     </div>
   )
 }
 
-export default EditNote
+export default CreateNote

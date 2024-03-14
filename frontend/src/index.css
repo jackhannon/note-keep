@@ -125,15 +125,13 @@ textarea {
 
 
 ::-webkit-scrollbar {
-  background-color: rgb(100, 100, 100);
-  border-radius: 100vw;
+  background-color: #272728;
   width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   padding: 3px;
-  background-color:  rgb(69, 66, 66);
-  border-radius: 100vw;
+  background-color: rgb(100, 100, 100);
 }
 
 

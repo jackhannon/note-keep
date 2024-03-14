@@ -1,6 +1,5 @@
 import React, { useState, useRef, useLayoutEffect, memo } from 'react';
 import NoteStyles from '../../styles/NoteStyles.module.css';
-import MainStyles from '../../styles/MainStyles.module.css'
 import optionModalStyles from '../../../../styles/optionModalStyles.module.css'
 import NoteModal from './NoteModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,12 +28,12 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   const {notes: selectedNotes, modeOn: multiSelectMode} = selectedNotesState
   const selectedNoteIds = selectedNotes.map(note => note._id)
   const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteCreate, noteLabelUpdate} = useSingleNoteMutation(note)
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const optionRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+    const optionRef = useRef<HTMLDivElement>(null);
 
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()
-
 
 
   const handleClickOutsideOptionModal = () => {
@@ -47,14 +46,21 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   const optionsModalButtonRef = useRef<HTMLButtonElement>(null)
   useClickOutside([optionsModalRef, optionsModalButtonRef], handleClickOutsideOptionModal)
 
-
-
+  
+  //make custom hook that handles this 
+  useLayoutEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.style.height = 'auto';
+      const scrollHeight = titleRef.current.scrollHeight;
+      titleRef.current.style.height = `${Math.min(scrollHeight, 10)}vh`;
+    }
+  }, [note.title]);
 
   useLayoutEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      const scrollHeight = textareaRef.current.scrollHeight;
-      textareaRef.current.style.height = `${Math.min(scrollHeight, 200)}px`;
+    if (bodyRef.current) {
+      bodyRef.current.style.height = 'auto';
+      const scrollHeight = bodyRef.current.scrollHeight;
+      bodyRef.current.style.height = `${Math.min(scrollHeight, 200)}px`;
     }
   }, [note.body]);
 
@@ -126,6 +132,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
     }
   }
 
+
   return (
     <div className={NoteStyles.container} ref={innerRef}>
       {noteState && <NoteModal handleDelete={handleDelete} note={note} setNoteState={setNoteState} noteState={noteState} />}
@@ -153,7 +160,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
             <button 
               aria-label={note.isPinned ? `pinned-for-note-${note._id}` : `unpinned-for-note-${note._id}`}
               className={`${NoteStyles.options}`} 
-              id={note.isPinned ? NoteStyles.removePin : ""} 
+              id={note.isPinned ? NoteStyles.removePin : NoteStyles.addPin} 
               onClick={!multiSelectMode ? (e)=>handleNotePinToggle(e) : (e) => handleClickWhileMultiSelect(e)}
             >
               <FontAwesomeIcon icon={faMapPin} />
@@ -161,24 +168,22 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
           </div>       
         )}
       
-        <input
+        <textarea
           aria-label={`note-title-for-note-${note._id}`}
-          className={MainStyles.titleInput}
+          className={NoteStyles.titleInput}
           placeholder="Title"
-          type="text"
+          ref={titleRef}
           value={note.title || ''}
           readOnly
         />
         <textarea
           aria-label={`note-body-for-note-${note._id}`}
           placeholder="Take a note..."
-          className={NoteStyles.bodyInput}
-          ref={textareaRef}
+          className={NoteStyles.bodyInputInactive}
+          ref={bodyRef}
           value={note.body || ''}
           readOnly
         />
-
-
         {(!multiSelectMode && optionsModalState) && (
           <div className={optionModalStyles.modal} ref={optionsModalRef}>
             {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} labels={note.labels} /> : null}
@@ -192,7 +197,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
           
         {!multiSelectMode ? 
           !["Trash", "Archive"].includes(labelId || "") ? (
-            <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
+            <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
               <button aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
                 <FontAwesomeIcon icon={faArchive} />
               </button>
@@ -201,7 +206,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
               </button>
             </div>
           ) : (labelId === "Trash") ? (
-            <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
+            <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
               <button aria-label={`trash-restore-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
                 <FontAwesomeIcon icon={faTrashRestore} />
               </button>
@@ -213,7 +218,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
               </button>
             </div>
           ) : (labelId === "Archive") ? (
-          <div className={`${NoteStyles.tools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
+          <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
             <button aria-label={`undo-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
               <FontAwesomeIcon icon={faUndo} />
             </button>

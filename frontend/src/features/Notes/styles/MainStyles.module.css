@@ -41,31 +41,12 @@
 
 
 
-.bodyInput {
-  display: flex;
-  align-items: center;
-  min-height: 2.5rem;
-  max-height: 1em;
-  padding: .5rem .5rem .5rem .5rem;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  position: relative;
-  line-height: 1.5;
-  font-weight: 400;
-  font-size: 13px;
-  height: auto;
-  resize: none;
-  overflow-y:auto;
-  width: 100%;
-  color: inherit;
-}
+
+
 
 .newNoteActive .bodyInput {
   max-height: 24.5em;
 }
 
 
-.titleInput {
-  height: 2.5rem;
-  padding: .5rem 2.3rem .5rem .5rem;
-  color: inherit;
-}
+

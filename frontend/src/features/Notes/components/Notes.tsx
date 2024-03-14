@@ -20,6 +20,7 @@ function useResizeRefCallback(): [React.RefCallback<HTMLDivElement>, number] {
     if (width >= 576) return 2;
     return 1;
   }
+  
   const setRef = useCallback((node: HTMLDivElement) => {
     const resizeObserver = new ResizeObserver(() => {
       setNumColumns(calculateColumns());
