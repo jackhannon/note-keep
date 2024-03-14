@@ -65,7 +65,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   }, [note.body]);
 
 
-  const handleSelectNoteToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSelectNoteToggle = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
     dispatchSelectedNotes({type: NOTE_TOGGLE_CLICKED, payload: note})
   }
@@ -120,8 +120,13 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
     setLabelModal(prevState => !prevState);
   }
   
-  const handleFocus = () => {
-    setNoteState(true);
+  const handleFocus = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    if (!noteState && !multiSelectMode) {
+      setNoteState(true);
+    }
+    if (multiSelectMode) {
+     handleSelectNoteToggle(e)
+    }
   };
 
   const shouldNoteShowCheckMark = () => {
@@ -140,7 +145,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
       <div
         className={NoteStyles.note}
         aria-label={`note-item-${note._id}`}
-        onClick={() => !noteState ? handleFocus() : null}
+        onClick={(e) => handleFocus(e)}
         onMouseEnter={() => setNoteHoverState(true)}
         onMouseLeave={() => handleMouseLeave()}
       >

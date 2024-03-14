@@ -41,7 +41,7 @@
   height: auto;
   line-height: 1.5;
   font-size: 13px;
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  padding: 0 2.4rem 0.5rem 0.5rem;
   min-height: 2.5rem;
   max-height: 1em;
   overflow-y:hidden;
@@ -113,8 +113,8 @@
 
 .pin {
   position: absolute;
-  right: -.5rem;
-  top: -.5rem;
+  right: .5rem;
+  top: .4rem;
   opacity: 0;
  }
 

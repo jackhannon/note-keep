@@ -69,7 +69,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
       const scrollHeight = titleRef.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-      if (scrollHeightInVh >= 10) {
+      if (scrollHeightInVh >= 6) {
         titleRef.current.style.overflowY = "auto"
       } else {
         titleRef.current.style.overflowY = "hidden"
