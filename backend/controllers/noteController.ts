@@ -78,7 +78,6 @@ const postNote = async (req: Request, res: Response, next: NextFunction) => {
   const newDoc = req.body;
   newDoc.isTrashed = false
   newDoc.isArchived = false
-  newDoc.isPinned = false
   
   try {
     const notes: Collection<Note> | undefined = db.collection('notes');

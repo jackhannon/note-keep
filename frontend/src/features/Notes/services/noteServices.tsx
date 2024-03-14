@@ -8,7 +8,7 @@ export function getNotes(labelId: string, query: string, page: number) {
   return makeRequest(url);
 }
 
-export function createNote(date: number, labels: string[], title?: string, body?: string,) {
+export function createNote(isPinned: boolean, date: number, labels: string[], title?: string, body?: string,) {
   if (!Array.isArray(labels)) {
     labels = [labels]
   }
@@ -16,7 +16,8 @@ export function createNote(date: number, labels: string[], title?: string, body?
     title,
     body,
     labels: [...labels],
-    date
+    date,
+    isPinned
   };
   
   return makeRequest(`/notes/newnote`, {

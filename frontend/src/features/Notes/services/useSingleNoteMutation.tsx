@@ -157,11 +157,12 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     body?: string;
     labels: string[];
     date: number
+    isPinned: boolean
   }
 
   const noteCreate = useMutation({
     mutationFn: (content: NotesDetails) => {
-      return createNote(content.date, content.labels, content.title, content.body);
+      return createNote(content.isPinned, content.date, content.labels, content.title, content.body);
     },
     onMutate: (content) => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query]);

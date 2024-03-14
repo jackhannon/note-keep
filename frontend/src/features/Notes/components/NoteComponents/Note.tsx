@@ -46,7 +46,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   const optionsModalButtonRef = useRef<HTMLButtonElement>(null)
   useClickOutside([optionsModalRef, optionsModalButtonRef], handleClickOutsideOptionModal)
 
-  
+
   //make custom hook that handles this 
   useLayoutEffect(() => {
     if (titleRef.current) {
@@ -102,7 +102,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
 
   const handleCopy = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
-    noteCreate.mutate({title: note.title, body: note.body, labels: note.labels, date: Date.now()});
+    noteCreate.mutate({title: note.title, body: note.body, labels: note.labels, date: Date.now(), isPinned: false});
   };
   
   const handleMouseLeave = () => {

@@ -6,7 +6,7 @@ import { useGlobalContext } from '../../../context/GlobalContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import NoteStyles from '../styles/NoteStyles.module.css'
 import useIsValidInput from '../../../hooks/useIsValidInput'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faMapPin } from '@fortawesome/free-solid-svg-icons'
 
 const CreateNote: React.FC = () => {
   const [createNoteIsFocused, setCreateNoteIsFocused] = useState<boolean>(false)
@@ -19,9 +19,11 @@ const CreateNote: React.FC = () => {
 
   const [isTitleValid, title, setTitle] = useIsValidInput(0, 100)
   const [isBodyValid, body, setBody] = useIsValidInput(0, 100000)
+  const [shouldBePinned, setShouldBePinned] = useState(false)
+  
   const handleBlur = async () => {
     if (title || body) {
-      noteCreate.mutate({title: title, body: body, labels: [currentLabel._id], date: Date.now()})
+      noteCreate.mutate({title: title, body: body, labels: [currentLabel._id], date: Date.now(), isPinned: shouldBePinned})
     }
     setTitle("")
     setBody("")
@@ -84,13 +86,27 @@ const CreateNote: React.FC = () => {
     }
   }, [title]);
 
-
-
+  const handleNewNotePinToggle = () => {
+    setShouldBePinned(shouldBePinned => !shouldBePinned)
+  }
+ 
   return (
     <div className={MainStyles.newNoteContainer}>
       <div ref={divRef} className={`${MainStyles.newNote} ${createNoteIsFocused ? MainStyles.newNoteActive : ""}`}>
+         
         {createNoteIsFocused ? (
           <>
+            <div className={`${NoteStyles.pin} ${NoteStyles.fadeIn}`} >
+              <button 
+                aria-label={`pin new note`}
+                className={`${NoteStyles.options}`} 
+                id={shouldBePinned ? NoteStyles.removePin : NoteStyles.addPin} 
+                onClick={handleNewNotePinToggle}
+              >
+                <FontAwesomeIcon icon={faMapPin} />
+              </button>
+            </div>    
+         
             <textarea 
               ref={titleRef}
               aria-label={"new-note-title"}
