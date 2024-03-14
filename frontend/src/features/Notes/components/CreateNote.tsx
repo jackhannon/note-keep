@@ -25,6 +25,7 @@ const CreateNote: React.FC = () => {
     if (title || body) {
       noteCreate.mutate({title: title, body: body, labels: [currentLabel._id], date: Date.now(), isPinned: shouldBePinned})
     }
+    setShouldBePinned(false)
     setTitle("")
     setBody("")
     setCreateNoteIsFocused(false)
