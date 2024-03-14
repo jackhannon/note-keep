@@ -71,7 +71,6 @@ const CreateNote: React.FC = () => {
     if (titleRef.current) {
       titleRef.current.style.height = 'auto';
       const scrollHeight = titleRef.current.scrollHeight;
-
       const viewportHeight = window.innerHeight;
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
