@@ -2,12 +2,13 @@ import React, { useState, useRef } from 'react'
 import sidebarStyles from '../styles/sidebarStyles.module.css'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faCheck, faX} from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCheck, faX, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import ModalLabel from './ModalLabel';
-
+import NoteStyles from '../../Notes/styles/NoteStyles.module.css'
 import useLabelMutation from '../services/useLabelMutation';
 import useLabelsQuery from '../services/useLabelsQuery';
 import useClickOutside from '../../../hooks/useClickOutside';
+import useIsValidInput from '../../../hooks/useIsValidInput';
 
 interface Props {
   setModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,7 +18,7 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
   const {addLabel} = useLabelMutation()
   const {data: labels} = useLabelsQuery()
   const [newLabelFocusState, setNewLabelFocusState] = useState<boolean>(false)
-  const [newLabel, setNewLabel] = useState<string>("")
+  const [isTitleValid, newLabel, setNewLabel] = useIsValidInput(0, 50)
 
   const onLabelCreate = () => {
     if (newLabel.length > 0) {
@@ -71,6 +72,10 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
             <FontAwesomeIcon icon={faCheck}/>
           </button>
         </div>
+        <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          label title must be 0-50 characters<br />
+        </p>
         {labels && labels.map((label, index)=> {
           return <ModalLabel key={label._id + index} label={label}/>
         }

@@ -81,6 +81,12 @@ const postNote = async (req: Request, res: Response, next: NextFunction) => {
   
   try {
     const notes: Collection<Note> | undefined = db.collection('notes');
+    if (newDoc.body.length > 100000 || newDoc.body.length < 0) {
+      throw new AppError(400, 'Note body must be be between 0 and 100000 characters');
+    }
+    if (newDoc.title.length > 100|| newDoc.title.length < 0) {
+      throw new AppError(400, 'Note body must be be between 0 and 100000 characters');
+    }
     const result: InsertOneResult<Note> | undefined = await notes?.insertOne(newDoc);
     if (result) {
       const insertedNote: Note = {
@@ -103,6 +109,12 @@ const patchNote = async (req: Request, res: Response, next: NextFunction) => {
   const updatedFields = req.body
   try {
     const notes: Collection<Note> | undefined = db.collection("notes")
+    if (updatedFields?.body && (updatedFields.body.length > 100000 || updatedFields.body.length < 0)) {
+      throw new AppError(400, 'Note body must be be between 0 and 100000 characters');
+    }
+    if (updatedFields?.title && (updatedFields.title.length > 100 || updatedFields.title.length < 0)) {
+      throw new AppError(400, 'Note title must be be between 0 and 100000 characters');
+    }
     const result = await notes?.findOneAndUpdate(
       {_id: new ObjectId(noteId)},
       {$set: updatedFields},
@@ -158,6 +170,9 @@ const postLabel = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const labels: Collection<Label> | undefined = db.collection("labels")
+    if (newDoc.title.length > 50 || newDoc.title.length < 0) {
+      throw new AppError(400, 'Label must be be between 0 and 50 characters');
+    }
     const result: InsertOneResult<Label> | undefined = await labels?.insertOne(newDoc);
     if (result) {
       const insertedLabel: Label = {
@@ -179,7 +194,9 @@ const patchLabel = async (req: Request, res: Response, next: NextFunction) => {
   const updatedFields = req.body
   try {
     const labels: Collection<Label> | undefined = db.collection("labels")
-
+    if (updatedFields.title && (updatedFields.title.length > 50 || updatedFields.title.length < 0)) {
+      throw new AppError(400, 'Label must be be between 0 and 50 characters');
+    }
     const result = await labels?.findOneAndUpdate(
       {_id: new ObjectId(labelId)},
       {$set: updatedFields},

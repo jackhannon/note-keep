@@ -99,7 +99,7 @@ describe('modifying individual notes', () => {
     fireEvent.click(note1);
 
     const newNoteTitle = "New title!"
-    const noteTitle: HTMLInputElement = screen.getByLabelText("active-note-title");
+    const noteTitle: HTMLInputElement = screen.getByLabelText("active note title");
  
     fireEvent.focus(noteTitle)
 

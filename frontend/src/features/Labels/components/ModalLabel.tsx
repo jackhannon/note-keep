@@ -1,13 +1,15 @@
 import React, {useState, useRef } from 'react'
 import sidebarStyles from '../styles/sidebarStyles.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTag, faTrash, faCheck, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { faTag, faTrash, faCheck, faPencil, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import NoteStyles from '../../Notes/styles/NoteStyles.module.css'
 
 import useClickOutside from '../../../hooks/useClickOutside'
 import useLabelMutation from '../services/useLabelMutation'
 import DeleteModal from './DeleteModal'
 import { LabelType } from '../../../interfaces'
 import { useGlobalContext } from '../../../context/GlobalContext'
+import useIsValidInput from '../../../hooks/useIsValidInput'
 
 interface Props {
   label: LabelType;
@@ -17,13 +19,13 @@ interface Props {
 
 const ModalLabel: React.FC<Props> = ({label}) => {
   const {currentLabel, handleSetLabel} = useGlobalContext()
-  const [title, setTitle] = useState<string>(label.title)
 
   const [tagHoverState, setTagHoverState] = useState<boolean>(false)
   const [existingLabelFocusState, setExistingLabelFocusState] = useState<boolean>(false)
   const {updateLabelName, removeLabel} = useLabelMutation()
 
   const [deletionModal, setDeletionModal] = useState<boolean>(false)
+  const [isTitleValid, title, setTitle] = useIsValidInput(0, 50, label.title)
 
   const handleToggleDeletionModal = () => {
     setDeletionModal(prevState => !prevState)
@@ -63,46 +65,52 @@ const ModalLabel: React.FC<Props> = ({label}) => {
   }
   
   return (
-  
-  <div className={sidebarStyles.field} ref={labelRef}>
-    {deletionModal && 
-      <DeleteModal 
-        labelTitle={label.title} 
-        handleDelete={handleDelete} 
-        handleToggleDeletionModal={handleToggleDeletionModal}
-      />
-    }
+    <>
+      <div className={sidebarStyles.field} ref={labelRef}>
+        {deletionModal && 
+          <DeleteModal 
+            labelTitle={label.title} 
+            handleDelete={handleDelete} 
+            handleToggleDeletionModal={handleToggleDeletionModal}
+          />
+        }
 
-    <button 
-      aria-label={`trash-button-for-label-${label._id}`} 
-      className={sidebarStyles.deleteLabel} 
-      onClick={()=> handleTrashClick()} 
-      onMouseOver={()=>setTagHoverState(true)} 
-      onMouseLeave={()=>setTagHoverState(false)}
-    >
-      <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
-    </button>
-    <div 
-      className={sidebarStyles.edit} 
-      onMouseOver={()=> setTagHoverState(true)} 
-      onMouseLeave={()=> setTagHoverState(false)} 
-      onFocus={()=>setExistingLabelFocusState(true)}
-    >
-      <input 
-        aria-label={`input-label-title-for-${label._id}`}
-        value={title} 
-        className={`${sidebarStyles.label} ${existingLabelFocusState ? sidebarStyles.input : null}`} 
-        onChange={e=> setTitle(e.target.value)}
-      />
-    </div>
-    <button 
-      aria-label={existingLabelFocusState ? `confirm-edit-button-for-label-${label._id}` : `edit-button-for-label-${label._id}`} 
-      className={sidebarStyles.renameLabel} 
-      onClick={() => handlePatchLabel()}
-    >
-      <FontAwesomeIcon icon={existingLabelFocusState ? faCheck : faPencil}/>
-    </button>
-  </div>
+        <button 
+          aria-label={`trash-button-for-label-${label._id}`} 
+          className={sidebarStyles.deleteLabel} 
+          onClick={()=> handleTrashClick()} 
+          onMouseOver={()=>setTagHoverState(true)} 
+          onMouseLeave={()=>setTagHoverState(false)}
+        >
+          <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
+        </button>
+        <div 
+          className={sidebarStyles.edit} 
+          onMouseOver={()=> setTagHoverState(true)} 
+          onMouseLeave={()=> setTagHoverState(false)} 
+          onFocus={()=>setExistingLabelFocusState(true)}
+        >
+          <input 
+            aria-label={`input-label-title-for-${label._id}`}
+            value={title} 
+            className={`${sidebarStyles.label} ${existingLabelFocusState ? sidebarStyles.input : null}`} 
+            onChange={e=> setTitle(e.target.value)}
+          />
+        </div>
+        <button 
+          aria-label={existingLabelFocusState ? `confirm-edit-button-for-label-${label._id}` : `edit-button-for-label-${label._id}`} 
+          className={sidebarStyles.renameLabel} 
+          onClick={() => handlePatchLabel()}
+        >
+          <FontAwesomeIcon icon={existingLabelFocusState ? faCheck : faPencil}/>
+        </button>
+
+      </div>
+      <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+        <FontAwesomeIcon icon={faInfoCircle} />
+        label title must be 0-50 characters<br />
+      </p>
+    </>
   )
 }
 
