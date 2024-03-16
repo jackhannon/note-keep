@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import NoteStyles from '../styles/NoteStyles.module.css'
 import useIsValidInput from '../../../hooks/useIsValidInput'
 import { faInfoCircle, faMapPin } from '@fortawesome/free-solid-svg-icons'
+import ButtonWithHoverLabel from '../../Components/ButtonWithHoverLabel'
 
 const CreateNote: React.FC = () => {
   const [createNoteIsFocused, setCreateNoteIsFocused] = useState<boolean>(false)
@@ -48,10 +49,10 @@ const CreateNote: React.FC = () => {
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       
-      if (scrollHeightInVh >= 10) {
+      if (scrollHeightInVh >= 8) {
         bodyRef.current.style.maxHeight= "50vh"
       }
-      if (scrollHeightInVh < 10) {
+      if (scrollHeightInVh < 8) {
         bodyRef.current.style.maxHeight= "1em"
       }
 
@@ -96,16 +97,15 @@ const CreateNote: React.FC = () => {
          
         {createNoteIsFocused ? (
           <>
-            <div className={`${NoteStyles.pin} ${NoteStyles.fadeIn}`} >
-              <button 
-                aria-label={`pin new note`}
-                className={`${NoteStyles.options}`} 
-                id={shouldBePinned ? NoteStyles.removePin : NoteStyles.addPin} 
-                onClick={handleNewNotePinToggle}
-              >
-                <FontAwesomeIcon icon={faMapPin} />
-              </button>
-            </div>    
+            <ButtonWithHoverLabel
+              ariaLabel={`pin new note`}
+              styles={`${NoteStyles.pin} ${NoteStyles.fadeIn}`}
+              id={shouldBePinned ? NoteStyles.removePin : NoteStyles.addPin} 
+              onClick={handleNewNotePinToggle}
+              label={"Pin new note"}
+            > 
+              <FontAwesomeIcon icon={faMapPin} />
+            </ButtonWithHoverLabel>
          
             <textarea 
               ref={titleRef}
@@ -115,7 +115,7 @@ const CreateNote: React.FC = () => {
               value={title}
               onChange={(e) =>setTitle(e.target.value)}
             />
-            <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+            <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : 'offscreen'}`}>
               <FontAwesomeIcon icon={faInfoCircle} />
               title must be 0-100 characters<br />
             </p>
@@ -132,7 +132,7 @@ const CreateNote: React.FC = () => {
             ref={bodyRef}
             onChange={(e)=>setBody(e.target.value)}
           />
-          <p id="body-validation-info" className={`${!isBodyValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+          <p id="body-validation-info" className={`${!isBodyValid ? NoteStyles.instructions : 'offscreen'}`}>
             <FontAwesomeIcon icon={faInfoCircle} />
             body must be 0-100000 characters<br />
           </p>

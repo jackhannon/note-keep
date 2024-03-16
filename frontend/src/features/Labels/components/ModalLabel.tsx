@@ -10,6 +10,7 @@ import DeleteModal from './DeleteModal'
 import { LabelType } from '../../../interfaces'
 import { useGlobalContext } from '../../../context/GlobalContext'
 import useIsValidInput from '../../../hooks/useIsValidInput'
+import ButtonWithHoverLabel from '../../Components/ButtonWithHoverLabel'
 
 interface Props {
   label: LabelType;
@@ -75,15 +76,15 @@ const ModalLabel: React.FC<Props> = ({label}) => {
           />
         }
 
-        <button 
-          aria-label={`trash-button-for-label-${label._id}`} 
-          className={sidebarStyles.deleteLabel} 
-          onClick={()=> handleTrashClick()} 
-          onMouseOver={()=>setTagHoverState(true)} 
+        <ButtonWithHoverLabel
+          ariaLabel={`trash-button-for-label-${label._id}`} 
+          onClick={handleTrashClick}
+          onMouseOver= {()=>setTagHoverState(true)}
           onMouseLeave={()=>setTagHoverState(false)}
-        >
+          label={"Trash label"}
+        > 
           <FontAwesomeIcon icon={tagHoverState || existingLabelFocusState ? faTrash : faTag} />
-        </button>
+        </ButtonWithHoverLabel>
         <div 
           className={sidebarStyles.edit} 
           onMouseOver={()=> setTagHoverState(true)} 
@@ -97,16 +98,17 @@ const ModalLabel: React.FC<Props> = ({label}) => {
             onChange={e=> setTitle(e.target.value)}
           />
         </div>
-        <button 
-          aria-label={existingLabelFocusState ? `confirm-edit-button-for-label-${label._id}` : `edit-button-for-label-${label._id}`} 
-          className={sidebarStyles.renameLabel} 
-          onClick={() => handlePatchLabel()}
-        >
+
+        <ButtonWithHoverLabel
+          ariaLabel={existingLabelFocusState ? `confirm-edit-button-for-label-${label._id}` : `edit-button-for-label-${label._id}`} 
+          onClick={handlePatchLabel}
+          label={"Edit label"}
+        > 
           <FontAwesomeIcon icon={existingLabelFocusState ? faCheck : faPencil}/>
-        </button>
+        </ButtonWithHoverLabel>
 
       </div>
-      <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+      <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : 'offscreen'}`}>
         <FontAwesomeIcon icon={faInfoCircle} />
         label title must be 0-50 characters<br />
       </p>

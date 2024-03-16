@@ -12,6 +12,7 @@ import useSingleNoteMutation from '../../services/useSingleNoteMutation';
 import LabelModal from '../LabelModal';
 import useLabelsQuery from '../../../Labels/services/useLabelsQuery';
 import useClickOutside from '../../../../hooks/useClickOutside';
+import ButtonWithHoverLabel from '../../../Components/ButtonWithHoverLabel';
 
 interface Props {
   note: NoteType;
@@ -150,27 +151,29 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
         onMouseLeave={() => handleMouseLeave()}
       >
     
-        <div className={`
-          ${NoteStyles.check} 
-          ${noteHoverState || selectedNoteIds.includes(note._id) ? NoteStyles.fadeIn : ""
-        }`}>
-          <button aria-label={`check-for-note-${note._id}`} className={NoteStyles.options} id={NoteStyles.check} onClick={(e) => handleSelectNoteToggle(e)}>
-            <FontAwesomeIcon icon={shouldNoteShowCheckMark() ? faCheck : faX} />
-          </button>
-        </div>
+  
+        <ButtonWithHoverLabel 
+          ariaLabel={`check-for-note-${note._id}`}
+          styles={`${NoteStyles.check} ${noteHoverState || selectedNoteIds.includes(note._id) ? NoteStyles.fadeIn : ""}`}
+          id={NoteStyles.check}
+          onClick={handleSelectNoteToggle}
+          label={shouldNoteShowCheckMark() ? "Select note" : "Unselect note"}
+        > 
+          <FontAwesomeIcon icon={shouldNoteShowCheckMark() ? faCheck : faX} />
+        </ButtonWithHoverLabel>
+
       
 
         {!["Trash", "Archive"].includes(labelId || "") && (
-          <div className={`${NoteStyles.pin} ${note.isPinned || noteHoverState ? NoteStyles.fadeIn : ""}`} >
-            <button 
-              aria-label={note.isPinned ? `pinned-for-note-${note._id}` : `unpinned-for-note-${note._id}`}
-              className={`${NoteStyles.options}`} 
+            <ButtonWithHoverLabel 
+              ariaLabel={note.isPinned ? `pinned-for-note-${note._id}` : `unpinned-for-note-${note._id}`}
+              styles={`${NoteStyles.pin} ${note.isPinned || noteHoverState ? NoteStyles.fadeIn : ""}`}
               id={note.isPinned ? NoteStyles.removePin : NoteStyles.addPin} 
-              onClick={!multiSelectMode ? (e)=>handleNotePinToggle(e) : (e) => handleClickWhileMultiSelect(e)}
-            >
+              onClick={!multiSelectMode ? handleNotePinToggle : handleClickWhileMultiSelect}
+              label={note.isPinned ? "Unpin note" : "Pin note"}
+            > 
               <FontAwesomeIcon icon={faMapPin} />
-            </button>
-          </div>       
+            </ButtonWithHoverLabel>
         )}
       
         <textarea
@@ -203,33 +206,62 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
         {!multiSelectMode ? 
           !["Trash", "Archive"].includes(labelId || "") ? (
             <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-              <button aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+
+              <ButtonWithHoverLabel 
+                ariaLabel={`archive-button-for-${note._id}`} 
+                onClick={handleArchive}
+                label={"Archive note"}
+              > 
                 <FontAwesomeIcon icon={faArchive} />
-              </button>
+              </ButtonWithHoverLabel>
+
               <button ref={optionsModalButtonRef} aria-label={`options-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleOptionClick(e)}>
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
             </div>
           ) : (labelId === "Trash") ? (
             <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-              <button aria-label={`trash-restore-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
+              <ButtonWithHoverLabel 
+                ariaLabel={`trash-restore-button-for-${note._id}`}
+                onClick={handleRestore}
+                label={"Restore note"}
+              > 
                 <FontAwesomeIcon icon={faTrashRestore} />
-              </button>
-              <button aria-label={`trash-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleDelete(e)}>
+              </ButtonWithHoverLabel>
+
+              <ButtonWithHoverLabel 
+                ariaLabel={`trash-button-for-${note._id}`}
+                onClick={handleDelete}
+                label={"Delete note"}
+              > 
                 <FontAwesomeIcon icon={faTrash} />
-              </button>
-              <button aria-label={`archive-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleArchive(e)}>
+              </ButtonWithHoverLabel>
+          
+              <ButtonWithHoverLabel 
+                ariaLabel={`archive-button-for-${note._id}`}
+                onClick={handleArchive}
+                label={"Archive note"}
+              > 
                 <FontAwesomeIcon icon={faArchive} />
-              </button>
+              </ButtonWithHoverLabel>
             </div>
           ) : (labelId === "Archive") ? (
           <div className={`${NoteStyles.hoverNoteTools} ${noteHoverState ? NoteStyles.fadeIn : ""}`} ref={optionRef}>
-            <button aria-label={`undo-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleRestore(e)}>
+            <ButtonWithHoverLabel 
+              ariaLabel={`undo-button-for-${note._id}`}
+              onClick={handleRestore}
+              label={"Restore note"}
+            > 
               <FontAwesomeIcon icon={faUndo} />
-            </button>
-            <button aria-label={`trash-button-for-${note._id}`} className={NoteStyles.options} onClick={(e)=>handleTrash(e)}>
+            </ButtonWithHoverLabel>
+
+            <ButtonWithHoverLabel 
+              ariaLabel={`trash-button-for-${note._id}`}
+              onClick={handleTrash}
+              label={"Delete note"}
+            > 
               <FontAwesomeIcon icon={faTrash} />
-            </button>
+            </ButtonWithHoverLabel>
           </div>
         ) : null
       : null}

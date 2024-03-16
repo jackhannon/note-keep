@@ -9,6 +9,7 @@ import useLabelMutation from '../services/useLabelMutation';
 import useLabelsQuery from '../services/useLabelsQuery';
 import useClickOutside from '../../../hooks/useClickOutside';
 import useIsValidInput from '../../../hooks/useIsValidInput';
+import ButtonWithHoverLabel from '../../Components/ButtonWithHoverLabel';
 
 interface Props {
   setModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,13 +50,15 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
         <div className={sidebarStyles.message}>Edit labels</div>
 
         <div className={sidebarStyles.newLabel} ref={modalLabelRef}>
-          <button 
-            aria-label="toggle-create-new-label-focus" 
-            className={sidebarStyles.addNewLabelBtn} 
+
+          <ButtonWithHoverLabel
+            ariaLabel={"toggle-create-new-label-focus"} 
             onClick={() => setNewLabelFocusState(prevState => !prevState)}
-          >
-            <FontAwesomeIcon icon={newLabelFocusState ? faX : faPlus}/>
-          </button>
+            label={newLabelFocusState ? "Dismiss" : "Edit note"}
+          > 
+              <FontAwesomeIcon icon={newLabelFocusState ? faX : faPlus}/>
+          </ButtonWithHoverLabel>
+       
           <input 
             aria-label="create-new-label"
             className={`${sidebarStyles.newLabelField} ${newLabelFocusState ? sidebarStyles.input : null}`} 
@@ -66,13 +69,17 @@ const Modal: React.FC<Props> = ({ setModalState }) => {
             onBlur={()=>setTimeout(() => {
               setNewLabel("") 
             }, 100)}
-            />
-          <button aria-label="confirm-new-label-creation" className={`${newLabelFocusState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`} 
-            onClick={onLabelCreate}>
+          />
+          <ButtonWithHoverLabel
+            ariaLabel={"confirm-new-label-creation"} 
+            styles={`${newLabelFocusState ? sidebarStyles.showCheck : null} ${sidebarStyles.confirmLabelBtn}`}
+            onClick={onLabelCreate}
+            label={"Create label"}
+          > 
             <FontAwesomeIcon icon={faCheck}/>
-          </button>
+          </ButtonWithHoverLabel>
         </div>
-        <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+        <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : 'offscreen'}`}>
           <FontAwesomeIcon icon={faInfoCircle} />
           label title must be 0-50 characters<br />
         </p>

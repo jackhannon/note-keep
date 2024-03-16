@@ -6,6 +6,7 @@ import useClickOutside from '../../../../hooks/useClickOutside';
 import useIsValidInput from '../../../../hooks/useIsValidInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faMapPin } from '@fortawesome/free-solid-svg-icons';
+import ButtonWithHoverLabel from '../../../Components/ButtonWithHoverLabel';
 
 
 interface Props {
@@ -43,10 +44,10 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
       const scrollHeight = bodyRef .current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-      if (scrollHeightInVh >= 10) {
+      if (scrollHeightInVh >= 8) {
         bodyRef.current.style.maxHeight= "65vh"
       }
-      if (scrollHeightInVh < 10) {
+      if (scrollHeightInVh < 8) {
         bodyRef.current.style.maxHeight= "1em"
       }
       if (scrollHeightInVh >= 65) {
@@ -108,14 +109,18 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
   return (
     <div className={NoteStyles.modalContainer}>
       <div className={NoteStyles.modal} ref={noteRef}>
-        <div className={`${NoteStyles.pin} ${NoteStyles.fadeIn}`} >
-          <button 
-            aria-label={note.isPinned ? `pinned-for-note-${note._id}` : `unpinned-for-note-${note._id}`}
-            className={`${NoteStyles.options}`} 
+        <div className={`${NoteStyles.pin} ${NoteStyles.fadeIn}`}>
+
+          <ButtonWithHoverLabel
+            ariaLabel={note.isPinned ? `pinned-for-note-${note._id}` : `unpinned-for-note-${note._id}`}
             id={note.isPinned ? NoteStyles.removePin : NoteStyles.addPin} 
             onClick={(e) => handleNotePinToggle(e)}
-          >
+            label={note.isPinned ? `Unpin note` : `Pin note`}
+          > 
             <FontAwesomeIcon icon={faMapPin} />
+          </ButtonWithHoverLabel>
+          <button 
+          >
           </button>
         </div>      
         <textarea
@@ -126,7 +131,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
           ref={titleRef}
           onChange={(e) => handleTitleChange(e)}
         />
-        <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+        <p id="title-validation-info" className={`${!isTitleValid ? NoteStyles.instructions : 'offscreen'}`}>
           <FontAwesomeIcon icon={faInfoCircle} />
           title must be 0-100 characters<br />
         </p>
@@ -138,7 +143,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
           ref={bodyRef}
           onChange={(e)=>handleBodyChange(e)}
         />
-        <p id="body-validation-info" className={`${!isBodyValid ? NoteStyles.instructions : NoteStyles.offscreen}`}>
+        <p id="body-validation-info" className={`${!isBodyValid ? NoteStyles.instructions : 'offscreen'}`}>
           <FontAwesomeIcon icon={faInfoCircle} />
           body must be 0-100000 characters<br />
         </p>
