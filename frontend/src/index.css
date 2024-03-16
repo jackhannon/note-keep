@@ -102,10 +102,6 @@ textarea {
   padding-bottom: 0.7rem;
 }
 
-.error-msg {
-
-}
-
 .my-masonry-grid {
   display: flex;
   width: 100%;
@@ -122,8 +118,6 @@ textarea {
   max-height: 20em;
 }
 
-
-
 ::-webkit-scrollbar {
   background-color: #272728;
   width: 10px;
@@ -134,4 +128,22 @@ textarea {
   background-color: rgb(100, 100, 100);
 }
 
+.error-box {
+  position: absolute;
+  top: 10px;
+  border-radius: 5px;
+  padding: 1.5rem 1.5rem;
+  background-color: rgb(255, 69, 69);
+}
 
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+
+.closeErrButton {
+  position: absolute;
+  right: .4rem;
+  top: .3rem;
+ }

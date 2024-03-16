@@ -24,8 +24,10 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
   const query: string = decodeURIComponent(req.query.query as string);
   const page: string = req.query.page as string;
 
+  
 
   try {
+
     const notes: Collection<Note> | undefined = await db.collection("notes");
     let zeroBasedPageNumber = Number(page) - 1;
     const escapedQuery = escapeRegExp(query);

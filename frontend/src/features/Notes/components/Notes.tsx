@@ -6,6 +6,7 @@ import MainStyles from '../styles/MainStyles.module.css'
 import Masonry from 'react-masonry-css'
 import { useGlobalContext } from '../../../context/GlobalContext.tsx';
 import useInfiniteNotesQuery from '../services/useInfiniteNotesQuery.tsx';
+import StatusMessage from '../../Components/StatusMessage.tsx';
 
 function useResizeRefCallback(): [React.RefCallback<HTMLDivElement>, number] {
   const [numColumns, setNumColumns] = useState<number>(0);
@@ -57,20 +58,22 @@ const Notes: React.FC = () => {
     }
   }, [inView, hasNextPage, fetchNextPage])
 
-  if (isPending) {
+  if (isError && error) {
+    return (
+      <div className={MainStyles.notesContentContainer}>
+        <StatusMessage>
+          {error.message}
+        </StatusMessage>
+      </div>
+    )  
+  }
+
+  if (isPending || !data) {
     return (
       <div className={MainStyles.notesContentContainer}>
         <h1 className='loading-msg'>Loading...</h1>
       </div>
     )
-  }
-    
-  if (isError || !data) {
-    return (
-      <div className={MainStyles.notesContentContainer}>
-        <h1 className='error-msg'>{error?.message || "Could not retrieve data"}</h1>
-      </div>
-    )  
   }
 
   const { pages } = data;

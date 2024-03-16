@@ -119,6 +119,7 @@
  }
 
 
+
 .hoverNoteTools {
  position: absolute;
  display: flex;
@@ -194,10 +195,5 @@
 .instructions > svg {
   margin-right: 0.25rem;
   color: #fff;
-
 }
 
-.offscreen {
-  position: absolute;
-  left: -9999px;
-}

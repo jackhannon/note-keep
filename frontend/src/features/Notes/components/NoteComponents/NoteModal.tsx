@@ -37,7 +37,6 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
 
-  //make custom hook that handles this 
   useLayoutEffect(() => {
     if (bodyRef .current) {
       bodyRef.current.style.height = 'auto';
