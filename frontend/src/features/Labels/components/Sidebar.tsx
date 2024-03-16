@@ -8,13 +8,14 @@ import Label from './Label'
 import { Link } from 'react-router-dom';
 import useLabelsQuery from '../services/useLabelsQuery';
 import { useGlobalContext } from '../../../context/GlobalContext';
+import StatusMessage from '../../Components/StatusMessage';
 
 const Sidebar: React.FC = () => {
   const {isSidebarOpen, handleSetLabel, currentLabel} = useGlobalContext()
   const {_id: labelId} = currentLabel
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
-  const {data: labels} = useLabelsQuery()
+  const {data: labels, isError, error} = useLabelsQuery()
 
   const hoverTimeoutId = useRef<number | NodeJS.Timeout>(0);
   const hoverTimeout = () => {
@@ -43,6 +44,16 @@ const Sidebar: React.FC = () => {
 
   
   return (
+    <>
+
+    {isError && error ?
+      <StatusMessage>
+        {error?.response?.data 
+        ? String(error.response.data) 
+        : error.message}
+      </StatusMessage>
+      : null
+    }
     <div 
       className={`${sidebarStyles.sidebar} ${(isSidebarOpen || isHovering) ? sidebarStyles.open : null}`} 
       onMouseEnter={() => handleHover()} 
@@ -104,6 +115,7 @@ const Sidebar: React.FC = () => {
         </div>
       </Link>
     </div>
+  </>
   )
 }
 

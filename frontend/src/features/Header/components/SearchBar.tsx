@@ -26,6 +26,7 @@ const SearchBar:React.FC = () => {
 
   return (
     <>
+    
       <button onClick={() => handleFocusInput()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
       <input 
         ref={inputRef}

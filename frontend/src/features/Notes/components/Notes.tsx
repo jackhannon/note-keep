@@ -60,11 +60,16 @@ const Notes: React.FC = () => {
 
   if (isError && error) {
     return (
-      <div className={MainStyles.notesContentContainer}>
+      <>
+        {error?.response?.data ?
+        <StatusMessage>
+          {String(error.response.data)}
+        </StatusMessage>
+        : 
         <StatusMessage>
           {error.message}
-        </StatusMessage>
-      </div>
+        </StatusMessage>}
+      </>
     )  
   }
 

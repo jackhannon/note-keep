@@ -134,6 +134,10 @@ textarea {
   border-radius: 5px;
   padding: 1.5rem 1.5rem;
   background-color: rgb(255, 69, 69);
+  top: 12%;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
 }
 
 .offscreen {
