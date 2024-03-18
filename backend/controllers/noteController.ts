@@ -27,7 +27,6 @@ const getQuery = async (req: Request, res: Response, next: NextFunction) => {
   
 
   try {
-
     const notes: Collection<Note> | undefined = await db.collection("notes");
     let zeroBasedPageNumber = Number(page) - 1;
     const escapedQuery = escapeRegExp(query);
