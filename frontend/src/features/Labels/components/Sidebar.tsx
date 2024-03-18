@@ -66,7 +66,7 @@ const Sidebar: React.FC = () => {
         className={`${sidebarStyles.child} ${labelId === "Notes" ? sidebarStyles.activeLabel : ""}`}
       >
         <div className={sidebarStyles.catagory}>
-          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faLightbulb} /></div>
+          <FontAwesomeIcon icon={faLightbulb} />
           <span>
             All Notes
           </span>
@@ -84,10 +84,14 @@ const Sidebar: React.FC = () => {
         className={sidebarStyles.child} 
         onClick={() => setModalState(prevState => !prevState)}
       >
-        <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faEdit} /></div>
-        <span className={sidebarStyles.catagory}>
-          Edit Labels
-        </span>
+        <div className={sidebarStyles.catagory}>
+
+          <FontAwesomeIcon icon={faEdit} />
+          <span className={sidebarStyles.catagory}>
+            Edit Labels
+          </span>
+        </div>
+
       </button>
       <Link 
         to={`/Archive`} 
@@ -95,7 +99,7 @@ const Sidebar: React.FC = () => {
         className={`${sidebarStyles.child} ${labelId === "Archive" ? sidebarStyles.activeLabel : ""}`}
       >
         <div className={sidebarStyles.catagory}>
-          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faArchive} /></div>
+          <FontAwesomeIcon icon={faArchive} />
           <span>
             Archive
           </span>
@@ -108,7 +112,7 @@ const Sidebar: React.FC = () => {
         className={`${sidebarStyles.child} ${labelId === "Trash" ? sidebarStyles.activeLabel : ""}`}
       >
         <div className={sidebarStyles.catagory}>
-          <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faTrash} /></div>
+          <FontAwesomeIcon icon={faTrash} />
           <span>
             Trash
           </span>

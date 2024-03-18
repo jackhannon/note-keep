@@ -18,7 +18,7 @@ export const useLabelMutation = () => {
       queryClient.setQueryData(['labels'], (prevLabels: LabelType[]) => {
         return prevLabels.map(label => {
           if (label._id === labelDetails._id) {
-            label.title = labelDetails.title
+            label = {...label, title: labelDetails.title}
           }
           return label
         })

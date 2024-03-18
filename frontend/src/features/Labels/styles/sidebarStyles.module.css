@@ -34,7 +34,7 @@
   justify-content: left;
   flex-direction: row;
   position: relative;
-  padding: 0.6em 1em;
+  padding: 0.6em .8em;
   font-size: 1em;
   color: white;
   background-color: rgb(70, 70, 70);
@@ -46,12 +46,7 @@
 }
 
 
-.icon {
-  min-width: 16px;
-  position: absolute;
-  left: 0.8rem;
-  color: white;
-}
+
 
 .open .catagory {
   color: white;
@@ -62,14 +57,23 @@
 .catagory {
   max-height: 2.5rem;
   visibility: none;
-  margin-left: 20px;
   color: transparent;
   max-width: 8rem;
   color: inherit;
   overflow: hidden;
   white-space: nowrap;
-
+  display: flex;
+  align-items: center;
   text-overflow: ellipsis;
+  min-width: 16px
+}
+
+.catagory > svg {
+  color: white;
+}
+
+.catagory > span {
+  margin-left: 10px;
 }
 
 .child.activeLabel {

@@ -16,7 +16,7 @@ const Label: React.FC<Props> = ({label}) => {
         currentLabel._id === label._id ? sidebarStyles.activeLabel : ""
     }`}>
       <div className={sidebarStyles.catagory}>
-        <div className={sidebarStyles.icon}><FontAwesomeIcon icon={faTag} /></div>
+        <FontAwesomeIcon icon={faTag} />
         <span>
           {label.title}
         </span>

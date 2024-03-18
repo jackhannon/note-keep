@@ -222,10 +222,9 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
       return updateNoteContents(boundNote._id, contents.title, contents.body)
     },
     onMutate: (contents) => {
-
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
+      
       queryClient.setQueryData(['notes',currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-
         const newPages = prevNotes.pages.map(page => {
           return page.map((note) => {
             if (note._id === boundNote._id) {
@@ -247,17 +246,18 @@ const useSingleNoteMutation = (boundNote: NoteType = {_id: "", labels: [], isPin
     mutationFn: (labels: string[]) => {
       return updateNoteLabels(boundNote._id, labels)
     },
-    onMutate: (labels) => {
+    onMutate: (noteLabels) => {
       const previousNotes = queryClient.getQueryData(['notes', currentLabel._id, query])
+
       queryClient.setQueryData(['notes', currentLabel._id, query], (prevNotes: {pages: NoteType[][]}) => {
-        if (!labels.some(label => label === currentLabel._id) && currentLabel._id !== "Notes") {
+        if (!noteLabels.some(label => label === currentLabel._id) && currentLabel._id !== "Notes") {
           const filteredPages = removeNote(boundNote._id, prevNotes.pages);
           return {...prevNotes, pages: filteredPages}
         }
         const newPages = prevNotes.pages.map(page => {
           return page.map(note => {
             if (note._id === boundNote._id) {
-              return {...note, labels: labels}
+              return {...note, labels: noteLabels}
             }
             return note
           })
