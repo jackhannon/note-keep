@@ -11,6 +11,8 @@ Features include but not limited to:
 
   - infinite scroll for labels that have many notes
 
+  - note order preservation
+
 
 Frontend built with:
   - React

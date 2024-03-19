@@ -115,7 +115,6 @@ textarea {
 .my-masonry-grid-column > div {
   background: rgb(255, 255, 255);
   height: auto;
-  max-height: 20em;
 }
 
 ::-webkit-scrollbar {

@@ -53,7 +53,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
     if (titleRef.current) {
       titleRef.current.style.height = 'auto';
       const scrollHeight = titleRef.current.scrollHeight;
-      titleRef.current.style.height = `${Math.min(scrollHeight, 10)}vh`;
+      titleRef.current.style.height = `${scrollHeight}px`;
     }
   }, [note.title]);
 

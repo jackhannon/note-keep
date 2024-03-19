@@ -75,11 +75,6 @@ const CreateNote: React.FC = () => {
       const viewportHeight = window.innerHeight;
 
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
-      if (scrollHeightInVh >= 6) {
-        titleRef.current.style.overflowY = "auto"
-      } else {
-        titleRef.current.style.overflowY = "hidden"
-      }
       titleRef.current.style.height = `${Math.min(
         scrollHeightInVh,
         10
