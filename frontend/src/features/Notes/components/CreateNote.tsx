@@ -44,15 +44,13 @@ const CreateNote: React.FC = () => {
     if (bodyRef.current) {
       bodyRef.current.style.height = 'auto';
       const scrollHeight = bodyRef.current.scrollHeight;
-
       const viewportHeight = window.innerHeight;
-
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       
-      if (scrollHeightInVh >= 8) {
+      if (scrollHeightInVh >= 6) {
         bodyRef.current.style.maxHeight= "50vh"
       }
-      if (scrollHeightInVh < 8) {
+      if (scrollHeightInVh < 6) {
         bodyRef.current.style.maxHeight= "1em"
       }
 
@@ -73,7 +71,6 @@ const CreateNote: React.FC = () => {
       titleRef.current.style.height = 'auto';
       const scrollHeight = titleRef.current.scrollHeight;
       const viewportHeight = window.innerHeight;
-
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       titleRef.current.style.height = `${Math.min(
         scrollHeightInVh,
