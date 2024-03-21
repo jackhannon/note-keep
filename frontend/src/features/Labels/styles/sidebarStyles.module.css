@@ -2,15 +2,18 @@
   padding: .7rem 0.3rem 0 .3rem;
   background-color: #202124;
   min-width: 3.2em;
-  min-height: 100vh;
+  min-height:100vh;
   display: flex;
   flex-direction: column;
   gap: .5rem;
   overflow: hidden;
+  position:sticky;
+  top: 3.45rem;
   transition: min-width 0.2s;
   z-index: 998;
   border: 1px solid rgb(116, 116, 116);
-
+  border-top: none;
+  float: left;
 }
 
 .open {

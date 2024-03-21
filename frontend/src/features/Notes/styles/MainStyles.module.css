@@ -1,8 +1,9 @@
 .container {
-  display: flex;
-  flex-direction: row;
   min-width: 0;
-  width: 100%;
+  position: relative;
+  float: right;
+  width: 80%;
+  min-height: auto;
 }
 
 .notesContentContainer {
@@ -11,7 +12,6 @@
   align-items: center;
   flex-direction: column;
   min-width: 0;
-  width: 100%;
 }
 
 .noNotes {

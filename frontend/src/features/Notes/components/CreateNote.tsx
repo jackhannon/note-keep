@@ -47,10 +47,10 @@ const CreateNote: React.FC = () => {
       const viewportHeight = window.innerHeight;
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       
-      if (scrollHeightInVh >= 6) {
+      if (scrollHeightInVh >= 10) {
         bodyRef.current.style.maxHeight= "50vh"
       }
-      if (scrollHeightInVh < 6) {
+      if (scrollHeightInVh < 10) {
         bodyRef.current.style.maxHeight= "1em"
       }
 
@@ -74,7 +74,7 @@ const CreateNote: React.FC = () => {
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       titleRef.current.style.height = `${Math.min(
         scrollHeightInVh,
-        10
+        20
       )}vh`;
     }
   }, [title]);

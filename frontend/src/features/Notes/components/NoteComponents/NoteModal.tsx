@@ -39,7 +39,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
 
 
   useLayoutEffect(() => {
-    if (bodyRef .current) {
+    if (bodyRef.current) {
       bodyRef.current.style.height = 'auto';
       const scrollHeight = bodyRef .current.scrollHeight;
       const viewportHeight = window.innerHeight;
@@ -71,7 +71,7 @@ const NoteModal: React.FC<Props> = ({handleDelete, setNoteState, note}) => {
       const scrollHeightInVh = (scrollHeight / viewportHeight) * 100;
       titleRef.current.style.height = `${Math.min(
         scrollHeightInVh,
-        11
+        20
       )}vh`;
     }
   }, [title]);
