@@ -28,12 +28,10 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
   padding: 0;
   display: block;
   background-color: #202124;
+  min-height: 100vh;
 
 }
 

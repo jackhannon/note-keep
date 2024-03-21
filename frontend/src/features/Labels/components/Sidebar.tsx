@@ -16,6 +16,7 @@ const Sidebar: React.FC = () => {
   const [isHovering, setIsHovering] = useState<boolean>(false)
   const [modalState, setModalState] = useState<boolean>(false)
   const {data: labels, isError, error} = useLabelsQuery()
+  const sidebarRef = useRef<HTMLDivElement>(null)
 
   const hoverTimeoutId = useRef<number | NodeJS.Timeout>(0);
   const hoverTimeout = () => {
@@ -40,7 +41,6 @@ const Sidebar: React.FC = () => {
   }, [modalState]);
  
 
-  const sidebarRef = useRef<HTMLDivElement>(null)
 
   
   return (
