@@ -17,9 +17,9 @@ const App: React.FC = () => {
           <Route path="/" element={<Navigate to="/Notes" />} />
           <Route path='/:labelId' element={
             <>
-              <Header/>
+              <Header />
               <Sidebar />
-              <Notes/>
+              <Notes />
             </>
           } />
         </Routes>

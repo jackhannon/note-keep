@@ -31,7 +31,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   const {toggleNotePin, noteTrash, noteArchive, noteRestore, noteDelete, noteCreate, noteLabelUpdate} = useSingleNoteMutation(note)
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLTextAreaElement>(null);
-    const optionRef = useRef<HTMLDivElement>(null);
+  const optionRef = useRef<HTMLDivElement>(null);
 
   const {data: labels} = useLabelsQuery()
   const {labelId} = useParams()

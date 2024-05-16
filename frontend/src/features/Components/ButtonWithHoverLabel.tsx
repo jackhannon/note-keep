@@ -19,7 +19,6 @@ const ButtonWithHoverLabel: React.FC<Props> = ({ariaLabel, styles, id, onClick, 
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}   
       className={styles}
-   
     >
       <button
         aria-label={ariaLabel}
