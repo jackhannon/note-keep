@@ -12,7 +12,7 @@ type ContextType = {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   handleClickWhileMultiSelect: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   dispatchSelectedNotes: React.Dispatch<SelectedNotesActions>;
-  selectedNotesState: SelectedNotesReducerState;
+  selectedNotesState: SelectedNotesReducerState; 
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   currentLabel: LabelType;
