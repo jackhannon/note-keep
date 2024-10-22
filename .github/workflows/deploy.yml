@@ -1,4 +1,4 @@
-name: Deploy frontend
+name: Deploy Frontend
 
 on:
   push:
@@ -16,18 +16,23 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          node-version: '16' # You can specify the node version you need
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./frontend # Specify the frontend folder
 
       - name: Build project
         run: npm run build
+        working-directory: ./frontend # Specify the frontend folder
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
         with:
           name: production-files
-          path: ./dist
+          path: ./frontend/dist # Upload the build from the frontend dist folder
 
   deploy:
     name: Deploy
