@@ -27,8 +27,6 @@ const useGlobalContext = () => {
 }
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
-
-
   const initialState: SelectedNotesReducerState = {
     notes: [],
     modeOn: false

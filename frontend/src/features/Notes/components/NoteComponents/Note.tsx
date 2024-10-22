@@ -48,7 +48,7 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
   useClickOutside([optionsModalRef, optionsModalButtonRef], handleClickOutsideOptionModal)
 
 
-  //make custom hook that handles this 
+  // make custom hook that handles this 
   useLayoutEffect(() => {
     if (titleRef.current) {
       titleRef.current.style.height = 'auto';
@@ -150,8 +150,6 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
         onMouseEnter={() => setNoteHoverState(true)}
         onMouseLeave={() => handleMouseLeave()}
       >
-    
-  
         <ButtonWithHoverLabel 
           ariaLabel={`check-for-note-${note._id}`}
           styles={`${NoteStyles.check} ${noteHoverState || selectedNoteIds.includes(note._id) ? NoteStyles.fadeIn : ""}`}
@@ -195,7 +193,13 @@ const Note: React.FC<Props> = memo(({ note, innerRef }) => {
         {(!multiSelectMode && optionsModalState) && (
           <div className={optionModalStyles.modal} ref={optionsModalRef}>
             {labelModalState ? <LabelModal handleLabelToggle={handleLabelToggle} labels={note.labels} /> : null}
-            <button aria-label={`trash-button-for-${note._id}`} className={optionModalStyles.modalBtn} onClick={(e)=>handleTrash(e)}>Delete</button>
+            <button 
+              aria-label={`trash-button-for-${note._id}`}
+              className={optionModalStyles.modalBtn} 
+              onClick={(e) => handleTrash(e)}
+            >
+              Delete
+            </button>
             {(labels && labels.length > 0) &&
               <button aria-label={`change-labels-button-for-${note._id}`} className={optionModalStyles.modalBtn} onClick={(e) => handleToggleLabelsModal(e)}>Change labels</button>
             }
