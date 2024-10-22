@@ -1,4 +1,6 @@
 name: Deploy
+run: cd frontend
+working-directory: ./frontend
 
 on:
   push:
@@ -16,9 +18,6 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-
-      - name: Navigate to frontend directory
-        run: cd frontend
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
