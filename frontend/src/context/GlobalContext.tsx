@@ -4,7 +4,7 @@ import { LabelType } from "../interfaces";
 import { useLocation, useNavigate } from "react-router";
 
 type GlobalProviderProps = {
-  children: React.ReactNode;
+  children: React.ReactNode; 
 }
 
 type ContextType = {
