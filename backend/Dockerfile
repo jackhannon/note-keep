@@ -11,6 +11,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
+ENV CLIENT_DOMAIN="https://jackhannon.github.io"
 
 
 # Throw-away build stage to reduce size of final image
