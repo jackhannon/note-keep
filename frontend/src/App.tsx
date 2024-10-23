@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <>
       <GlobalProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/Notes" />} />
+          <Route path="/" element={<Navigate to={`${import.meta.env.VITE_BASE_URL}/Notes`}/>} />
           <Route path='/:labelId' element={
             <>
               <Header />
