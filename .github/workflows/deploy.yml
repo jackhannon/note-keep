@@ -26,7 +26,10 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         working-directory: ./frontend # Specify the frontend folder
+        
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
