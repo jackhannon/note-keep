@@ -1,0 +1,20 @@
+FROM node
+
+ENV PORT=5000
+ENV ATLAS_URI=mongodb+srv://Jackh123:Jackh123@cluster0.egkadac.mongodb.net/?retryWrites=true&w=majority
+
+COPY package*.json ./
+
+RUN npm install
+
+RUN npm install pm2 -g
+
+COPY . .
+
+RUN npm run build
+
+COPY . .
+
+CMD pm2 start process.yml && tail -f /dev/null
+
+EXPOSE 5000
