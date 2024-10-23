@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <BrowserRouter basename={import.meta.env.VITE_BASE_URL}>
         <App /> 
       </BrowserRouter>
     </QueryClientProvider>
